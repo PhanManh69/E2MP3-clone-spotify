@@ -30,6 +30,7 @@ import com.emanh.rootapp.presentation.navigation.homeScreenGraph
 import com.emanh.rootapp.presentation.navigation.loginScreenGraph
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
+import com.emanh.rootapp.presentation.navigation.searchInputScreenGraph
 import com.emanh.rootapp.presentation.navigation.searchScreenGraph
 import com.emanh.rootapp.presentation.navigation.testComposableScreenGraph
 import com.emanh.rootapp.presentation.navigation.yourLibraryScreenGraph
@@ -96,6 +97,7 @@ fun RootNavScreen(
             loginScreenGraph()
             homeScreenGraph()
             searchScreenGraph()
+            searchInputScreenGraph()
             yourLibraryScreenGraph()
         }
 

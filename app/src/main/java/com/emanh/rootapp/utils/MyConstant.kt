@@ -1,5 +1,6 @@
 package com.emanh.rootapp.utils
 
+import androidx.compose.ui.res.stringResource
 import com.emanh.rootapp.R
 import com.emanh.rootapp.presentation.composable.PrimaryLibraryData
 import com.emanh.rootapp.presentation.composable.STFCarouselHeroThumbData
@@ -1619,28 +1620,28 @@ object MyConstant {
                                                                                                              imageUrl = "https://lh3.googleusercontent.com/CzQb1BDMu_bVkkUbHNDDPkErfaJPyuKTFHHdboXcGJBmjEaquJC06k162s-l7VMaoa_QXZRvg3N6ht8=w1920-h800-p-l90-rj",
                                                                                                              nameSinger = "WREN EVANS"))))))
 
-    val cardGenresSearchList = listOf(
-            Pair(R.string.music, R.drawable.img_card_music),
-            Pair(R.string.podcasts, R.drawable.img_card_podcast),
-            Pair(R.string.live_events, R.drawable.img_card_live_events),
-            Pair(R.string.made_for_you, R.drawable.img_card_mede_for_you),
-            Pair(R.string.new_releases, R.drawable.img_card_new_releases),
-            Pair(R.string.summer, R.drawable.img_card_summer),
-            Pair(R.string.sanremo_festival, R.drawable.img_card_sanremo_festival),
-            Pair(R.string.pop, R.drawable.img_card_pop,),
-            Pair(R.string.hip_hop, R.drawable.img_card_hip_hop),
-            Pair(R.string.podcast_charts, R.drawable.img_card_podcast_charts),
-            Pair(R.string.podcast_new_releases, R.drawable.img_card_podcast_new_releases),
-            Pair(R.string.video_podcasts, R.drawable.img_card_video_podcast),
-            Pair(R.string.only_on_spotify, R.drawable.img_card_only_on_spotify),
-            Pair(R.string.charts, R.drawable.img_card_charts),
-            Pair(R.string.latin, R.drawable.img_card_latin),
-            Pair(R.string.dance, R.drawable.img_card_dance),
-            Pair(R.string.rock, R.drawable.img_card_rock),
-            Pair(R.string.indie, R.drawable.img_card_indie),
-            Pair(R.string.mood, R.drawable.img_card_mood),
-            Pair(R.string.party, R.drawable.img_card_party),
-            Pair(R.string.gaming, R.drawable.img_card_gaming),
-            Pair(R.string.chill, R.drawable.img_card_chill)
-    )
+    val cardGenresSearchList = listOf(Pair(R.string.music, R.drawable.img_card_music),
+                                      Pair(R.string.podcasts, R.drawable.img_card_podcast),
+                                      Pair(R.string.live_events, R.drawable.img_card_live_events),
+                                      Pair(R.string.made_for_you, R.drawable.img_card_mede_for_you),
+                                      Pair(R.string.new_releases, R.drawable.img_card_new_releases),
+                                      Pair(R.string.summer, R.drawable.img_card_summer),
+                                      Pair(R.string.sanremo_festival, R.drawable.img_card_sanremo_festival),
+                                      Pair(R.string.pop, R.drawable.img_card_pop),
+                                      Pair(R.string.hip_hop, R.drawable.img_card_hip_hop),
+                                      Pair(R.string.podcast_charts, R.drawable.img_card_podcast_charts),
+                                      Pair(R.string.podcast_new_releases, R.drawable.img_card_podcast_new_releases),
+                                      Pair(R.string.video_podcasts, R.drawable.img_card_video_podcast),
+                                      Pair(R.string.only_on_spotify, R.drawable.img_card_only_on_spotify),
+                                      Pair(R.string.charts, R.drawable.img_card_charts),
+                                      Pair(R.string.latin, R.drawable.img_card_latin),
+                                      Pair(R.string.dance, R.drawable.img_card_dance),
+                                      Pair(R.string.rock, R.drawable.img_card_rock),
+                                      Pair(R.string.indie, R.drawable.img_card_indie),
+                                      Pair(R.string.mood, R.drawable.img_card_mood),
+                                      Pair(R.string.party, R.drawable.img_card_party),
+                                      Pair(R.string.gaming, R.drawable.img_card_gaming),
+                                      Pair(R.string.chill, R.drawable.img_card_chill))
+
+    val chipSearchInputList = listOf(R.string.artist, R.string.album, R.string.playlist, R.string.song, R.string.podcasts)
 }

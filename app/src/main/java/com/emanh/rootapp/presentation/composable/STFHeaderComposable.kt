@@ -58,8 +58,10 @@ import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextSecondary
 import com.emanh.rootapp.presentation.theme.Title4Bold
-import com.emanh.rootapp.utils.MyConstant.chipsList
+import com.emanh.rootapp.utils.MyConstant.chipSearchInputList
 import com.emanh.rootapp.utils.MyConstant.sampleLibraryData
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 
 enum class STFHeaderType {
     HeaderHome, HeaderSearch, HeaderSearchInput, HeaderLibrary
@@ -81,7 +83,7 @@ fun STFHeader(
     userName: String = "",
     inputText: String = "",
     type: STFHeaderType,
-    searchChipsList: List<String> = emptyList(),
+    searchChipsList: List<Int> = emptyList(),
     libraryList: PrimaryLibraryData = PrimaryLibraryData(primaryLibrary = emptyList()),
     onAvatarClick: () -> Unit = {},
     onChipsHomeClick: (Int) -> Unit = {},
@@ -93,6 +95,7 @@ fun STFHeader(
     onPrimaryChipsClick: () -> Unit = {},
     onSecondaryChipsClick: () -> Unit = {},
     onInputTextChange: (String) -> Unit = {},
+    focusRequester: FocusRequester? = null,
     content: @Composable (Modifier) -> Unit = {}
 ) {
     val maxSearchStickPosition = if (type == STFHeaderType.HeaderSearch) 128.dp else 80.dp
@@ -149,7 +152,8 @@ fun STFHeader(
                                                                     chipsList = searchChipsList,
                                                                     onInputTextChange = onInputTextChange,
                                                                     onBackClick = onBackClick,
-                                                                    onChipsClick = onChipsSearchInputClick)
+                                                                    onChipsClick = onChipsSearchInputClick,
+                                                                    focusRequester = focusRequester)
 
             STFHeaderType.HeaderLibrary -> STFHeaderLibrary(modifier = modifier,
                                                             avatarUrl = avatarUrl,
@@ -279,10 +283,11 @@ private fun STFHeaderSearchInput(
     modifier: Modifier = Modifier,
     inputText: String,
     currentPosition: Dp,
-    chipsList: List<String>,
+    chipsList: List<Int>,
     onInputTextChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    onChipsClick: (Int) -> Unit
+    onChipsClick: (Int) -> Unit,
+    focusRequester: FocusRequester? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val chipsSelected = remember { mutableIntStateOf(-1) }
@@ -324,7 +329,9 @@ private fun STFHeaderSearchInput(
                               focusedTextColor = TextPrimary,
                               unfocusedTextColor = TextPrimary,
                       ),
-                      modifier = Modifier.weight(1f))
+                      modifier = Modifier
+                          .weight(1f)
+                          .then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier))
 
             Icon(painter = painterResource(id = R.drawable.ic_24_close),
                  contentDescription = null,
@@ -341,7 +348,7 @@ private fun STFHeaderSearchInput(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(chipsList.size) { index ->
-                STFChips(text = chipsList[index],
+                STFChips(text = stringResource(chipsList[index]),
                          size = STFChipsSize.Small,
                          type = if (index == chipsSelected.intValue) STFChipsType.Stroke else STFChipsType.Default,
                          onClick = {
@@ -443,7 +450,7 @@ fun HeaderSearchInputPreview() {
         STFHeaderSearchInput(
                 inputText = currentMessage,
                 currentPosition = 0.dp,
-                chipsList = chipsList,
+                chipsList = chipSearchInputList,
                 onInputTextChange = { currentMessage = it },
                 onBackClick = {},
                 onChipsClick = {},

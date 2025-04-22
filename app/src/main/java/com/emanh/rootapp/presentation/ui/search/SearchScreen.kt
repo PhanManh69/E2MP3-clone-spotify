@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.rootapp.presentation.composable.STFHeader
 import com.emanh.rootapp.presentation.composable.STFHeaderType
 import com.emanh.rootapp.presentation.ui.search.composable.SearchCardGenres
@@ -25,11 +26,15 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SearchScreen() {
-    SearchScaffold(onGenreClick = {})
+    val viewModel = hiltViewModel<SearchViewModel>()
+
+    SearchScaffold(onSearchClick = {
+        viewModel.goToSearchInput()
+    }, onGenreClick = {})
 }
 
 @Composable
-private fun SearchScaffold(modifier: Modifier = Modifier, onGenreClick: (Int) -> Unit) {
+private fun SearchScaffold(modifier: Modifier = Modifier, onSearchClick: () -> Unit, onGenreClick: (Int) -> Unit) {
     var visibleItemCount by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
 
@@ -44,7 +49,7 @@ private fun SearchScaffold(modifier: Modifier = Modifier, onGenreClick: (Int) ->
         }
     }
 
-    STFHeader(modifier = modifier, userName = "emanh", type = STFHeaderType.HeaderSearch, content = {
+    STFHeader(modifier = modifier, userName = "emanh", type = STFHeaderType.HeaderSearch, onSearchClick = onSearchClick, content = {
         Column(modifier = it.verticalScroll(scrollState)) {
             repeat(minOf(visibleItemCount, displayItems.size)) { index ->
                 AnimatedVisibility(visible = true, enter = fadeIn(animationSpec = tween(durationMillis = 300))) {
