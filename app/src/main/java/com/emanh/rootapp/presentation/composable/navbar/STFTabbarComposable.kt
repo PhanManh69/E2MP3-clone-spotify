@@ -27,7 +27,7 @@ import com.emanh.rootapp.presentation.theme.GradientTabbar
 @Composable
 fun STFTabbar(modifier: Modifier = Modifier, navController: NavController) {
     val buttonItems = remember {
-        listOf(STFNavButtonItem.Home, STFNavButtonItem.Search, STFNavButtonItem.YourLibrary, STFNavButtonItem.TestComposable)
+        listOf(STFNavButtonItem.Home, STFNavButtonItem.Search, STFNavButtonItem.YourLibrary)
     }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()

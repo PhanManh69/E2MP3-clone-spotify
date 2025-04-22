@@ -36,10 +36,10 @@ sealed class STFNavButtonItem<T>(
         override fun type(isSelected: Boolean) = if (isSelected) STFTabIconType.Select else STFTabIconType.Default
     }
 
-    @Serializable
-    data object TestComposable :
-            STFNavButtonItem<AppNavigationRoute.TestComposable>(name = R.string.premium, iconDefault = R.drawable.ic_32_premium,
-                                                                iconSelected = R.drawable.ic_32_premium, route = AppNavigationRoute.TestComposable) {
-        override fun type(isSelected: Boolean) = if (isSelected) STFTabIconType.Select else STFTabIconType.Default
-    }
+//    @Serializable
+//    data object TestComposable :
+//            STFNavButtonItem<AppNavigationRoute.TestComposable>(name = R.string.premium, iconDefault = R.drawable.ic_32_premium,
+//                                                                iconSelected = R.drawable.ic_32_premium, route = AppNavigationRoute.TestComposable) {
+//        override fun type(isSelected: Boolean) = if (isSelected) STFTabIconType.Select else STFTabIconType.Default
+//    }
 }
