@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -49,6 +51,7 @@ import com.emanh.rootapp.presentation.theme.AlphaN00_50
 import com.emanh.rootapp.presentation.theme.Body6Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundPrimary
+import com.emanh.rootapp.presentation.theme.IconBackgroundSecondary
 import com.emanh.rootapp.presentation.theme.IconInvert
 import com.emanh.rootapp.presentation.theme.IconProduct
 import com.emanh.rootapp.presentation.theme.TextBackgroundPrimary
@@ -79,10 +82,29 @@ fun STFCardImage(
     var isImageLoaded by remember { mutableStateOf(false) }
     var isLoadFailed by remember { mutableStateOf(false) }
     var toggled by remember { mutableStateOf(false) }
+    var isSwipeProcessed by remember { mutableStateOf(false) }
 
     val liked = remember(isLiked) { mutableStateOf(isLiked) }
     val coroutineScope = rememberCoroutineScope()
     val animatedPadding by animateDpAsState(if (toggled) 6.dp else 0.dp)
+
+    fun navigateToPrevious() {
+        if (imageUrlList.isNotEmpty()) {
+            currentImageIndex = if (currentImageIndex > 0) currentImageIndex - 1
+            else imageUrlList.size - 1
+
+            isImageLoaded = false
+            isLoadFailed = false
+        }
+    }
+
+    fun navigateToNext() {
+        if (imageUrlList.isNotEmpty()) {
+            currentImageIndex = (currentImageIndex + 1) % imageUrlList.size
+            isImageLoaded = false
+            isLoadFailed = false
+        }
+    }
 
     DisposableEffect(currentImageUrl) {
         val job = coroutineScope.launch {
@@ -100,6 +122,26 @@ fun STFCardImage(
     Box(modifier = modifier
         .padding(horizontal = 16.dp)
         .padding(top = 24.dp, bottom = 8.dp)
+        .pointerInput(Unit) {
+            detectHorizontalDragGestures(onDragStart = {
+                isSwipeProcessed = false
+            }, onDragEnd = {
+                isSwipeProcessed = false
+            }, onHorizontalDrag = { _, dragAmount ->
+                if (!isSwipeProcessed) {
+                    when {
+                        dragAmount < -20 -> {
+                            navigateToNext()
+                            isSwipeProcessed = true
+                        }
+                        dragAmount > 20 -> {
+                            navigateToPrevious()
+                            isSwipeProcessed = true
+                        }
+                    }
+                }
+            })
+        }
         .debounceClickable(indication = null) {
             coroutineScope.launch {
                 toggled = true
@@ -125,23 +167,34 @@ fun STFCardImage(
                           animatedPadding = animatedPadding,
                           onAddPlaylist = onAddPlaylist)
 
-        ImageNavigationControls(modifier = Modifier.align(Alignment.Center), onPreviousClick = {
-            if (imageUrlList.isNotEmpty()) {
-                currentImageIndex = if (currentImageIndex > 0) currentImageIndex - 1
-                else imageUrlList.size - 1
+        ImageIndicators(modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(bottom = 100.dp),
+                        count = imageUrlList.size,
+                        currentIndex = currentImageIndex)
 
-                isImageLoaded = false
-                isLoadFailed = false
-            }
-        }, onNextClick = {
-            if (imageUrlList.isNotEmpty()) {
-                currentImageIndex = (currentImageIndex + 1) % imageUrlList.size
-                isImageLoaded = false
-                isLoadFailed = false
-            }
-        })
+        ImageNavigationControls(modifier = Modifier.align(Alignment.Center),
+                                onPreviousClick = { navigateToPrevious() },
+                                onNextClick = { navigateToNext() })
 
         STFCardImageButtons(modifier = Modifier.align(Alignment.BottomCenter), text = description)
+    }
+}
+
+@Composable
+private fun ImageIndicators(
+    modifier: Modifier = Modifier, count: Int, currentIndex: Int
+) {
+    if (count <= 1) return
+
+    Row(modifier = modifier, horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+        repeat(count) { index ->
+            val isSelected = index == currentIndex
+            Box(modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(if (isSelected) 8.dp else 6.dp)
+                .background(color = if (isSelected) IconBackgroundPrimary else IconBackgroundSecondary, shape = RoundedCornerShape(50)))
+        }
     }
 }
 
