@@ -39,55 +39,63 @@ fun HomeScreen() {
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val uiState by homeViewModel.uiState.collectAsState()
 
-    HomeScaffold(isLiked = uiState.isLiked,
-                 onCardClick = {},
-                 onThumbTopMixesClick = {},
-                 onThumbRecentylClick = {},
-                 onThumbRecommendedlClick = {},
-                 onAvatarClick = {},
-                 onThumbSimilarClick = {},
-                 onThumbRadioClick = {},
+    HomeScaffold(isLikedImage = uiState.isLiked,
+                 isLikedPodcast = uiState.isLiked,
                  onViewAll = {},
-                 onPlayAll = {})
+                 onPlayRecommendedAll = {},
+                 onPlayTrendingAll = {},
+                 onQuickPlayClick = {},
+                 onTopMixesClick = {},
+                 onRecentylClick = {},
+                 onRecommendedlClick = {},
+                 onTrendingClick = {},
+                 onAvatarClick = {},
+                 onSimilarClick = {},
+                 onRadioClick = {})
 }
 
 @Composable
 private fun HomeScaffold(
     modifier: Modifier = Modifier,
-    isLiked: Boolean = false,
-    onCardClick: (Int) -> Unit,
-    onThumbTopMixesClick: (Int) -> Unit,
-    onThumbRecentylClick: (Int) -> Unit,
-    onThumbRecommendedlClick: (Int) -> Unit,
-    onAvatarClick: (Int) -> Unit,
-    onThumbSimilarClick: (Int) -> Unit,
-    onThumbRadioClick: (Int) -> Unit,
+    isLikedImage: Boolean = false,
+    isLikedPodcast: Boolean = false,
     onViewAll: () -> Unit,
-    onPlayAll: () -> Unit
+    onPlayRecommendedAll: () -> Unit,
+    onPlayTrendingAll: () -> Unit,
+    onQuickPlayClick: (Int) -> Unit,
+    onTopMixesClick: (Int) -> Unit,
+    onRecentylClick: (Int) -> Unit,
+    onRecommendedlClick: (Int) -> Unit,
+    onTrendingClick: (Int) -> Unit,
+    onAvatarClick: (Int) -> Unit,
+    onSimilarClick: (Int) -> Unit,
+    onRadioClick: (Int) -> Unit
 ) {
     var selectedChip by remember { mutableIntStateOf(0) }
     var visibleItemCount by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
 
     val commonSections: List<@Composable () -> Unit> = remember {
-        listOf({ HomeQuickPlaylist(onCardClick = onCardClick) },
-               { HomeYourTopMixes(onThumbClick = onThumbTopMixesClick) },
-               { HomeRecentlyListened(onThumbClick = onThumbRecentylClick, onViewAll = onViewAll) },
-               { HomeRecommended(onThumbClick = onThumbRecommendedlClick, onPlayAll = onPlayAll) },
-               { HomeTrendingSong(onThumbClick = onThumbRecommendedlClick, onPlayAll = onPlayAll) },
-               { HomeRadioForYou(onThumbClick = onThumbRadioClick) },
-               { HomeSimilarContent(onThumbClick = onThumbSimilarClick, onAvatarClick = onAvatarClick) })
+        listOf({ HomeQuickPlaylist(onCardClick = onQuickPlayClick) },
+               { HomeYourTopMixes(onThumbClick = onTopMixesClick) },
+               { HomeRecentlyListened(onThumbClick = onRecentylClick, onViewAll = onViewAll) },
+               { HomeRecommended(onThumbClick = onRecommendedlClick, onPlayAll = onPlayRecommendedAll) },
+               { HomeTrendingSong(onThumbClick = onTrendingClick, onPlayAll = onPlayTrendingAll) },
+               { HomeRadioForYou(onThumbClick = onRadioClick) },
+               { HomeSimilarContent(onThumbClick = onSimilarClick, onAvatarClick = onAvatarClick) })
     }
 
     val podcastSections: List<@Composable () -> Unit> = remember {
-        listOf({ HomeVideoShort() }, { HomePodcats(isLiked = isLiked) })
+        listOf({ HomeVideoShort() }, { HomePodcats(isLiked = isLikedPodcast) })
     }
 
     val displayItems by remember(selectedChip) {
         derivedStateOf {
             when (selectedChip) {
-                0 -> commonSections + listOf({ HomeCardImage(maxItems = 2) }, { HomePodcats(isLiked = isLiked, maxItems = 2) })
-                1 -> commonSections + listOf { HomeCardImage() }
+                0 -> commonSections + listOf({ HomeCardImage(isLiked = isLikedImage, maxItems = 2) },
+                                             { HomePodcats(isLiked = isLikedPodcast, maxItems = 2) })
+
+                1 -> commonSections + listOf { HomeCardImage(isLiked = isLikedImage) }
                 2 -> podcastSections
                 else -> emptyList()
             }
