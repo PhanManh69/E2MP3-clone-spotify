@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setImmersiveMode() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
 
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
             controller.hide(WindowInsetsCompat.Type.navigationBars())
