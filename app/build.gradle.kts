@@ -17,12 +17,12 @@ kapt {
 }
 
 android {
-    namespace = "com.emanh.rootapp"
+    namespace = "com.emanh.e2mp3.spotify"
     compileSdk = 35
     compileSdkVersion(35)
 
     defaultConfig {
-        applicationId = "com.emanh.rootapp"
+        applicationId = "com.emanh.e2mp3.spotify"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -123,11 +123,10 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.lottie.compose)
     implementation(libs.palette.ktx)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(platform(libs.okhttp.bom))
-
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.ui)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.okhttp.bom))
 
     implementation("io.coil-kt:coil-compose:2.7.0")
 }
