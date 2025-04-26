@@ -41,6 +41,7 @@ fun HomeScreen() {
 
     HomeScaffold(isLikedImage = uiState.isLiked,
                  isLikedPodcast = uiState.isLiked,
+                 recommendedList = mutableListOf(),
                  onViewAll = {},
                  onPlayRecommendedAll = {},
                  onPlayTrendingAll = {},
@@ -59,6 +60,7 @@ private fun HomeScaffold(
     modifier: Modifier = Modifier,
     isLikedImage: Boolean = false,
     isLikedPodcast: Boolean = false,
+    recommendedList: List<HomeSongsData>,
     onViewAll: () -> Unit,
     onPlayRecommendedAll: () -> Unit,
     onPlayTrendingAll: () -> Unit,
@@ -79,7 +81,7 @@ private fun HomeScaffold(
         listOf({ HomeQuickPlaylist(onCardClick = onQuickPlayClick) },
                { HomeYourTopMixes(onThumbClick = onTopMixesClick) },
                { HomeRecentlyListened(onThumbClick = onRecentylClick, onViewAll = onViewAll) },
-               { HomeRecommended(onThumbClick = onRecommendedlClick, onPlayAll = onPlayRecommendedAll) },
+               { HomeRecommended(recommendedList = recommendedList, onThumbClick = onRecommendedlClick, onPlayAll = onPlayRecommendedAll) },
                { HomeTrendingSong(onThumbClick = onTrendingClick, onPlayAll = onPlayTrendingAll) },
                { HomeRadioForYou(onThumbClick = onRadioClick) },
                { HomeSimilarContent(onThumbClick = onSimilarClick, onAvatarClick = onAvatarClick) })

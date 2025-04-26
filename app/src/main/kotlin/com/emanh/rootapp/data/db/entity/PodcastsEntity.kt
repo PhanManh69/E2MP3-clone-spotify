@@ -10,8 +10,8 @@ data class PodcastsEntity(
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "subtitle") val subtitle: String? = null,
-    @ColumnInfo(name = "owner_id") val owner: Int? = null,
+    @ColumnInfo(name = "owner_id") val ownerId: Int? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String? = null,
     @ColumnInfo(name = "timeline") val timeline: Long? = null,
-    @ColumnInfo(name = "likes") val likes: List<Int>? = null,
+    @ColumnInfo(name = "likes") val likesIdList: List<Int>? = null,
 )

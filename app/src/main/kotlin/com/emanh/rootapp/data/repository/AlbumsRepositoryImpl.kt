@@ -14,14 +14,14 @@ class AlbumsRepositoryImpl @Inject constructor(
     override fun getAllAlbums(): Flow<List<AlbumsModel>> {
         return albumsDataSource.getAllAlbums().map { entities ->
             entities.map { entity ->
-                AlbumsModel(id = entity.id,
+                AlbumsModel(id = entity.albumId,
                             avatarUrl = entity.avatarUrl,
                             title = entity.title,
                             subtitle = entity.subtitle,
                             albumType = entity.avatarUrl,
                             releaseDate = entity.releaseDate,
-                            artist = entity.artist,
-                            songs = entity.songs)
+                            artist = entity.artistsIdList,
+                            songs = entity.songsIdList)
             }
         }
     }
@@ -31,13 +31,13 @@ class AlbumsRepositoryImpl @Inject constructor(
     }
 
     private fun mapToEntity(model: AlbumsModel): AlbumsEntity {
-        return AlbumsEntity(id = model.id,
+        return AlbumsEntity(albumId = model.id,
                             avatarUrl = model.avatarUrl,
                             title = model.title,
                             subtitle = model.subtitle,
                             albumType = model.avatarUrl,
                             releaseDate = model.releaseDate,
-                            artist = model.artist,
-                            songs = model.songs)
+                            artistsIdList = model.artist,
+                            songsIdList = model.songs)
     }
 }

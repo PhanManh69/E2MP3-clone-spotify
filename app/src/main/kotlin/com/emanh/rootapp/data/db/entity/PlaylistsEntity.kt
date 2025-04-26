@@ -6,11 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "playlists")
 data class PlaylistsEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val playlistId: Int = 0,
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "subtitle") val subtitle: String? = null,
     @ColumnInfo(name = "owner_id") val ownerId: Int? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String,
-    @ColumnInfo(name = "songs") val songs: List<Int>
+    @ColumnInfo(name = "songs") val songsIdList: List<Int>
 )

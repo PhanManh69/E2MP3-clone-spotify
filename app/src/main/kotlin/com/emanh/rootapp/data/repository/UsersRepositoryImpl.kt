@@ -22,7 +22,7 @@ class UsersRepositoryImpl @Inject constructor(
                            avatarUrl = entity.avatarUrl,
                            name = entity.name,
                            followers = entity.followers,
-                           following = entity.following)
+                           following = entity.followingIdList)
             }
         }
     }
@@ -40,6 +40,6 @@ class UsersRepositoryImpl @Inject constructor(
                            avatarUrl = model.avatarUrl,
                            name = model.name,
                            followers = model.followers,
-                           following = model.following)
+                           followingIdList = model.following)
     }
 }

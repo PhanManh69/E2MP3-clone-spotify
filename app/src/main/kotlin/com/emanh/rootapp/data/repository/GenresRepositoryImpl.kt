@@ -14,14 +14,14 @@ class GenresRepositoryImpl @Inject constructor(
     override fun getAllGenres(): Flow<List<GenresModel>> {
         return genresDataSource.getAllGenres().map { entities ->
             entities.map { entity ->
-                GenresModel(id = entity.id, nameId = entity.nameId)
+                GenresModel(id = entity.genreId, nameId = entity.nameId)
             }
         }
     }
 
     override fun getGenreById(genreId: Int): Flow<GenresModel> {
         return genresDataSource.getGenreById(genreId).map { entity ->
-            GenresModel(id = entity.id, nameId = entity.nameId)
+            GenresModel(id = entity.genreId, nameId = entity.nameId)
         }
     }
 
@@ -30,6 +30,6 @@ class GenresRepositoryImpl @Inject constructor(
     }
 
     private fun mapToEntity(model: GenresModel): GenresEntity {
-        return GenresEntity(id = model.id, nameId = model.nameId)
+        return GenresEntity(genreId = model.id, nameId = model.nameId)
     }
 }

@@ -12,7 +12,7 @@ interface GenresDao {
     @Query("SELECT * FROM genres")
     fun getAllGenres(): Flow<List<GenresEntity>>
 
-    @Query("SELECT * FROM genres WHERE id = :genreId")
+    @Query("SELECT * FROM genres WHERE genreId = :genreId")
     fun getGenreById(genreId: Int): Flow<GenresEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

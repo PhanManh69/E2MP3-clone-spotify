@@ -1,4 +1,4 @@
-package com.emanh.rootapp.presentation
+package com.emanh.rootapp.presentation.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emanh.rootapp.presentation.composable.STFItem
-import com.emanh.rootapp.presentation.composable.STFItemSize
-import com.emanh.rootapp.presentation.composable.STFItemType
 import com.emanh.rootapp.presentation.theme.Body2Bold
 import com.emanh.rootapp.presentation.theme.Body6Medium
 import com.emanh.rootapp.presentation.theme.E2MP3Theme

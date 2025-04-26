@@ -14,16 +14,33 @@ class SongsRepositoryImpl @Inject constructor(
     override fun getAllSongs(): Flow<List<SongsModel>> {
         return songsDataSource.getAllSongs().map { entities ->
             entities.map { entity ->
-                SongsModel(id = entity.id,
+                SongsModel(id = entity.songId,
                            avatarUrl = entity.avatarUrl,
                            songUrl = entity.songUrl,
                            title = entity.title,
                            subtitle = entity.subtitle,
                            timeline = entity.timeline,
                            releaseDate = entity.releaseDate,
-                           genres = entity.genres,
-                           likes = entity.likes,
-                           artists = entity.artists)
+                           genres = entity.genresIdList,
+                           likes = entity.likesIdList,
+                           artists = entity.artistsIdList)
+            }
+        }
+    }
+
+    override fun getSongByGenreId(genreId: String): Flow<List<SongsModel>> {
+        return songsDataSource.getSongByGenreId(genreId).map { entities ->
+            entities.map { entity ->
+                SongsModel(id = entity.songId,
+                           avatarUrl = entity.avatarUrl,
+                           songUrl = entity.songUrl,
+                           title = entity.title,
+                           subtitle = entity.subtitle,
+                           timeline = entity.timeline,
+                           releaseDate = entity.releaseDate,
+                           genres = entity.genresIdList,
+                           likes = entity.likesIdList,
+                           artists = entity.artistsIdList)
             }
         }
     }
@@ -33,15 +50,15 @@ class SongsRepositoryImpl @Inject constructor(
     }
 
     private fun mapToEntity(model: SongsModel): SongsEntity {
-        return SongsEntity(id = model.id,
+        return SongsEntity(songId = model.id,
                            avatarUrl = model.avatarUrl,
                            songUrl = model.songUrl,
                            title = model.title,
                            subtitle = model.subtitle,
                            timeline = model.timeline,
                            releaseDate = model.releaseDate,
-                           genres = model.genres,
-                           likes = model.likes,
-                           artists = model.artists)
+                           genresIdList = model.genres,
+                           likesIdList = model.likes,
+                           artistsIdList = model.artists)
     }
 }

@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import com.emanh.rootapp.presentation.ItemArtistsPreview
+import com.emanh.rootapp.presentation.composable.ItemArtistsPreview
 import com.emanh.rootapp.presentation.composable.AvatarUrlPreview
 import com.emanh.rootapp.presentation.composable.AvatarUsernamePreview
 import com.emanh.rootapp.presentation.composable.BrandPreview

@@ -7,6 +7,7 @@ import com.emanh.rootapp.domain.usecase.AlbumsUseCase
 import com.emanh.rootapp.domain.usecase.GenresUseCase
 import com.emanh.rootapp.domain.usecase.SongsUseCase
 import com.emanh.rootapp.domain.usecase.UsersUseCase
+import com.emanh.rootapp.domain.usecase.crossref.SongGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,8 @@ class HomeViewModel @Inject constructor(
     private val genresUseCase: GenresUseCase,
     private val songsUseCase: SongsUseCase,
     private val usersUseCase: UsersUseCase,
-    private val albumsUseCase: AlbumsUseCase
+    private val albumsUseCase: AlbumsUseCase,
+    private val songGenreUseCase: SongGenreUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -35,6 +37,15 @@ class HomeViewModel @Inject constructor(
         getAllSongs()
         getAllUsers()
         getAllAlbums()
+        getAllSongsWithGenres()
+    }
+
+    private fun getAllSongsWithGenres() {
+        songGenreUseCase.getAllSongsWithGenres().onEach { songGenreList ->
+            Log.d(TAG, "Fetched $songGenreList songGenre")
+        }.catch { error ->
+            Log.e(TAG, "Error fetching songGenre: $error")
+        }.launchIn(viewModelScope)
     }
 
     private fun getAllGenres() {
