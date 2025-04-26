@@ -18,16 +18,39 @@ object MyQuery {
     """
 
     const val QUERY_SONGS_BY_GENRES = """
-        SELECT s.*
-        FROM songs s
-        WHERE 
-            -- Check if any genre ID in the song's genres list matches any ID in the provided genres list
-            EXISTS (
-                SELECT 1 
-                FROM json_each(s.genresIdList) as sg
-                WHERE instr(:genresList, sg.value) > 0
+        WITH top_genres AS (
+            SELECT sg.genreId
+            FROM cross_ref_song_genre sg
+            JOIN views_song vs ON sg.songId = vs.song_id
+            WHERE vs.user_id = :userId
+            GROUP BY sg.genreId
+            ORDER BY COUNT(*) DESC
+            LIMIT 3
+        ),
+        fallback_genres AS (
+            SELECT genreId FROM (
+                SELECT 1 AS genreId
+                UNION ALL
+                SELECT 12
+                UNION ALL
+                SELECT 14
             )
+        ),
+        selected_genres AS (
+            SELECT genreId FROM top_genres
+            UNION ALL
+            SELECT genreId FROM fallback_genres
+            WHERE NOT EXISTS (SELECT 1 FROM top_genres LIMIT 3)
+            LIMIT 3
+        )
+        SELECT DISTINCT s.*
+        FROM songs s
+        JOIN cross_ref_song_genre sg1 ON s.songId = sg1.songId
+        JOIN cross_ref_song_genre sg2 ON s.songId = sg2.songId
+        WHERE sg1.genreId IN (SELECT genreId FROM selected_genres)
+        AND sg2.genreId IN (SELECT genreId FROM selected_genres)
+        AND sg1.genreId < sg2.genreId
         ORDER BY RANDOM()
-        LIMIT :limit
+        LIMIT 10
     """
 }

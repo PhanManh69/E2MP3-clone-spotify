@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -39,11 +40,18 @@ fun HomeScreen() {
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val uiState by homeViewModel.uiState.collectAsState()
     val isLiked = uiState.isLiked
+    val initialRecommendedSongs = remember {
+        mutableStateOf<List<HomeSongsData>>(emptyList())
+    }
+
+    if (initialRecommendedSongs.value.isEmpty() && uiState.recommendedSongs.isNotEmpty()) {
+        initialRecommendedSongs.value = uiState.recommendedSongs
+    }
 
     HomeScaffold(isLikedImage = isLiked,
                  isLikedPodcast = isLiked,
                  recentlyListenedSongs = uiState.recentlyListenedSongs,
-                 recommendedSongs = uiState.recommendedSongs,
+                 recommendedSongs = initialRecommendedSongs.value,
                  onViewAll = {},
                  onPlayRecommendedAll = {},
                  onPlayTrendingAll = {},

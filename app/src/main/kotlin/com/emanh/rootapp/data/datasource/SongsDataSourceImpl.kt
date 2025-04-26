@@ -12,8 +12,8 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getAllSongs()
     }
 
-    override fun getRecommendedSongs(): Flow<List<SongsEntity>> {
-        return songsDao.getRecommendedSongs()
+    override fun getRecommendedSongs(userId: Int): Flow<List<SongsEntity>> {
+        return songsDao.getRecommendedSongs(userId)
     }
 
     override fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsEntity>> {

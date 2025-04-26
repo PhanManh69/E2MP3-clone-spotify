@@ -31,7 +31,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRecommendedSongs() {
-        songsUseCase.getRecommendedSongs().onEach { songsList ->
+        val userId = 1
+        songsUseCase.getRecommendedSongs(userId).onEach { songsList ->
             _uiState.update { currentState ->
                 currentState.copy(recommendedSongs = songsList.map { song ->
                     HomeSongsData(id = song.id,
