@@ -28,8 +28,25 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSongByGenreId(genreId: String): Flow<List<SongsModel>> {
-        return songsDataSource.getSongByGenreId(genreId).map { entities ->
+    override fun getRecommendedSongs(): Flow<List<SongsModel>> {
+        return songsDataSource.getRecommendedSongs().map { entities ->
+            entities.map { entity ->
+                SongsModel(id = entity.songId,
+                           avatarUrl = entity.avatarUrl,
+                           songUrl = entity.songUrl,
+                           title = entity.title,
+                           subtitle = entity.subtitle,
+                           timeline = entity.timeline,
+                           releaseDate = entity.releaseDate,
+                           genres = entity.genresIdList,
+                           likes = entity.likesIdList,
+                           artists = entity.artistsIdList)
+            }
+        }
+    }
+
+    override fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>> {
+        return songsDataSource.getRecentlyListenedSongs(userId).map { entities ->
             entities.map { entity ->
                 SongsModel(id = entity.songId,
                            avatarUrl = entity.avatarUrl,

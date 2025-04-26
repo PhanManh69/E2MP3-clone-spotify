@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface SongsDataSource {
     fun getAllSongs(): Flow<List<SongsEntity>>
 
-    fun getSongByGenreId(genreId: String): Flow<List<SongsEntity>>
+    fun getRecommendedSongs(): Flow<List<SongsEntity>>
+
+    fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsEntity>>
 
     suspend fun insertAllSongs(songs: List<SongsEntity>)
 }

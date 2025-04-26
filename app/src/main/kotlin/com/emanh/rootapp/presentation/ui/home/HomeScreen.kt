@@ -38,17 +38,19 @@ import kotlinx.coroutines.delay
 fun HomeScreen() {
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val uiState by homeViewModel.uiState.collectAsState()
+    val isLiked = uiState.isLiked
 
-    HomeScaffold(isLikedImage = uiState.isLiked,
-                 isLikedPodcast = uiState.isLiked,
-                 recommendedList = mutableListOf(),
+    HomeScaffold(isLikedImage = isLiked,
+                 isLikedPodcast = isLiked,
+                 recentlyListenedSongs = uiState.recentlyListenedSongs,
+                 recommendedSongs = uiState.recommendedSongs,
                  onViewAll = {},
                  onPlayRecommendedAll = {},
                  onPlayTrendingAll = {},
                  onQuickPlayClick = {},
                  onTopMixesClick = {},
                  onRecentylClick = {},
-                 onRecommendedlClick = {},
+                 onRecommendedlClick = { homeViewModel.onRecommendedlClick(it) },
                  onTrendingClick = {},
                  onAvatarClick = {},
                  onSimilarClick = {},
@@ -60,7 +62,8 @@ private fun HomeScaffold(
     modifier: Modifier = Modifier,
     isLikedImage: Boolean = false,
     isLikedPodcast: Boolean = false,
-    recommendedList: List<HomeSongsData>,
+    recentlyListenedSongs: List<HomeSongsData>,
+    recommendedSongs: List<HomeSongsData>,
     onViewAll: () -> Unit,
     onPlayRecommendedAll: () -> Unit,
     onPlayTrendingAll: () -> Unit,
@@ -76,22 +79,30 @@ private fun HomeScaffold(
     var selectedChip by remember { mutableIntStateOf(0) }
     var visibleItemCount by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
-
-    val commonSections: List<@Composable () -> Unit> = remember {
+    val recentlyListenedState = remember(recentlyListenedSongs) {
+        @Composable {
+            HomeRecentlyListened(recentlyLestenedList = recentlyListenedSongs, onThumbClick = onRecentylClick, onViewAll = onViewAll)
+        }
+    }
+    val recommendedState = remember(recommendedSongs) {
+        @Composable {
+            HomeRecommended(recommendedList = recommendedSongs, onThumbClick = onRecommendedlClick, onPlayAll = onPlayRecommendedAll)
+        }
+    }
+    val staticSections: List<@Composable () -> Unit> = remember {
         listOf({ HomeQuickPlaylist(onCardClick = onQuickPlayClick) },
                { HomeYourTopMixes(onThumbClick = onTopMixesClick) },
-               { HomeRecentlyListened(onThumbClick = onRecentylClick, onViewAll = onViewAll) },
-               { HomeRecommended(recommendedList = recommendedList, onThumbClick = onRecommendedlClick, onPlayAll = onPlayRecommendedAll) },
                { HomeTrendingSong(onThumbClick = onTrendingClick, onPlayAll = onPlayTrendingAll) },
                { HomeRadioForYou(onThumbClick = onRadioClick) },
                { HomeSimilarContent(onThumbClick = onSimilarClick, onAvatarClick = onAvatarClick) })
     }
-
+    val commonSections = remember(recentlyListenedState, recommendedState) {
+        listOf(staticSections[0], staticSections[1], recentlyListenedState, recommendedState, staticSections[2], staticSections[3], staticSections[4])
+    }
     val podcastSections: List<@Composable () -> Unit> = remember {
         listOf({ HomeVideoShort() }, { HomePodcats(isLiked = isLikedPodcast) })
     }
-
-    val displayItems by remember(selectedChip) {
+    val displayItems by remember(selectedChip, commonSections) {
         derivedStateOf {
             when (selectedChip) {
                 0 -> commonSections + listOf({ HomeCardImage(isLiked = isLikedImage, maxItems = 2) },
@@ -104,7 +115,7 @@ private fun HomeScaffold(
         }
     }
 
-    LaunchedEffect(displayItems) {
+    LaunchedEffect(displayItems.size, selectedChip) {
         visibleItemCount = 0
         while (visibleItemCount < displayItems.size) {
             delay(100L)
@@ -119,7 +130,6 @@ private fun HomeScaffold(
                     displayItems[index].invoke()
                 }
             }
-
             Spacer(modifier = Modifier.height(PADDING_BOTTOM_BAR.dp))
         }
     })

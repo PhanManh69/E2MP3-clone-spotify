@@ -12,6 +12,8 @@ import com.emanh.rootapp.data.datasource.SongsDataSource
 import com.emanh.rootapp.data.datasource.SongsDataSourceImpl
 import com.emanh.rootapp.data.datasource.UsersDataSource
 import com.emanh.rootapp.data.datasource.UsersDataSourceImpl
+import com.emanh.rootapp.data.datasource.ViewsSongDataSource
+import com.emanh.rootapp.data.datasource.ViewsSongDataSourceImpl
 import com.emanh.rootapp.data.db.dao.AlbumsDao
 import com.emanh.rootapp.data.db.dao.crossref.SongGenreDao
 import com.emanh.rootapp.data.db.dao.GenresDao
@@ -27,11 +29,13 @@ import com.emanh.rootapp.data.repository.crossref.SongGenreRepositoryImpl
 import com.emanh.rootapp.data.repository.GenresRepositoryImpl
 import com.emanh.rootapp.data.repository.SongsRepositoryImpl
 import com.emanh.rootapp.data.repository.UsersRepositoryImpl
+import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
 import com.emanh.rootapp.domain.repository.AlbumsRepository
 import com.emanh.rootapp.domain.repository.crossref.SongGenreRepository
 import com.emanh.rootapp.domain.repository.GenresRepository
 import com.emanh.rootapp.domain.repository.SongsRepository
 import com.emanh.rootapp.domain.repository.UsersRepository
+import com.emanh.rootapp.domain.repository.ViewsSongRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -154,6 +158,18 @@ object DatabaseModule {
     @Singleton
     fun provideAlbumsRepository(albumsDataSource: AlbumsDataSource): AlbumsRepository {
         return AlbumsRepositoryImpl(albumsDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideViewsSongDataSource(viewsSongDao: ViewsSongDao): ViewsSongDataSource {
+        return ViewsSongDataSourceImpl(viewsSongDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideViewsSongRepository(viewsSongDataSource: ViewsSongDataSource): ViewsSongRepository {
+        return ViewsSongRepositoryImpl(viewsSongDataSource)
     }
 
     @Provides

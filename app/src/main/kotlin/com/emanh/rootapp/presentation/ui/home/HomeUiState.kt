@@ -81,10 +81,14 @@ data class HomeAlbumsData(
     val songs: List<Int>
 )
 
+@Immutable
+data class HomeViewsSongData(
+    val viewsSongId: Int, val userId: Int, val songId: Int, val numberListener: Int, val dateTime: String
+)
+
 data class HomeUiState(
     val isLiked: Boolean = false,
-    val genres: List<HomeGenreData> = emptyList(),
-    val songs: List<HomeSongsData> = emptyList(),
-    val users: List<HomeUsersData> = emptyList(),
-    val albums: List<HomeAlbumsData> = emptyList()
+    val recommendedSongs: List<HomeSongsData> = emptyList(),
+    val recentlyListenedSongs: List<HomeSongsData> = emptyList(),
+    val insertViewsSong: HomeViewsSongData = HomeViewsSongData(0, 0, 0, 0, "")
 )

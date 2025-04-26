@@ -12,8 +12,12 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getAllSongs()
     }
 
-    override fun getSongByGenreId(genreId: String): Flow<List<SongsEntity>> {
-        return songsDao.getSongByGenreId(genreId)
+    override fun getRecommendedSongs(): Flow<List<SongsEntity>> {
+        return songsDao.getRecommendedSongs()
+    }
+
+    override fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsEntity>> {
+        return songsDao.getRecentlyListenedSongs(userId)
     }
 
     override suspend fun insertAllSongs(songs: List<SongsEntity>) {

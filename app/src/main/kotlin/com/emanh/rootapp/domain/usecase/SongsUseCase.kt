@@ -12,7 +12,11 @@ class SongsUseCase @Inject constructor(
         return songsRepository.getAllSongs()
     }
 
-    fun getSongByGenreId(genreId: String): Flow<List<SongsModel>> {
-        return songsRepository.getSongByGenreId(genreId)
+    fun getRecommendedSongs(): Flow<List<SongsModel>> {
+        return songsRepository.getRecommendedSongs()
+    }
+
+    fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>> {
+        return songsRepository.getRecentlyListenedSongs(userId)
     }
 }

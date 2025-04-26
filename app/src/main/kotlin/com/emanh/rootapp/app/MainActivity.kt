@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setImmersiveMode()
         super.onCreate(savedInstanceState)
+//        deleteDatabase("e2mp3_db")
         databaseInitialized()
         setContent {
             E2MP3Theme {
