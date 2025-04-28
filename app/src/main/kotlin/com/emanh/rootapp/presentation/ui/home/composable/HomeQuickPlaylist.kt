@@ -15,10 +15,10 @@ import com.emanh.rootapp.presentation.ui.home.HomePlaylistsData
 import com.emanh.rootapp.utils.MyConstant.fakeQuickPlaylistList
 
 @Composable
-fun HomeQuickPlaylist(modifier: Modifier = Modifier, onCardClick: (Int) -> Unit) {
+fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any>, onCardClick: (Int) -> Unit) {
     Column(modifier = modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val chunkSize = 2
-        val chunkedList = fakeQuickPlaylistList.chunked(chunkSize)
+        val chunkedList = quickPlaylistList.chunked(chunkSize)
 
         chunkedList.forEach { rowItems ->
             Row(modifier = Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -45,13 +45,5 @@ fun HomeQuickPlaylist(modifier: Modifier = Modifier, onCardClick: (Int) -> Unit)
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun HomeGridCardPreview() {
-    E2MP3Theme {
-        HomeQuickPlaylist(onCardClick = {})
     }
 }

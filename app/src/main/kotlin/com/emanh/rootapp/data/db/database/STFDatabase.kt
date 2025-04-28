@@ -12,6 +12,7 @@ import com.emanh.rootapp.data.db.dao.PodcastsDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
+import com.emanh.rootapp.data.db.dao.crossref.PlaylistSongDao
 import com.emanh.rootapp.data.db.entity.AlbumsEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongGenreEntity
 import com.emanh.rootapp.data.db.entity.GenresEntity
@@ -20,8 +21,9 @@ import com.emanh.rootapp.data.db.entity.PodcastsEntity
 import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.data.db.entity.ViewsSongEntity
+import com.emanh.rootapp.data.db.entity.crossref.PlaylistSongEntity
 
-@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SongGenreEntity::class],
+@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SongGenreEntity::class, PlaylistSongEntity::class],
           version = 1,
           exportSchema = false)
 @TypeConverters(Converters::class)
@@ -34,4 +36,5 @@ abstract class STFDatabase : RoomDatabase() {
     abstract fun usersDao(): UsersDao
     abstract fun viewsSongDao(): ViewsSongDao
     abstract fun crossRefSongGenreDao(): SongGenreDao
+    abstract fun crossRefPlaylistSongDao(): PlaylistSongDao
 }

@@ -17,7 +17,7 @@ object MyQuery {
         SELECT * FROM views_song WHERE user_id = :userId AND song_id = :songId LIMIT 1
     """
 
-    const val QUERY_SONGS_BY_GENRES = """
+    const val QUERY_RECOMMENDED_YOUR = """
         WITH top_genres AS (
             SELECT sg.genreId
             FROM cross_ref_song_genre sg
@@ -52,5 +52,21 @@ object MyQuery {
         AND sg1.genreId < sg2.genreId
         ORDER BY RANDOM()
         LIMIT 10
+    """
+
+    const val QUERY_TRENDING = """
+        SELECT s.*
+        FROM songs s
+        JOIN views_song vs ON s.songId = vs.song_id
+        ORDER BY number_listener DESC
+        LIMIT 10
+    """
+
+    const val QUERY_QUICK_PLAYLIST = """
+        SELECT *
+        FROM playlists
+        WHERE isRadio = false AND owner_id = 1 OR owner_id = :userId
+        ORDER BY RANDOM()
+        LIMIT 6
     """
 }

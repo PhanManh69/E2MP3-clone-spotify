@@ -19,4 +19,8 @@ class SongsUseCase @Inject constructor(
     fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>> {
         return songsRepository.getRecentlyListenedSongs(userId)
     }
+
+    fun getTrendingSongs(): Flow<List<SongsModel>> {
+        return songsRepository.getTrendingSongs()
+    }
 }

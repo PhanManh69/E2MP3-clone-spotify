@@ -62,6 +62,23 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getTrendingSongs(): Flow<List<SongsModel>> {
+        return songsDataSource.getTrendingSongs().map { entities ->
+            entities.map { entity ->
+                SongsModel(id = entity.songId,
+                           avatarUrl = entity.avatarUrl,
+                           songUrl = entity.songUrl,
+                           title = entity.title,
+                           subtitle = entity.subtitle,
+                           timeline = entity.timeline,
+                           releaseDate = entity.releaseDate,
+                           genres = entity.genresIdList,
+                           likes = entity.likesIdList,
+                           artists = entity.artistsIdList)
+            }
+        }
+    }
+
     override suspend fun insertAllSongs(songs: List<SongsModel>) {
         songsDataSource.insertAllSongs(songs.map { mapToEntity(it) })
     }

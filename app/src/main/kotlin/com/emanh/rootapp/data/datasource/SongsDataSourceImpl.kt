@@ -20,6 +20,10 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getRecentlyListenedSongs(userId)
     }
 
+    override fun getTrendingSongs(): Flow<List<SongsEntity>> {
+        return songsDao.getTrendingSongs()
+    }
+
     override suspend fun insertAllSongs(songs: List<SongsEntity>) {
         songsDao.insertAllSongs(songs)
     }

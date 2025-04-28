@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SongGenreUseCase @Inject constructor(
-        private val songGenreRepository: SongGenreRepository
+    private val songGenreRepository: SongGenreRepository
 ) {
     fun getAllSongsWithGenres(): Flow<List<SongsWithGenresModel>> {
         return songGenreRepository.getAllSongsWithGenres()

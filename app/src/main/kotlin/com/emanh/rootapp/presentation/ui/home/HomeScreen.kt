@@ -50,8 +50,10 @@ fun HomeScreen() {
 
     HomeScaffold(isLikedImage = isLiked,
                  isLikedPodcast = isLiked,
+                 playlistSongList = uiState.quickPlaylistSongs,
                  recentlyListenedSongs = uiState.recentlyListenedSongs,
                  recommendedSongs = initialRecommendedSongs.value,
+                 trendingSongs = uiState.trendingSongs,
                  onViewAll = {},
                  onPlayRecommendedAll = {},
                  onPlayTrendingAll = {},
@@ -70,8 +72,10 @@ private fun HomeScaffold(
     modifier: Modifier = Modifier,
     isLikedImage: Boolean = false,
     isLikedPodcast: Boolean = false,
+    playlistSongList: List<Any>,
     recentlyListenedSongs: List<HomeSongsData>,
     recommendedSongs: List<HomeSongsData>,
+    trendingSongs: List<HomeSongsData>,
     onViewAll: () -> Unit,
     onPlayRecommendedAll: () -> Unit,
     onPlayTrendingAll: () -> Unit,
@@ -87,6 +91,11 @@ private fun HomeScaffold(
     var selectedChip by remember { mutableIntStateOf(0) }
     var visibleItemCount by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
+    val quickPlaylistState = remember(playlistSongList) {
+        @Composable {
+            HomeQuickPlaylist(quickPlaylistList = playlistSongList, onCardClick = onQuickPlayClick)
+        }
+    }
     val recentlyListenedState = remember(recentlyListenedSongs) {
         @Composable {
             HomeRecentlyListened(recentlyLestenedList = recentlyListenedSongs, onThumbClick = onRecentylClick, onViewAll = onViewAll)
@@ -97,15 +106,18 @@ private fun HomeScaffold(
             HomeRecommended(recommendedList = recommendedSongs, onThumbClick = onRecommendedlClick, onPlayAll = onPlayRecommendedAll)
         }
     }
+    val trendingState = remember(trendingSongs) {
+        @Composable {
+            HomeTrendingSong(trendingList = trendingSongs, onThumbClick = onTrendingClick, onPlayAll = onPlayTrendingAll)
+        }
+    }
     val staticSections: List<@Composable () -> Unit> = remember {
-        listOf({ HomeQuickPlaylist(onCardClick = onQuickPlayClick) },
-               { HomeYourTopMixes(onThumbClick = onTopMixesClick) },
-               { HomeTrendingSong(onThumbClick = onTrendingClick, onPlayAll = onPlayTrendingAll) },
+        listOf({ HomeYourTopMixes(onThumbClick = onTopMixesClick) },
                { HomeRadioForYou(onThumbClick = onRadioClick) },
                { HomeSimilarContent(onThumbClick = onSimilarClick, onAvatarClick = onAvatarClick) })
     }
-    val commonSections = remember(recentlyListenedState, recommendedState) {
-        listOf(staticSections[0], staticSections[1], recentlyListenedState, recommendedState, staticSections[2], staticSections[3], staticSections[4])
+    val commonSections = remember(recentlyListenedState, recommendedState, trendingState) {
+        listOf(quickPlaylistState, staticSections[0], recentlyListenedState, recommendedState, trendingState, staticSections[1], staticSections[2])
     }
     val podcastSections: List<@Composable () -> Unit> = remember {
         listOf({ HomeVideoShort() }, { HomePodcats(isLiked = isLikedPodcast) })

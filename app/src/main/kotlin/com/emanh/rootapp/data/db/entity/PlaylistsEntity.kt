@@ -10,6 +10,7 @@ data class PlaylistsEntity(
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "subtitle") val subtitle: String? = null,
+    @ColumnInfo(name = "isRadio") val isRadio: Boolean = false,
     @ColumnInfo(name = "owner_id") val ownerId: Int? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String,
     @ColumnInfo(name = "songs") val songsIdList: List<Int>

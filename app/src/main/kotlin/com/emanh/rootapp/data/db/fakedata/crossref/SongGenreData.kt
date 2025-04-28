@@ -5,7 +5,6 @@ import com.emanh.rootapp.data.db.fakedata.fakeSongsData
 
 fun fakeCrossRefSongGenreData(): List<SongGenreEntity> {
     val songsData = fakeSongsData()
-
     val crossRefList = mutableListOf<SongGenreEntity>()
 
     songsData.forEachIndexed { index, item ->

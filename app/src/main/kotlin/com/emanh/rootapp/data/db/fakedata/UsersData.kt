@@ -3,7 +3,13 @@ package com.emanh.rootapp.data.db.fakedata
 import com.emanh.rootapp.data.db.entity.UsersEntity
 
 fun fakeUsersData(): List<UsersEntity> {
-    val usersData = listOf(UsersEntity(username = "PhanManh24",
+    val usersData = listOf(UsersEntity(username = "Spotify",
+                                       email = "Spotify@gmail.com",
+                                       password = "Phanmanh24",
+                                       avatarUrl = "https://www.scdn.co/i/_global/twitter_card-default.jpg",
+                                       name = "Spotify",
+                                       followers = 999999999),
+                           UsersEntity(username = "PhanManh24",
                                        email = "phankhacmanh2n@gmail.com",
                                        password = "Phanmanh24",
                                        avatarUrl = "https://res.cloudinary.com/decqclrhl/image/upload/v1745556291/e2mp3-spotify/img/img_avatar_emanh.jpg",

@@ -8,12 +8,16 @@ import com.emanh.rootapp.data.datasource.crossref.SongGenreDataSource
 import com.emanh.rootapp.data.datasource.crossref.SongGenreDataSourceImpl
 import com.emanh.rootapp.data.datasource.GenresDataSource
 import com.emanh.rootapp.data.datasource.GenresDataSourceImpl
+import com.emanh.rootapp.data.datasource.PlaylistsDataSource
+import com.emanh.rootapp.data.datasource.PlaylistsDataSourceImpl
 import com.emanh.rootapp.data.datasource.SongsDataSource
 import com.emanh.rootapp.data.datasource.SongsDataSourceImpl
 import com.emanh.rootapp.data.datasource.UsersDataSource
 import com.emanh.rootapp.data.datasource.UsersDataSourceImpl
 import com.emanh.rootapp.data.datasource.ViewsSongDataSource
 import com.emanh.rootapp.data.datasource.ViewsSongDataSourceImpl
+import com.emanh.rootapp.data.datasource.crossref.PlaylistSongDataSource
+import com.emanh.rootapp.data.datasource.crossref.PlaylistSongDataSourceImpl
 import com.emanh.rootapp.data.db.dao.AlbumsDao
 import com.emanh.rootapp.data.db.dao.crossref.SongGenreDao
 import com.emanh.rootapp.data.db.dao.GenresDao
@@ -22,20 +26,25 @@ import com.emanh.rootapp.data.db.dao.PodcastsDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
+import com.emanh.rootapp.data.db.dao.crossref.PlaylistSongDao
 import com.emanh.rootapp.data.db.database.STFDatabase
 import com.emanh.rootapp.data.db.initializer.DatabaseInitializer
 import com.emanh.rootapp.data.repository.AlbumsRepositoryImpl
 import com.emanh.rootapp.data.repository.crossref.SongGenreRepositoryImpl
 import com.emanh.rootapp.data.repository.GenresRepositoryImpl
+import com.emanh.rootapp.data.repository.PlaylistsRepositoryImpl
 import com.emanh.rootapp.data.repository.SongsRepositoryImpl
 import com.emanh.rootapp.data.repository.UsersRepositoryImpl
 import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
+import com.emanh.rootapp.data.repository.crossref.PlaylistSongRepositoryImpl
 import com.emanh.rootapp.domain.repository.AlbumsRepository
 import com.emanh.rootapp.domain.repository.crossref.SongGenreRepository
 import com.emanh.rootapp.domain.repository.GenresRepository
+import com.emanh.rootapp.domain.repository.PlaylistsRepository
 import com.emanh.rootapp.domain.repository.SongsRepository
 import com.emanh.rootapp.domain.repository.UsersRepository
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
+import com.emanh.rootapp.domain.repository.crossref.PlaylistSongRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -102,14 +111,22 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideCrossRefPlaylistSongDao(database: STFDatabase): PlaylistSongDao {
+        return database.crossRefPlaylistSongDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideDatabaseInitializer(
         genresDao: GenresDao,
         songsDao: SongsDao,
         usersDao: UsersDao,
         albumsDao: AlbumsDao,
-        crossRefSongGenreDao: SongGenreDao
+        palylistsDao: PlaylistsDao,
+        crossRefSongGenreDao: SongGenreDao,
+        crossRefPlaylistSongDao: PlaylistSongDao
     ): DatabaseInitializer {
-        return DatabaseInitializer(genresDao, songsDao, usersDao, albumsDao, crossRefSongGenreDao)
+        return DatabaseInitializer(genresDao, songsDao, usersDao, albumsDao, palylistsDao, crossRefSongGenreDao, crossRefPlaylistSongDao)
     }
 
     @Provides
@@ -162,6 +179,18 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun providePlaylistsDataSource(playlistsDao: PlaylistsDao): PlaylistsDataSource {
+        return PlaylistsDataSourceImpl(playlistsDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlaylistsRepository(playlistsDataSource: PlaylistsDataSource): PlaylistsRepository {
+        return PlaylistsRepositoryImpl(playlistsDataSource)
+    }
+
+    @Provides
+    @Singleton
     fun provideViewsSongDataSource(viewsSongDao: ViewsSongDao): ViewsSongDataSource {
         return ViewsSongDataSourceImpl(viewsSongDao)
     }
@@ -182,5 +211,17 @@ object DatabaseModule {
     @Singleton
     fun provideCrossRefSongGenreRepository(songGenreDataSource: SongGenreDataSource): SongGenreRepository {
         return SongGenreRepositoryImpl(songGenreDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefPlaylistSongDataSource(crossRefPlaylistSongDao: PlaylistSongDao): PlaylistSongDataSource {
+        return PlaylistSongDataSourceImpl(crossRefPlaylistSongDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefPlaylistSongRepository(songGenreDataSource: PlaylistSongDataSource): PlaylistSongRepository {
+        return PlaylistSongRepositoryImpl(songGenreDataSource)
     }
 }

@@ -10,5 +10,7 @@ interface SongsRepository {
 
     fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>>
 
+    fun getTrendingSongs(): Flow<List<SongsModel>>
+
     suspend fun insertAllSongs(songs: List<SongsModel>)
 }

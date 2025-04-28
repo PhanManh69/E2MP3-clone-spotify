@@ -8,6 +8,6 @@ import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongGenreEntity
 
 data class SongsWithGenresModel(
-    @Embedded val songsModel: SongsEntity,
+    @Embedded val songs: SongsEntity,
     @Relation(parentColumn = "songId", entityColumn = "genreId", associateBy = Junction(SongGenreEntity::class)) val genresList: List<GenresEntity>
 )

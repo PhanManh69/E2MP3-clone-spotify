@@ -88,7 +88,9 @@ data class HomeViewsSongData(
 
 data class HomeUiState(
     val isLiked: Boolean = false,
+    val quickPlaylistSongs:  List<Any> = emptyList(),
     val recommendedSongs: List<HomeSongsData> = emptyList(),
     val recentlyListenedSongs: List<HomeSongsData> = emptyList(),
+    val trendingSongs: List<HomeSongsData> = emptyList(),
     val insertViewsSong: HomeViewsSongData = HomeViewsSongData(0, 0, 0, 0, "")
 )

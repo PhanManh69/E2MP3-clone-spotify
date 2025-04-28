@@ -1,7 +1,6 @@
 package com.emanh.rootapp.data.repository.crossref
 
 import com.emanh.rootapp.data.datasource.crossref.SongGenreDataSource
-import com.emanh.rootapp.data.db.entity.crossref.SongGenreEntity
 import com.emanh.rootapp.domain.model.crossref.SongsWithGenresModel
 import com.emanh.rootapp.domain.repository.crossref.SongGenreRepository
 import kotlinx.coroutines.flow.Flow
@@ -12,9 +11,5 @@ class SongGenreRepositoryImpl @Inject constructor(
 ) : SongGenreRepository {
     override fun getAllSongsWithGenres(): Flow<List<SongsWithGenresModel>> {
         return songGenreDataSource.getAllSongsWithGenres()
-    }
-
-    override suspend fun insertAllCrossRefSongGenre(songGenreEntity: List<SongGenreEntity>) {
-        songGenreDataSource.insertAllCrossRefSongGenre(songGenreEntity)
     }
 }

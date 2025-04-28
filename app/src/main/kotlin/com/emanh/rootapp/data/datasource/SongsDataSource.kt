@@ -10,5 +10,7 @@ interface SongsDataSource {
 
     fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsEntity>>
 
+    fun getTrendingSongs(): Flow<List<SongsEntity>>
+
     suspend fun insertAllSongs(songs: List<SongsEntity>)
 }
