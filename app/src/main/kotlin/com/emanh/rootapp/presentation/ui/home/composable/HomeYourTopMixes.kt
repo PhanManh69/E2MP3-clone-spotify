@@ -1,40 +1,36 @@
 package com.emanh.rootapp.presentation.ui.home.composable
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFCarouselHorizontal
 import com.emanh.rootapp.presentation.composable.STFCarouselThumbData
 import com.emanh.rootapp.presentation.composable.STFCarouselType
-import com.emanh.rootapp.presentation.theme.E2MP3Theme
-import com.emanh.rootapp.utils.MyConstant.fakeYourTopMixesList
 
 @Composable
 fun HomeYourTopMixes(
-    modifier: Modifier = Modifier, onThumbClick: (Int) -> Unit
+    modifier: Modifier = Modifier, yourTopMixesList: List<CrossRefPlaylistsModel>, onThumbClick: (Int) -> Unit
 ) {
-    val thumbItem = fakeYourTopMixesList.map { playlist ->
-        val allSingerNames = playlist.songs.flatMap { it.singer }.map { it.nameSinger }.distinct().joinToString(", ")
+    val thumbItem = yourTopMixesList.map { playlist ->
+        val orderedSongsList = playlist.playlists.songsIdList.mapNotNull { songId ->
+            playlist.songsList.find { it.songId == songId }
+        }
 
-        STFCarouselThumbData(id = playlist.id, imageUrl = playlist.imageUrl, description = allSingerNames)
+        val allSingerNames = orderedSongsList.map { it.subtitle }.distinct().joinToString(", ")
+
+        STFCarouselThumbData(id = playlist.playlists.playlistId, imageUrl = playlist.playlists.avatarUrl.orEmpty(), description = allSingerNames)
     }
+
+    Log.d("HomeYourTopMixes", "thumbItem: $thumbItem")
 
     STFCarouselHorizontal(modifier = modifier,
                           title = stringResource(R.string.your_top_mixes),
                           type = STFCarouselType.Playlist,
                           thumbItem = thumbItem,
-                          onThumbClick = { index ->
-                              val playlistId = thumbItem.getOrNull(index)?.id
-                              playlistId?.let { onThumbClick(it) }
+                          onThumbClick = { playlistId ->
+                              onThumbClick(playlistId)
                           })
-}
-
-@Preview
-@Composable
-private fun HomePopularAlbumsSinglesPreview() {
-    E2MP3Theme {
-        HomeYourTopMixes(onThumbClick = {})
-    }
 }

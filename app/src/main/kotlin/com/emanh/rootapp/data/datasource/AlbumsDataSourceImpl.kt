@@ -12,6 +12,14 @@ class AlbumsDataSourceImpl @Inject constructor(
         return albumsDao.getAllAlbums()
     }
 
+    override fun getQuickAlbum(): Flow<List<AlbumsEntity>> {
+        return albumsDao.getQuickAlbum()
+    }
+
+    override fun getSimilarAlbums(): Flow<List<AlbumsEntity>> {
+        return albumsDao.getSimilarAlbums()
+    }
+
     override suspend fun insertAlbums(albums: List<AlbumsEntity>) {
         albumsDao.insertAllAlbums(albums)
     }

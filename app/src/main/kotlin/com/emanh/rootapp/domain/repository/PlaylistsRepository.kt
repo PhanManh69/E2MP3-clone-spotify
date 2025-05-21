@@ -5,4 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistsRepository {
     fun getAllPlaylists(): Flow<List<PlaylistsModel>>
+
+    fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsModel>>
+
+    fun getRadioForYou(): Flow<List<PlaylistsModel>>
 }

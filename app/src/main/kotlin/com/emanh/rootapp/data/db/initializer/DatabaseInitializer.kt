@@ -2,13 +2,17 @@ package com.emanh.rootapp.data.db.initializer
 
 import android.util.Log
 import com.emanh.rootapp.data.db.dao.AlbumsDao
-import com.emanh.rootapp.data.db.dao.crossref.SongGenreDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
 import com.emanh.rootapp.data.db.dao.GenresDao
 import com.emanh.rootapp.data.db.dao.PlaylistsDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
-import com.emanh.rootapp.data.db.dao.crossref.PlaylistSongDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefPlaylistDao
+import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefAlbumArtistData
+import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefAlbumSongData
 import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefPlaylistSongData
+import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefSongArtistData
 import com.emanh.rootapp.data.db.fakedata.fakeAlbumsData
 import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefSongGenreData
 import com.emanh.rootapp.data.db.fakedata.fakeGenresData
@@ -36,8 +40,9 @@ class DatabaseInitializer @Inject constructor(
     private val usersDao: UsersDao,
     private val albumsDao: AlbumsDao,
     private val playlistsDao: PlaylistsDao,
-    private val crossRefSongGenreDao: SongGenreDao,
-    private val crossRefPlaylistSongDao: PlaylistSongDao
+    private val crossRefSongDao: CrossRefSongDao,
+    private val crossRefPlaylistDao: CrossRefPlaylistDao,
+    private val crossRefAlbumDao: CrossRefAlbumDao
 ) {
     private val _isDatabaseInitialized = MutableStateFlow(false)
     val isDatabaseInitialized: StateFlow<Boolean> = _isDatabaseInitialized.asStateFlow()
@@ -70,11 +75,14 @@ class DatabaseInitializer @Inject constructor(
                 val playlitsList = withTimeout(5000) {
                     playlistsDao.getAllPlaylists().first()
                 }
-                val crossRefSongGenreList = withTimeout(5000) {
-                    crossRefSongGenreDao.getAllSongsWithGenres().first()
+                val crossRefSongList = withTimeout(5000) {
+                    crossRefSongDao.getAllCrossRefSongs().first()
                 }
-                val crossRefPlaylistSongDaoList = withTimeout(5000) {
-                    crossRefPlaylistSongDao.getAllPlaylistWithSong().first()
+                val crossRefPlaylistList = withTimeout(5000) {
+                    crossRefPlaylistDao.getAllCrossRefPlaylists().first()
+                }
+                val crossRefAlbumList = withTimeout(5000) {
+                    crossRefAlbumDao.getAllCrossRefAlbums().first()
                 }
 
                 if (genresList.isEmpty()) {
@@ -132,23 +140,38 @@ class DatabaseInitializer @Inject constructor(
                     }
                 }
 
-                if (crossRefSongGenreList.isEmpty()) {
+                if (crossRefSongList.isEmpty()) {
                     Log.d(TAG, "Inserting crossRefSongGenre data: ${fakeCrossRefSongGenreData().size} items")
+                    Log.d(TAG, "Inserting crossRefSongArtist data: ${fakeCrossRefSongArtistData().size} items")
                     try {
-                        crossRefSongGenreDao.insertAllCrossRefSongGenre(fakeCrossRefSongGenreData())
+                        crossRefSongDao.insertAllCrossRefSongGenre(fakeCrossRefSongGenreData())
+                        crossRefSongDao.insertAllCrossRefSongArtist(fakeCrossRefSongArtistData())
                     } catch (e: Exception) {
-                        Log.e(TAG, "Failed to insert crossRefSongGenre data: $e")
+                        Log.e(TAG, "Failed to insert crossRefSong data: $e")
                         _isDatabaseInitialized.value = false
                         return@launch
                     }
                 }
 
-                if (crossRefPlaylistSongDaoList.isEmpty()) {
+                if (crossRefPlaylistList.isEmpty()) {
                     Log.d(TAG, "Inserting crossRefPlaylistSongDaoList data: ${fakeCrossRefPlaylistSongData().size} items")
                     try {
-                        crossRefPlaylistSongDao.insertAllCrossRefPlaylistSong(fakeCrossRefPlaylistSongData())
+                        crossRefPlaylistDao.insertAllCrossRefPlaylistSong(fakeCrossRefPlaylistSongData())
                     } catch (e: Exception) {
-                        Log.e(TAG, "Failed to insert crossRefPlaylistSongDaoList data: $e")
+                        Log.e(TAG, "Failed to insert crossRefPlaylist data: $e")
+                        _isDatabaseInitialized.value = false
+                        return@launch
+                    }
+                }
+
+                if (crossRefAlbumList.isEmpty()) {
+                    Log.d(TAG, "Inserting crossRefAlbumSongDaoList data: ${fakeCrossRefAlbumSongData().size} items")
+                    Log.d(TAG, "Inserting crossRefAlbumArtistDaoList data: ${fakeCrossRefAlbumArtistData().size} items")
+                    try {
+                        crossRefAlbumDao.insertAllCrossRefAlbumSong(fakeCrossRefAlbumSongData())
+                        crossRefAlbumDao.insertAllCrossRefAlbumArtist(fakeCrossRefAlbumArtistData())
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to insert crossRefAlbum data: $e")
                         _isDatabaseInitialized.value = false
                         return@launch
                     }

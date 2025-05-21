@@ -8,7 +8,10 @@ import javax.inject.Inject
 class AlbumsUseCase @Inject constructor(
     private val albumsRepository: AlbumsRepository
 ) {
-    fun getAllAlbums(): Flow<List<AlbumsModel>> {
-        return albumsRepository.getAllAlbums()
+    fun getQuickAlbum(): Flow<List<AlbumsModel>> {
+        return albumsRepository.getQuickAlbum()
+    }
+    fun getSimilarAlbums(): Flow<List<AlbumsModel>> {
+        return albumsRepository.getSimilarAlbums()
     }
 }

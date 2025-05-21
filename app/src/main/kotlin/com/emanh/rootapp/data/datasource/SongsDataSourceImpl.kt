@@ -24,6 +24,22 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getTrendingSongs()
     }
 
+    override fun getSimilarSongs(): Flow<List<SongsEntity>> {
+        return songsDao.getSimilarSongs()
+    }
+
+    override fun getMoreByArtists(songId: Int): Flow<List<SongsEntity>> {
+        return songsDao.getMoreByArtists(songId)
+    }
+
+    override fun getSongsByArtist(userId: Int): Flow<List<SongsEntity>> {
+        return songsDao.getSongsByArtist(userId)
+    }
+
+    override fun getSongsById(songId: Int): Flow<SongsEntity> {
+        return songsDao.getSongsById(songId)
+    }
+
     override suspend fun insertAllSongs(songs: List<SongsEntity>) {
         songsDao.insertAllSongs(songs)
     }

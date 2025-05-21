@@ -12,5 +12,13 @@ interface SongsDataSource {
 
     fun getTrendingSongs(): Flow<List<SongsEntity>>
 
+    fun getSimilarSongs(): Flow<List<SongsEntity>>
+
+    fun getMoreByArtists(songId: Int): Flow<List<SongsEntity>>
+
+    fun getSongsByArtist(userId: Int): Flow<List<SongsEntity>>
+
+    fun getSongsById(songId: Int): Flow<SongsEntity>
+
     suspend fun insertAllSongs(songs: List<SongsEntity>)
 }

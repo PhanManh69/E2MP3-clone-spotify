@@ -1,14 +1,14 @@
 package com.emanh.rootapp.domain.model
 
 data class SongsModel(
-    val id: Int,
-    val avatarUrl: String?,
-    val songUrl: String?,
-    val title: String?,
-    val subtitle: String?,
-    val timeline: String?,
-    val releaseDate: String?,
-    val genres: List<Int>?,
-    val likes: List<Int>?,
-    val artists: List<Int>?
+    val id: Int = 0,
+    val avatarUrl: String? = null,
+    val songUrl: String? = null,
+    val title: String? = null,
+    val subtitle: String? = null,
+    val timeline: String? = null,
+    val releaseDate: String? = null,
+    val genres: List<Int>? = null,
+    val likes: List<Int>? = null,
+    val artists: List<Int>? = null
 )

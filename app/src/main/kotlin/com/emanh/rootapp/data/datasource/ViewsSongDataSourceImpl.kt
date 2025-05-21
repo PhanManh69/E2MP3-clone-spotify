@@ -8,6 +8,14 @@ import javax.inject.Inject
 class ViewsSongDataSourceImpl @Inject constructor(
     private val viewsSongDao: ViewsSongDao
 ) : ViewsSongDataSource {
+    override fun getTotalListenerAlbum(albumId: Int): Flow<Int> {
+        return viewsSongDao.getTotalListenerAlbum(albumId)
+    }
+
+    override fun getListenerMonth(userId: Int): Flow<Int> {
+        return viewsSongDao.getListenerMonth(userId)
+    }
+
     override suspend fun findViewRecord(userId: Int, songId: Int): ViewsSongEntity? {
         return viewsSongDao.findViewRecord(userId, songId)
     }

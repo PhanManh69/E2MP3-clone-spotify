@@ -8,10 +8,6 @@ import javax.inject.Inject
 class SongsUseCase @Inject constructor(
     private val songsRepository: SongsRepository
 ) {
-    fun getAllSongs(): Flow<List<SongsModel>> {
-        return songsRepository.getAllSongs()
-    }
-
     fun getRecommendedSongs(userId: Int): Flow<List<SongsModel>> {
         return songsRepository.getRecommendedSongs(userId)
     }
@@ -22,5 +18,21 @@ class SongsUseCase @Inject constructor(
 
     fun getTrendingSongs(): Flow<List<SongsModel>> {
         return songsRepository.getTrendingSongs()
+    }
+
+    fun getSimilarSongs(): Flow<List<SongsModel>> {
+        return songsRepository.getSimilarSongs()
+    }
+
+    fun getMoreByArtists(songId: Int): Flow<List<SongsModel>> {
+        return songsRepository.getMoreByArtists(songId)
+    }
+
+    fun getSongsByArtist(userId: Int): Flow<List<SongsModel>> {
+        return songsRepository.getSongsByArtist(userId)
+    }
+
+    fun getSongsById(songId: Int): Flow<SongsModel> {
+        return songsRepository.getSongsById(songId)
     }
 }

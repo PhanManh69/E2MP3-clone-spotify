@@ -13,16 +13,19 @@ class AlbumsRepositoryImpl @Inject constructor(
 ) : AlbumsRepository {
     override fun getAllAlbums(): Flow<List<AlbumsModel>> {
         return albumsDataSource.getAllAlbums().map { entities ->
-            entities.map { entity ->
-                AlbumsModel(id = entity.albumId,
-                            avatarUrl = entity.avatarUrl,
-                            title = entity.title,
-                            subtitle = entity.subtitle,
-                            albumType = entity.avatarUrl,
-                            releaseDate = entity.releaseDate,
-                            artist = entity.artistsIdList,
-                            songs = entity.songsIdList)
-            }
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
+    override fun getQuickAlbum(): Flow<List<AlbumsModel>> {
+        return albumsDataSource.getQuickAlbum().map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
+    override fun getSimilarAlbums(): Flow<List<AlbumsModel>> {
+        return albumsDataSource.getSimilarAlbums().map { entities ->
+            entities.map { entity -> mapToModel(entity) }
         }
     }
 
@@ -35,9 +38,20 @@ class AlbumsRepositoryImpl @Inject constructor(
                             avatarUrl = model.avatarUrl,
                             title = model.title,
                             subtitle = model.subtitle,
-                            albumType = model.avatarUrl,
+                            albumType = model.albumType,
                             releaseDate = model.releaseDate,
                             artistsIdList = model.artist,
                             songsIdList = model.songs)
+    }
+
+    private fun mapToModel(entity: AlbumsEntity): AlbumsModel {
+        return AlbumsModel(id = entity.albumId,
+                           avatarUrl = entity.avatarUrl,
+                           title = entity.title,
+                           subtitle = entity.subtitle,
+                           albumType = entity.albumType,
+                           releaseDate = entity.releaseDate,
+                           artist = entity.artistsIdList,
+                           songs = entity.songsIdList)
     }
 }

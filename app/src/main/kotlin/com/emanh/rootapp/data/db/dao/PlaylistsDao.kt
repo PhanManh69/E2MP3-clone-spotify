@@ -5,7 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.emanh.rootapp.data.db.entity.PlaylistsEntity
-import com.emanh.rootapp.data.db.entity.SongsEntity
+import com.emanh.rootapp.utils.MyQuery.QUERY_QUICK_PLAYLIST
+import com.emanh.rootapp.utils.MyQuery.QUERY_RADIO_FOR_YOU
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,7 +14,11 @@ interface PlaylistsDao {
     @Query("SELECT * FROM playlists")
     fun getAllPlaylists(): Flow<List<PlaylistsEntity>>
 
+    @Query(QUERY_QUICK_PLAYLIST)
+    fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsEntity>>
 
+    @Query(QUERY_RADIO_FOR_YOU)
+    fun getRadioForYou(): Flow<List<PlaylistsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>)

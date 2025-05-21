@@ -3,96 +3,103 @@ package com.emanh.rootapp.presentation.ui.home.composable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.domain.model.AlbumsModel
+import com.emanh.rootapp.domain.model.SongsModel
+import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.composable.STFCarouselHorizontal
 import com.emanh.rootapp.presentation.composable.STFCarouselThumbData
 import com.emanh.rootapp.presentation.composable.STFCarouselType
 import com.emanh.rootapp.presentation.composable.STFThumbType
-import com.emanh.rootapp.presentation.theme.E2MP3Theme
-import com.emanh.rootapp.presentation.ui.home.HomeAlbumsDataFake
-import com.emanh.rootapp.presentation.ui.home.HomeSingerData
-import com.emanh.rootapp.presentation.ui.home.HomeSongsDataFake
-import com.emanh.rootapp.utils.MyConstant.fakeSimilarContentList
+import com.emanh.rootapp.utils.MyConstant.ALBUM_TYPE
+import com.emanh.rootapp.utils.MyConstant.ARTIST_TYPE
+import com.emanh.rootapp.utils.MyConstant.SINGLE_TYPE
 
 @Composable
-fun HomeSimilarContent(modifier: Modifier = Modifier, onAvatarClick: (Int) -> Unit, onThumbClick: (Int) -> Unit) {
-    val thumbList = fakeSimilarContentList.drop(1).map { item ->
+fun HomeSimilarContent(
+    modifier: Modifier = Modifier,
+    yourFavoriteArtists: UsersModel,
+    similarContent: List<Any>,
+    onAvatarClick: (Int) -> Unit,
+    onThumbClick: (Int, String) -> Unit
+) {
+    val thumbList = similarContent.map { item ->
         val id = when (item) {
-            is HomeAlbumsDataFake -> item.id
-            is HomeSingerData -> item.id
-            is HomeSongsDataFake -> item.id
+            is AlbumsModel -> item.id
+            is UsersModel -> item.id
+            is SongsModel -> item.id
             else -> -1
         }
 
         val imageUrl = when (item) {
-            is HomeAlbumsDataFake -> item.imageUrl
-            is HomeSingerData -> item.imageUrl
-            is HomeSongsDataFake -> item.imageUrl
+            is AlbumsModel -> item.avatarUrl
+            is UsersModel -> item.avatarUrl
+            is SongsModel -> item.avatarUrl
             else -> ""
         }
 
         val title = when (item) {
-            is HomeAlbumsDataFake -> item.nameAlbum
-            is HomeSingerData -> item.nameSinger
-            is HomeSongsDataFake -> item.title
+            is AlbumsModel -> item.title
+            is UsersModel -> item.name
+            is SongsModel -> item.title
             else -> ""
         }
 
         val subtitle = when (item) {
-            is HomeAlbumsDataFake -> item.singer.nameSinger
-            is HomeSongsDataFake -> item.subtitle
+            is AlbumsModel -> item.subtitle
+            is SongsModel -> item.subtitle
             else -> ""
         }
 
         val description = when (item) {
-            is HomeAlbumsDataFake -> item.ablumType
-            is HomeSongsDataFake -> stringResource(R.string.cd_single)
+            is AlbumsModel -> item.albumType
+            is SongsModel -> stringResource(R.string.cd_single)
             else -> ""
         }
 
-        STFCarouselThumbData(id = id, imageUrl = imageUrl, title = title, subtitle = subtitle, description = description ?: "")
+        STFCarouselThumbData(id = id,
+                             imageUrl = imageUrl.orEmpty(),
+                             title = title.orEmpty(),
+                             subtitle = subtitle.orEmpty(),
+                             description = description.orEmpty())
     }
 
-    val thumbTypeList = fakeSimilarContentList.drop(1).map { item ->
+    val thumbTypeList = similarContent.map { item ->
         when (item) {
-            is HomeSingerData -> STFThumbType.Artists
+            is UsersModel -> STFThumbType.Artists
             else -> STFThumbType.Music
         }
     }
 
-    val firstItem = fakeSimilarContentList.firstOrNull()
-
-    val avatarUrl = when (firstItem) {
-        is HomeAlbumsDataFake -> firstItem.imageUrl
-        is HomeSingerData -> firstItem.imageUrl
-        is HomeSongsDataFake -> firstItem.imageUrl
-        else -> ""
-    }
-
-    val userName = when (firstItem) {
-        is HomeAlbumsDataFake -> firstItem.nameAlbum
-        is HomeSingerData -> firstItem.nameSinger
-        is HomeSongsDataFake -> firstItem.title
-        else -> ""
+    val type = similarContent.map { item ->
+        when (item) {
+            is AlbumsModel -> ALBUM_TYPE
+            is UsersModel -> ARTIST_TYPE
+            is SongsModel -> SINGLE_TYPE
+            else -> ""
+        }
     }
 
     STFCarouselHorizontal(modifier = modifier,
-                          avatarUrl = avatarUrl,
-                          userName = userName,
+                          avatarUrl = yourFavoriteArtists.avatarUrl,
+                          userName = yourFavoriteArtists.username.orEmpty(),
                           table = stringResource(R.string.other_similar_content),
-                          title = userName,
+                          title = yourFavoriteArtists.name.orEmpty(),
                           type = STFCarouselType.MusicBig,
                           typeThumb = thumbTypeList,
                           thumbItem = thumbList,
                           onAvatarClick = { onAvatarClick(0) },
-                          onThumbClick = onThumbClick)
-}
-
-@Preview
-@Composable
-private fun HomeSimilarContentPreview() {
-    E2MP3Theme {
-        HomeSimilarContent(onAvatarClick = {}, onThumbClick = {})
-    }
+                          onThumbClick = { clickedId ->
+                              val similarItem = similarContent.indexOfFirst { item ->
+                                  when (item) {
+                                      is AlbumsModel -> item.id == clickedId
+                                      is UsersModel -> item.id == clickedId
+                                      is SongsModel -> item.id == clickedId
+                                      else -> false
+                                  }
+                              }
+                              if (similarItem != -1 && similarItem < type.size) {
+                                  onThumbClick(clickedId, type[similarItem])
+                              }
+                          })
 }

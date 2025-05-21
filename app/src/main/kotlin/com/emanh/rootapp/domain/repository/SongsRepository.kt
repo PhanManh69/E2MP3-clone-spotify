@@ -12,5 +12,13 @@ interface SongsRepository {
 
     fun getTrendingSongs(): Flow<List<SongsModel>>
 
+    fun getSimilarSongs(): Flow<List<SongsModel>>
+
+    fun getMoreByArtists(songId: Int): Flow<List<SongsModel>>
+
+    fun getSongsByArtist(userId: Int): Flow<List<SongsModel>>
+
+    fun getSongsById(songId: Int): Flow<SongsModel>
+
     suspend fun insertAllSongs(songs: List<SongsModel>)
 }

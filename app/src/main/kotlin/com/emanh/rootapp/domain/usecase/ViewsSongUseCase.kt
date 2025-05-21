@@ -2,6 +2,7 @@ package com.emanh.rootapp.domain.usecase
 
 import com.emanh.rootapp.domain.model.ViewsSongModel
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
+import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -10,6 +11,14 @@ import javax.inject.Inject
 class ViewsSongUseCase @Inject constructor(
     private val viewsSongRepository: ViewsSongRepository
 ) {
+    fun getTotalListenerAlbum(albumId: Int): Flow<Int> {
+        return viewsSongRepository.getTotalListenerAlbum(albumId)
+    }
+
+    fun getListenerMonth(userId: Int): Flow<Int> {
+        return viewsSongRepository.getListenerMonth(userId)
+    }
+
     suspend fun trackSongView(userId: Int, songId: Int): ViewsSongModel {
         val currentDateTime = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
         val existingRecord = viewsSongRepository.findViewRecord(userId, songId)
@@ -23,11 +32,11 @@ class ViewsSongUseCase @Inject constructor(
             updatedRecord
         } else {
             val newRecord = ViewsSongModel(
-                viewsSongId = 0,
-                userId = userId,
-                songId = songId,
-                numberListener = 1,
-                dateTime = currentDateTime
+                    id = 0,
+                    userId = userId,
+                    songId = songId,
+                    numberListener = 1,
+                    dateTime = currentDateTime
             )
             viewsSongRepository.insertViewsSong(newRecord)
             newRecord

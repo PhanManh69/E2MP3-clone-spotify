@@ -32,8 +32,6 @@ object MyQuery {
                 SELECT 1 AS genreId
                 UNION ALL
                 SELECT 12
-                UNION ALL
-                SELECT 14
             )
         ),
         selected_genres AS (
@@ -68,5 +66,200 @@ object MyQuery {
         WHERE isRadio = false AND owner_id = 1 OR owner_id = :userId
         ORDER BY RANDOM()
         LIMIT 6
+    """
+
+    const val QUERY_QUICK_ALBUM = """
+        SELECT *
+        FROM albums
+        ORDER BY RANDOM()
+        LIMIT 2
+    """
+
+    const val QUERY_YOUR_TOP_MIXES = """
+        SELECT *
+        FROM playlists
+        WHERE isRadio = false AND owner_id = 1
+    """
+
+    const val QUERY_RADIO_FOR_YOU = """
+        SELECT *
+        FROM playlists
+        WHERE isRadio = true
+    """
+
+    const val QUERY_PLAYLIST_CARD = """
+        SELECT *
+        FROM playlists
+        WHERE isRadio = false
+        ORDER BY RANDOM()
+        LIMIT 6
+    """
+
+    const val QUERY_YOUR_FAVORITE_ARTISTS = """
+        SELECT * 
+        FROM users u
+        JOIN cross_ref_song_artist sa ON sa.songId = (
+            SELECT COALESCE(
+                (
+                    SELECT s.songId
+                    FROM songs s
+                    JOIN views_song vs ON s.songId = vs.song_id
+                    WHERE vs.user_id = :userId
+                    ORDER BY vs.number_listener DESC
+                    LIMIT 1
+                ),
+                (
+                    SELECT s2.songId
+                    FROM songs s2
+                    ORDER BY RANDOM()
+                    LIMIT 1
+                )
+            )
+        )
+        WHERE u.userId = sa.userId
+        ORDER BY RANDOM()
+        LIMIT 1
+    """
+
+    const val QUERY_SIMILAR_ARTISTS = """
+        SELECT *
+        FROM users
+        WHERE is_artist = true
+            AND userId NOT IN (
+                SELECT u.userId
+                FROM users u
+                JOIN cross_ref_song_artist sa ON u.userId = sa.userId
+                WHERE sa.songId = (
+                    SELECT COALESCE(
+                        (
+                            SELECT s.songId
+                            FROM songs s
+                            JOIN views_song vs ON s.songId = vs.song_id
+                            WHERE vs.user_id = :userId
+                            ORDER BY vs.number_listener DESC
+                            LIMIT 1
+                        ),
+                        (
+                            SELECT s2.songId
+                            FROM songs s2
+                            ORDER BY RANDOM()
+                            LIMIT 1
+                        )
+                    )
+                )
+        )
+        ORDER BY RANDOM()
+        LIMIT 6
+    """
+
+    const val QUERY_SIMILAR_SONGS = """
+        SELECT *
+        FROM songs
+        ORDER BY RANDOM()
+        LIMIT 2
+    """
+
+    const val QUERY_SIMILAR_ALBUMS = """
+        SELECT *
+        FROM albums
+        ORDER BY RANDOM()
+        LIMIT 2
+    """
+
+    const val QUERY_GET_PLAYLIST_SONGS = """
+        SELECT *
+        FROM playlists
+        WHERE playlistId = :playlistId
+    """
+
+    const val QUERY_GET_ALBUM_SONGS = """
+        SELECT *
+        FROM albums
+        WHERE albumId = :albumId
+    """
+
+    const val QUERY_OWNER_PLAYLIST = """
+        SELECT *
+        FROM users
+        WHERE userId = :userId
+    """
+
+    const val QUERY_OWNER_ALBUM = """
+        SELECT *
+        FROM users
+        WHERE userId IN (
+            SELECT aa.userId
+            FROM albums a
+            JOIN cross_ref_album_artist aa ON a.albumId = aa.albumId
+            WHERE a.albumId = :albumId
+        )
+    """
+
+    const val QUERY_TOTAL_LISTENER_ALBUM = """
+        SELECT SUM(v.number_listener) AS total_views
+        FROM views_song v
+        WHERE v.song_id IN (
+            SELECT s.songId
+            FROM songs s
+            JOIN cross_ref_album_song _as ON s.songId = _as.songId
+            JOIN albums a ON _as.albumId = a.albumId
+            WHERE a.albumId = :albumId
+        )
+    """
+
+    const val QUERY_SONG_BY_ID = """
+        SELECT *
+        FROM songs
+        WHERE songId = :songId
+    """
+
+    const val QUERY_MORE_BY_ARTISTS = """
+        SELECT DISTINCT s.*
+        FROM songs s
+        JOIN cross_ref_song_artist sa ON s.songId = sa.songId
+        WHERE sa.userId IN (
+            SELECT userId
+            FROM cross_ref_song_artist
+            WHERE songId = :songId
+        )
+        ORDER BY RANDOM()
+        LIMIT 10
+    """
+
+    const val QUERY_ARTIST_BY_ID = """
+        SELECT *
+        FROM users
+        WHERE userId = :userId
+    """
+
+    const val QUERY_SONGS_BY_ARTIST = """
+        SELECT s.*
+        FROM songs s
+        JOIN cross_ref_song_artist sa ON s.songId = sa.songId
+        WHERE sa.userId = :userId
+        ORDER BY RANDOM()
+        LIMIT 10
+    """
+
+    const val QUERY_GENRE_NAME_BY_ARTIST = """
+        SELECT DISTINCT g.name_id
+        FROM genres g
+        JOIN cross_ref_song_genre sg ON g.genreId = sg.genreId
+        JOIN songs s ON sg.songId = s.songId
+        JOIN cross_ref_song_artist sa ON s.songId = sa.songId
+        WHERE sa.userId = :userId
+    """
+
+    const val QUERY_LISTENER_MONTH = """
+        SELECT SUM(v.number_listener) AS total_views
+        FROM views_song v
+        WHERE v.song_id IN (
+            SELECT s.songId
+            FROM songs s
+            JOIN cross_ref_song_artist sa ON s.songId = sa.songId
+            JOIN users u ON sa.userId = u.userId
+            WHERE u.userId = :userId
+        )
+        AND substr(v.date_time, 7, 4) || '-' || substr(v.date_time, 4, 2) = strftime('%Y-%m', 'now')
     """
 }

@@ -14,25 +14,59 @@ class UsersRepositoryImpl @Inject constructor(
     override fun getAllUsers(): Flow<List<UsersModel>> {
         return usersDataSource.getAllUsers().map { entities ->
             entities.map { entity ->
-                UsersModel(id = entity.id,
-                           isArtist = entity.isArtist,
-                           username = entity.username,
-                           email = entity.email,
-                           password = entity.password,
-                           avatarUrl = entity.avatarUrl,
-                           name = entity.name,
-                           followers = entity.followers,
-                           following = entity.followingIdList)
+                mapToModel(entity)
             }
         }
+    }
+
+    override fun getYourFavoriteArtists(userId: Int): Flow<UsersModel> {
+        return usersDataSource.getYourFavoriteArtists(userId).map { entity ->
+            mapToModel(entity)
+        }
+    }
+
+    override fun getSimilarArtists(userId: Int): Flow<List<UsersModel>> {
+        return usersDataSource.getSimilarArtists(userId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
+    override fun getOwnerPlaylist(userId: Int): Flow<UsersModel> {
+        return usersDataSource.getOwnerPlaylist(userId).map { entity -> mapToModel(entity) }
+    }
+
+    override fun getOwnerAlbum(albumId: Int): Flow<List<UsersModel>> {
+        return usersDataSource.getOwnerAlbum(albumId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
+    override fun getArtistById(userId: Int): Flow<UsersModel> {
+        return usersDataSource.getArtistById(userId).map { entity -> mapToModel(entity) }
     }
 
     override suspend fun insertAllUsers(users: List<UsersModel>) {
         usersDataSource.insertAllUsers(users.map { mapToEntity(it) })
     }
 
+    private fun mapToModel(entity: UsersEntity): UsersModel {
+        return UsersModel(id = entity.userId,
+                          isArtist = entity.isArtist,
+                          username = entity.username,
+                          email = entity.email,
+                          password = entity.password,
+                          avatarUrl = entity.avatarUrl,
+                          name = entity.name,
+                          followers = entity.followers,
+                          following = entity.followingIdList)
+    }
+
     private fun mapToEntity(model: UsersModel): UsersEntity {
-        return UsersEntity(id = model.id,
+        return UsersEntity(userId = model.id,
                            isArtist = model.isArtist,
                            username = model.username,
                            email = model.email,

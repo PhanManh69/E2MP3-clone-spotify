@@ -6,5 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface PlaylistsDataSource {
     fun getAllPlaylists(): Flow<List<PlaylistsEntity>>
 
+    fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsEntity>>
+
+    fun getRadioForYou(): Flow<List<PlaylistsEntity>>
+
     suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>)
 }

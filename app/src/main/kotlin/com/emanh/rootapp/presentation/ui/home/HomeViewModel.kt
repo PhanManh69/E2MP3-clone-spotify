@@ -3,9 +3,21 @@ package com.emanh.rootapp.presentation.ui.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emanh.rootapp.domain.usecase.AlbumsUseCase
+import com.emanh.rootapp.domain.usecase.PlaylistsUseCase
 import com.emanh.rootapp.domain.usecase.SongsUseCase
-import com.emanh.rootapp.domain.usecase.ViewsSongUseCase
-import com.emanh.rootapp.domain.usecase.crossref.PlaylistSongUseCase
+import com.emanh.rootapp.domain.usecase.UsersUseCase
+import com.emanh.rootapp.domain.usecase.crossref.CrossRefPlaylistUseCase
+import com.emanh.rootapp.presentation.navigation.AlbumScreenNavigation
+import com.emanh.rootapp.presentation.navigation.ArtistScreenNavigation
+import com.emanh.rootapp.presentation.navigation.PlaylistScreenNavigation
+import com.emanh.rootapp.presentation.navigation.SingleScreenNavigation
+import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
+import com.emanh.rootapp.presentation.navigation.router.AppRouter
+import com.emanh.rootapp.utils.MyConstant.ALBUM_TYPE
+import com.emanh.rootapp.utils.MyConstant.ARTIST_TYPE
+import com.emanh.rootapp.utils.MyConstant.PLAYLIST_TYPE
+import com.emanh.rootapp.utils.MyConstant.SINGLE_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,14 +26,19 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
 private const val TAG = "HomeViewModel"
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val songsUseCase: SongsUseCase, private val viewsSongUseCase: ViewsSongUseCase, private val playlistSongUseCase: PlaylistSongUseCase
+    private val appRouter: AppRouter,
+    private val songsUseCase: SongsUseCase,
+    private val albumsUseCase: AlbumsUseCase,
+    private val playlistsUseCase: PlaylistsUseCase,
+    private val usersUseCase: UsersUseCase,
+    private val crossRefPlaylistUseCase: CrossRefPlaylistUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -31,102 +48,175 @@ class HomeViewModel @Inject constructor(
         getRecentlyListenedSongs()
         getTrendingSongs()
         getQuickPlaylists()
+        getYourTopMixes()
+        getRadioForYou()
+        getPlaylistCard()
+        getYourFavoriteArtists()
+        getSimilarContent()
     }
 
-    fun onRecommendedlClick(songId: Int) {
-        viewModelScope.launch {
-            try {
-                val userId = 1
-                val result = viewsSongUseCase.trackSongView(userId, songId)
-                val viewCount = result.numberListener ?: 0
-                Log.d(TAG, "Song $songId viewed by user $userId - view count: $viewCount, timestamp: ${result.dateTime}")
-            } catch (e: Exception) {
-                Log.e(TAG, "Error recording song view: ${e.message}")
-            }
+    fun onQuickPlayClick(id: Int, type: String) {
+        if (type == ALBUM_TYPE) {
+            goToAlbum(id)
+        } else if (type == PLAYLIST_TYPE) {
+            goToPlaylist(id)
         }
     }
 
+    fun onSimilarClick(id: Int, type: String) {
+        if (type == ALBUM_TYPE) {
+            goToAlbum(id)
+        } else if (type == SINGLE_TYPE) {
+            goToSingle(id)
+        } else if (type == ARTIST_TYPE) {
+            goToArtist(id)
+        }
+    }
+
+    fun goToPlaylist(playlistId: Int) {
+        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlistId))
+    }
+
+    fun goToAlbum(albumId: Int) {
+        appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(albumId))
+    }
+
+    fun goToSingle(singleId: Int) {
+        appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
+    }
+
+    fun goToArtist(artistId: Int) {
+        appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+    }
+
     private fun getRecommendedSongs() {
-        val userId = 1
+        val userId = 2
+        _uiState.update { it.copy(isLoading = true) }
+
         songsUseCase.getRecommendedSongs(userId).onEach { songsList ->
             _uiState.update { currentState ->
-                currentState.copy(recommendedSongs = songsList.map { song ->
-                    HomeSongsData(id = song.id,
-                                  avatarUrl = song.avatarUrl ?: "",
-                                  songUrl = song.songUrl ?: "",
-                                  title = song.title ?: "",
-                                  subtitle = song.subtitle ?: "",
-                                  timeline = song.timeline ?: "",
-                                  releaseDate = song.releaseDate ?: "",
-                                  genres = song.genres ?: emptyList(),
-                                  likes = song.likes ?: emptyList(),
-                                  artists = song.artists ?: emptyList())
-                })
+                currentState.copy(recommendedSongs = songsList, isLoading = false)
             }
-            Log.d("HomeViewModel", "Fetched Recommended ${songsList.size} songs")
         }.catch { error ->
-            Log.e(TAG, "Error fetching songs: $error")
+            Log.e(TAG, "Error fetching RecommendedSongs: $error")
+            _uiState.update { it.copy(isLoading = false) }
         }.launchIn(viewModelScope)
     }
 
     private fun getRecentlyListenedSongs() {
-        val userId = 1
+        val userId = 2
+        _uiState.update { it.copy(isLoading = true) }
+
         songsUseCase.getRecentlyListenedSongs(userId).onEach { songsList ->
             _uiState.update { currentState ->
-                currentState.copy(recentlyListenedSongs = songsList.map { song ->
-                    with(song) {
-                        HomeSongsData(id = id,
-                                      avatarUrl = avatarUrl.orEmpty(),
-                                      songUrl = songUrl.orEmpty(),
-                                      title = title.orEmpty(),
-                                      subtitle = subtitle.orEmpty(),
-                                      timeline = timeline.orEmpty(),
-                                      releaseDate = releaseDate.orEmpty(),
-                                      genres = genres.orEmpty(),
-                                      likes = likes.orEmpty(),
-                                      artists = artists.orEmpty())
-                    }
-                })
+                currentState.copy(recentlyListenedSongs = songsList, isLoading = false)
             }
-            Log.d("HomeViewModel", "Fetched Recently Listened ${songsList.size} songs")
         }.catch { error ->
-            Log.e(TAG, "Error fetching songs: $error")
+            Log.e(TAG, "Error fetching RecentlyListenedSongs: $error")
+            _uiState.update { it.copy(isLoading = false) }
         }.launchIn(viewModelScope)
     }
 
     private fun getTrendingSongs() {
+        _uiState.update { it.copy(isLoading = true) }
+
         songsUseCase.getTrendingSongs().onEach { songsList ->
             _uiState.update { currentState ->
-                currentState.copy(trendingSongs = songsList.map { song ->
-                    with(song) {
-                        HomeSongsData(id = id,
-                                      avatarUrl = avatarUrl.orEmpty(),
-                                      songUrl = songUrl.orEmpty(),
-                                      title = title.orEmpty(),
-                                      subtitle = subtitle.orEmpty(),
-                                      timeline = timeline.orEmpty(),
-                                      releaseDate = releaseDate.orEmpty(),
-                                      genres = genres.orEmpty(),
-                                      likes = likes.orEmpty(),
-                                      artists = artists.orEmpty())
-                    }
-                })
+                currentState.copy(trendingSongs = songsList, isLoading = false)
             }
-            Log.d("HomeViewModel", "Fetched Trending ${songsList.size} songs")
         }.catch { error ->
-            Log.e(TAG, "Error fetching songs: $error")
+            Log.e(TAG, "Error fetching TrendingSongs: $error")
+            _uiState.update { it.copy(isLoading = false) }
         }.launchIn(viewModelScope)
     }
 
     private fun getQuickPlaylists() {
         val userId = 2
-        playlistSongUseCase.getQuickPlaylist(userId).onEach { playlistSongList ->
+        _uiState.update { it.copy(isLoading = true) }
+
+        playlistsUseCase.getQuickPlaylist(userId).zip(albumsUseCase.getQuickAlbum()) { playlistSongs, albumSongs ->
+            albumSongs + playlistSongs
+        }.onEach { combinedSongs ->
             _uiState.update { currentState ->
-                currentState.copy(quickPlaylistSongs = playlistSongList)
+                currentState.copy(quickPlaylistsList = combinedSongs, isLoading = false)
             }
-            Log.d("HomeViewModel", "Fetched QuickPlaylists ${playlistSongList.size} songs")
         }.catch { error ->
-            Log.e(TAG, "Error fetching songs: $error")
+            Log.e(TAG, "Error fetching QuickPlaylists: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getYourTopMixes() {
+        _uiState.update { it.copy(isLoading = true) }
+
+        crossRefPlaylistUseCase.getYourTopMixes().onEach { playlists ->
+            _uiState.update { currentState ->
+                currentState.copy(yourTopMixesPlaylist = playlists, isLoading = false)
+            }
+        }.catch { error ->
+            Log.e(TAG, "Error fetching YourTopMixes: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getRadioForYou() {
+        _uiState.update { it.copy(isLoading = true) }
+
+        playlistsUseCase.getRadioForYou().onEach { playlist ->
+            _uiState.update { currentState ->
+                currentState.copy(radioForYouPlaylist = playlist, isLoading = false)
+            }
+        }.catch { error ->
+            Log.e(TAG, "Error fetching RadioForYou: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getYourFavoriteArtists() {
+        val userId = 2
+        _uiState.update { it.copy(isLoading = true) }
+
+        usersUseCase.getYourFavoriteArtists(userId).onEach { artists ->
+            _uiState.update { currentState ->
+                currentState.copy(yourFavoriteArtists = artists, isLoading = false)
+            }
+        }.catch { error ->
+            Log.e(TAG, "Error fetching YourFavoriteArtists: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getSimilarContent() {
+        val userId = 2
+        _uiState.update { it.copy(isLoading = true) }
+
+        usersUseCase.getSimilarArtists(userId).zip(songsUseCase.getSimilarSongs()) { artists, songs ->
+            artists to songs
+        }.zip(albumsUseCase.getSimilarAlbums()) { (artists, songs), albums ->
+            (artists + songs + albums).shuffled()
+        }.onEach { combinedShuffledContent ->
+            _uiState.update { currentState ->
+                currentState.copy(similarContent = combinedShuffledContent, isLoading = false)
+            }
+
+            Log.d(TAG, "SimilarContent: ${_uiState.value.similarContent}")
+        }.catch { error ->
+            Log.e(TAG, "Error fetching SimilarContent: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getPlaylistCard() {
+        _uiState.update { it.copy(isLoading = true) }
+
+        crossRefPlaylistUseCase.getPlaylistCard().onEach { playlist ->
+            _uiState.update { currentState ->
+                currentState.copy(playlistCard = playlist, isLoading = false)
+            }
+            Log.d(TAG, "playlistCard: ${_uiState.value.playlistCard}")
+        }.catch { error ->
+            Log.e(TAG, "Error fetching PlaylistCard: $error")
+            _uiState.update { it.copy(isLoading = false) }
         }.launchIn(viewModelScope)
     }
 }

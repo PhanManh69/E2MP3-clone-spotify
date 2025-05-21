@@ -15,6 +15,7 @@ val Title2Bold = TextStyle(fontFamily = SFPro, fontSize = 30.sp, fontWeight = Fo
 val Title3Bold = TextStyle(fontFamily = SFPro, fontSize = 23.sp, fontWeight = FontWeight.Bold, lineHeight = 28.sp, letterSpacing = (-0.9).sp)
 val Title4Bold = TextStyle(fontFamily = SFPro, fontSize = 22.sp, fontWeight = FontWeight.Bold, lineHeight = 26.sp, letterSpacing = (-0.55).sp)
 val Title5Bold = TextStyle(fontFamily = SFPro, fontSize = 19.sp, fontWeight = FontWeight.Bold, lineHeight = 23.sp, letterSpacing = (-0.5).sp)
+val Title6Bold = TextStyle(fontFamily = SFPro, fontSize = 19.sp, fontWeight = FontWeight.Bold, lineHeight = 28.sp, letterSpacing = (-0.5).sp)
 val Body1Regular = TextStyle(fontFamily = SFPro, fontSize = 18.sp, fontWeight = FontWeight.Normal, lineHeight = 22.sp, letterSpacing = 0.sp)
 val Body1Bold = TextStyle(fontFamily = SFPro, fontSize = 18.sp, fontWeight = FontWeight.Bold, lineHeight = 22.sp, letterSpacing = (-0.2).sp)
 val Body2Regular = TextStyle(fontFamily = SFPro, fontSize = 17.sp, fontWeight = FontWeight.Normal, lineHeight = 21.sp, letterSpacing = 0.sp)

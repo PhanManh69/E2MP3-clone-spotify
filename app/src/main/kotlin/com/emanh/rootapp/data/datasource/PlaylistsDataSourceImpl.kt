@@ -12,6 +12,14 @@ class PlaylistsDataSourceImpl @Inject constructor(
         return playlistsDao.getAllPlaylists()
     }
 
+    override fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsEntity>> {
+        return playlistsDao.getQuickPlaylist(userId)
+    }
+
+    override fun getRadioForYou(): Flow<List<PlaylistsEntity>> {
+        return playlistsDao.getRadioForYou()
+    }
+
     override suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>) {
         playlistsDao.insertAllPlaylists(playlists)
     }

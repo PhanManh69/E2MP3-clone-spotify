@@ -10,9 +10,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
+import com.emanh.rootapp.app.main.MainScreen
 import com.emanh.rootapp.data.db.initializer.DatabaseInitializer
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setImmersiveMode()
         super.onCreate(savedInstanceState)
-        deleteDatabase("e2mp3_db")
-//        databaseInitialized()
+//        deleteDatabase("e2mp3_db")
+        databaseInitialized()
         setContent {
             E2MP3Theme {
-                RootNavScreen(appRouter = appRouter)
+                MainScreen(appRouter = appRouter)
             }
         }
     }
@@ -47,11 +47,6 @@ class MainActivity : AppCompatActivity() {
     private fun setImmersiveMode() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
-
-        WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.navigationBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
@@ -65,7 +60,6 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "Database initialized: $isInitialized")
                     if (!isInitialized) {
                         databaseInitializer.reinitializeDatabase()
-                        Toast.makeText(this@MainActivity, "Application initialization...", Toast.LENGTH_LONG).show()
                     }
                 }
             } catch (e: Exception) {

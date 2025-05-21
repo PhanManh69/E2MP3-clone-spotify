@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import com.emanh.rootapp.data.datasource.AlbumsDataSource
 import com.emanh.rootapp.data.datasource.AlbumsDataSourceImpl
-import com.emanh.rootapp.data.datasource.crossref.SongGenreDataSource
-import com.emanh.rootapp.data.datasource.crossref.SongGenreDataSourceImpl
+import com.emanh.rootapp.data.datasource.crossref.CrossRefSongDataSource
+import com.emanh.rootapp.data.datasource.crossref.CrossRefSongDataSourceImpl
 import com.emanh.rootapp.data.datasource.GenresDataSource
 import com.emanh.rootapp.data.datasource.GenresDataSourceImpl
+import com.emanh.rootapp.data.datasource.MusixmatchDataSource
+import com.emanh.rootapp.data.datasource.MusixmatchDataSourceImpl
 import com.emanh.rootapp.data.datasource.PlaylistsDataSource
 import com.emanh.rootapp.data.datasource.PlaylistsDataSourceImpl
 import com.emanh.rootapp.data.datasource.SongsDataSource
@@ -16,35 +18,43 @@ import com.emanh.rootapp.data.datasource.UsersDataSource
 import com.emanh.rootapp.data.datasource.UsersDataSourceImpl
 import com.emanh.rootapp.data.datasource.ViewsSongDataSource
 import com.emanh.rootapp.data.datasource.ViewsSongDataSourceImpl
-import com.emanh.rootapp.data.datasource.crossref.PlaylistSongDataSource
-import com.emanh.rootapp.data.datasource.crossref.PlaylistSongDataSourceImpl
+import com.emanh.rootapp.data.datasource.crossref.CrossRefAlbumDataSource
+import com.emanh.rootapp.data.datasource.crossref.CrossRefAlbumDataSourceImpl
+import com.emanh.rootapp.data.datasource.crossref.CrossRefPlaylistDataSource
+import com.emanh.rootapp.data.datasource.crossref.CrossRefPlaylistDataSourceImpl
 import com.emanh.rootapp.data.db.dao.AlbumsDao
-import com.emanh.rootapp.data.db.dao.crossref.SongGenreDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
 import com.emanh.rootapp.data.db.dao.GenresDao
 import com.emanh.rootapp.data.db.dao.PlaylistsDao
 import com.emanh.rootapp.data.db.dao.PodcastsDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
-import com.emanh.rootapp.data.db.dao.crossref.PlaylistSongDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefPlaylistDao
 import com.emanh.rootapp.data.db.database.STFDatabase
 import com.emanh.rootapp.data.db.initializer.DatabaseInitializer
+import com.emanh.rootapp.data.db.service.MusixmatchService
 import com.emanh.rootapp.data.repository.AlbumsRepositoryImpl
-import com.emanh.rootapp.data.repository.crossref.SongGenreRepositoryImpl
+import com.emanh.rootapp.data.repository.crossref.CrossRefSongRepositoryImpl
 import com.emanh.rootapp.data.repository.GenresRepositoryImpl
+import com.emanh.rootapp.data.repository.MusixmatchRepositoryImpl
 import com.emanh.rootapp.data.repository.PlaylistsRepositoryImpl
 import com.emanh.rootapp.data.repository.SongsRepositoryImpl
 import com.emanh.rootapp.data.repository.UsersRepositoryImpl
 import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
-import com.emanh.rootapp.data.repository.crossref.PlaylistSongRepositoryImpl
+import com.emanh.rootapp.data.repository.crossref.CrossRefAlbumRepositoryImpl
+import com.emanh.rootapp.data.repository.crossref.CrossRefPlaylistRepositoryImpl
 import com.emanh.rootapp.domain.repository.AlbumsRepository
-import com.emanh.rootapp.domain.repository.crossref.SongGenreRepository
+import com.emanh.rootapp.domain.repository.crossref.CrossRefSongRepository
 import com.emanh.rootapp.domain.repository.GenresRepository
+import com.emanh.rootapp.domain.repository.MusixmatchRepository
 import com.emanh.rootapp.domain.repository.PlaylistsRepository
 import com.emanh.rootapp.domain.repository.SongsRepository
 import com.emanh.rootapp.domain.repository.UsersRepository
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
-import com.emanh.rootapp.domain.repository.crossref.PlaylistSongRepository
+import com.emanh.rootapp.domain.repository.crossref.CrossRefAlbumRepository
+import com.emanh.rootapp.domain.repository.crossref.CrossRefPlaylistRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -105,14 +115,20 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideCrossRefSongGenreDao(database: STFDatabase): SongGenreDao {
-        return database.crossRefSongGenreDao()
+    fun provideCrossRefSongDao(database: STFDatabase): CrossRefSongDao {
+        return database.crossRefSongDao()
     }
 
     @Provides
     @Singleton
-    fun provideCrossRefPlaylistSongDao(database: STFDatabase): PlaylistSongDao {
-        return database.crossRefPlaylistSongDao()
+    fun provideCrossRefPlaylistDao(database: STFDatabase): CrossRefPlaylistDao {
+        return database.crossRefPlaylistDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefAlbumDao(database: STFDatabase): CrossRefAlbumDao {
+        return database.crossRefAlbumDao()
     }
 
     @Provides
@@ -123,10 +139,11 @@ object DatabaseModule {
         usersDao: UsersDao,
         albumsDao: AlbumsDao,
         palylistsDao: PlaylistsDao,
-        crossRefSongGenreDao: SongGenreDao,
-        crossRefPlaylistSongDao: PlaylistSongDao
+        crossRefSongDao: CrossRefSongDao,
+        crossRefPlaylistDao: CrossRefPlaylistDao,
+        crossRefAlbumDao: CrossRefAlbumDao
     ): DatabaseInitializer {
-        return DatabaseInitializer(genresDao, songsDao, usersDao, albumsDao, palylistsDao, crossRefSongGenreDao, crossRefPlaylistSongDao)
+        return DatabaseInitializer(genresDao, songsDao, usersDao, albumsDao, palylistsDao, crossRefSongDao, crossRefPlaylistDao, crossRefAlbumDao)
     }
 
     @Provides
@@ -203,25 +220,49 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideCrossRefSongGenreDataSource(crossRefSongGenreDao: SongGenreDao): SongGenreDataSource {
-        return SongGenreDataSourceImpl(crossRefSongGenreDao)
+    fun provideCrossRefSongGenreDataSource(crossRefCrossRefSongDao: CrossRefSongDao): CrossRefSongDataSource {
+        return CrossRefSongDataSourceImpl(crossRefCrossRefSongDao)
     }
 
     @Provides
     @Singleton
-    fun provideCrossRefSongGenreRepository(songGenreDataSource: SongGenreDataSource): SongGenreRepository {
-        return SongGenreRepositoryImpl(songGenreDataSource)
+    fun provideCrossRefSongGenreRepository(crossRefSongDataSource: CrossRefSongDataSource): CrossRefSongRepository {
+        return CrossRefSongRepositoryImpl(crossRefSongDataSource)
     }
 
     @Provides
     @Singleton
-    fun provideCrossRefPlaylistSongDataSource(crossRefPlaylistSongDao: PlaylistSongDao): PlaylistSongDataSource {
-        return PlaylistSongDataSourceImpl(crossRefPlaylistSongDao)
+    fun provideCrossRefPlaylistSongDataSource(crossRefCrossRefPlaylistDao: CrossRefPlaylistDao): CrossRefPlaylistDataSource {
+        return CrossRefPlaylistDataSourceImpl(crossRefCrossRefPlaylistDao)
     }
 
     @Provides
     @Singleton
-    fun provideCrossRefPlaylistSongRepository(songGenreDataSource: PlaylistSongDataSource): PlaylistSongRepository {
-        return PlaylistSongRepositoryImpl(songGenreDataSource)
+    fun provideCrossRefPlaylistSongRepository(crossRefPlaylistDataSource: CrossRefPlaylistDataSource): CrossRefPlaylistRepository {
+        return CrossRefPlaylistRepositoryImpl(crossRefPlaylistDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefAlbumSongDataSource(crossRefCrossRefAlbumDao: CrossRefAlbumDao): CrossRefAlbumDataSource {
+        return CrossRefAlbumDataSourceImpl(crossRefCrossRefAlbumDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefAlbumSongRepository(crossRefAlbumDataSource: CrossRefAlbumDataSource): CrossRefAlbumRepository {
+        return CrossRefAlbumRepositoryImpl(crossRefAlbumDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMusixmatchDataSource(musixmatchService: MusixmatchService): MusixmatchDataSource {
+        return MusixmatchDataSourceImpl(musixmatchService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMusixmatchRepository(musixmatchDataSource: MusixmatchDataSource): MusixmatchRepository {
+        return MusixmatchRepositoryImpl(musixmatchDataSource)
     }
 }

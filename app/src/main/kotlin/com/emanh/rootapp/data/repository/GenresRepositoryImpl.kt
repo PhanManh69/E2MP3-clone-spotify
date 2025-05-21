@@ -25,6 +25,10 @@ class GenresRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getGenreNameByArtist(userId: Int): Flow<List<Int>> {
+        return genresDataSource.getGenreNameByArtist(userId)
+    }
+
     override suspend fun insertAllGenres(genres: List<GenresModel>) {
         genresDataSource.insertAllGenres(genres.map { mapToEntity(it) })
     }

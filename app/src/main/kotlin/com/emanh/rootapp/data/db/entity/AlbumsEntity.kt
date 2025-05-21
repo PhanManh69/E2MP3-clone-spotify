@@ -13,5 +13,5 @@ data class AlbumsEntity(
     @ColumnInfo(name = "album_type") val albumType: String? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String? = null,
     @ColumnInfo(name = "artists") val artistsIdList: List<Int>? = null,
-    @ColumnInfo(name = "songs") val songsIdList: List<Int>? = null
+    @ColumnInfo(name = "songs") val songsIdList: List<Int>
 )

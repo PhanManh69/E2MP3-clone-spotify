@@ -245,7 +245,7 @@ fun StickyPlayerPreview() {
 
                       if (played && progressJob == null) {
                           progressJob = scope.launch {
-                              loadProgress(isPlaying = { isPlayed }, updateProgress = { progress -> currentProgress = progress }, onFinish = {
+                              loadProgress(timeSeconds = 2000, isPlaying = { isPlayed }, updateProgress = { progress -> currentProgress = progress }, onFinish = {
                                   isPlayed = false
                                   progressJob = null
                               })

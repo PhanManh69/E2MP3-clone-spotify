@@ -6,16 +6,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emanh.rootapp.domain.model.AlbumsModel
+import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFCardSlim
-import com.emanh.rootapp.presentation.theme.E2MP3Theme
-import com.emanh.rootapp.presentation.ui.home.HomeAlbumsDataFake
-import com.emanh.rootapp.presentation.ui.home.HomePlaylistsData
-import com.emanh.rootapp.utils.MyConstant.fakeQuickPlaylistList
+import com.emanh.rootapp.utils.MyConstant.ALBUM_TYPE
+import com.emanh.rootapp.utils.MyConstant.PLAYLIST_TYPE
 
 @Composable
-fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any>, onCardClick: (Int) -> Unit) {
+fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any>, onCardClick: (Int, String) -> Unit) {
     Column(modifier = modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val chunkSize = 2
         val chunkedList = quickPlaylistList.chunked(chunkSize)
@@ -24,24 +23,30 @@ fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any
             Row(modifier = Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 rowItems.forEach { item ->
                     val id = when (item) {
-                        is HomeAlbumsDataFake -> item.id
-                        is HomePlaylistsData -> item.id
+                        is AlbumsModel -> item.id
+                        is PlaylistsModel -> item.id
                         else -> -1
                     }
 
                     val title = when (item) {
-                        is HomeAlbumsDataFake -> item.nameAlbum
-                        is HomePlaylistsData -> item.namePlaylist
+                        is AlbumsModel -> item.title
+                        is PlaylistsModel -> item.title
                         else -> ""
                     }
 
                     val imageUrl = when (item) {
-                        is HomeAlbumsDataFake -> item.imageUrl
-                        is HomePlaylistsData -> item.imageUrl
+                        is AlbumsModel -> item.avatarUrl
+                        is PlaylistsModel -> item.avatarUrl
                         else -> ""
                     }
 
-                    STFCardSlim(modifier = Modifier.weight(1f), imageUrl = imageUrl, title = title, onClick = { onCardClick(id) })
+                    val type = when (item) {
+                        is AlbumsModel -> ALBUM_TYPE
+                        is PlaylistsModel -> PLAYLIST_TYPE
+                        else -> ""
+                    }
+
+                    STFCardSlim(modifier = Modifier.weight(1f), imageUrl = imageUrl.orEmpty(), title = title.orEmpty(), onClick = { onCardClick(id, type) })
                 }
             }
         }

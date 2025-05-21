@@ -142,7 +142,7 @@ fun STFThumbHero(
             Text(text = subtitle,
                  color = TextSecondary,
                  style = Body6Regular,
-                 maxLines = if (type == STFThumbHeroType.Song) 1 else Int.MAX_VALUE,
+                 maxLines = if (type == STFThumbHeroType.Song) 1 else 2,
                  overflow = TextOverflow.Ellipsis,
                  modifier = Modifier.width(sizeImage))
         }

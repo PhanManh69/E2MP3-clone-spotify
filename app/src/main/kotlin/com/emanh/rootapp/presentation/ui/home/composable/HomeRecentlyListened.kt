@@ -4,17 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.presentation.composable.STFCarouselHorizontal
 import com.emanh.rootapp.presentation.composable.STFCarouselThumbData
 import com.emanh.rootapp.presentation.composable.STFCarouselType
-import com.emanh.rootapp.presentation.ui.home.HomeSongsData
 
 @Composable
 fun HomeRecentlyListened(
-    modifier: Modifier = Modifier, recentlyLestenedList: List<HomeSongsData>, onThumbClick: (Int) -> Unit, onViewAll: () -> Unit
+    modifier: Modifier = Modifier, recentlyLestenedList: List<SongsModel>, onThumbClick: (Int) -> Unit, onViewAll: () -> Unit
 ) {
     val thumbItem = recentlyLestenedList.take(10).map { song ->
-        STFCarouselThumbData(id = song.id, imageUrl = song.avatarUrl, title = song.title, subtitle = song.subtitle)
+        STFCarouselThumbData(id = song.id, imageUrl = song.avatarUrl.orEmpty(), title = song.title.orEmpty(), subtitle = song.subtitle.orEmpty())
     }
 
     if (thumbItem.isEmpty()) return else {

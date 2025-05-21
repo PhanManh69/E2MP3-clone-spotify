@@ -13,4 +13,8 @@ object NavActions {
             this.navigateUp()
         }
     }
+
+    fun NavController.onPopBack() {
+        this.popBackStack()
+    }
 } 

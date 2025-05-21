@@ -5,8 +5,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.emanh.rootapp.data.db.entity.SongsEntity
+import com.emanh.rootapp.utils.MyQuery.QUERY_MORE_BY_ARTISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_RECENTLY_LISTENED_SONGS
 import com.emanh.rootapp.utils.MyQuery.QUERY_RECOMMENDED_YOUR
+import com.emanh.rootapp.utils.MyQuery.QUERY_SIMILAR_SONGS
+import com.emanh.rootapp.utils.MyQuery.QUERY_SONGS_BY_ARTIST
+import com.emanh.rootapp.utils.MyQuery.QUERY_SONG_BY_ID
 import com.emanh.rootapp.utils.MyQuery.QUERY_TRENDING
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +27,18 @@ interface SongsDao {
 
     @Query(QUERY_TRENDING)
     fun getTrendingSongs(): Flow<List<SongsEntity>>
+
+    @Query(QUERY_SIMILAR_SONGS)
+    fun getSimilarSongs(): Flow<List<SongsEntity>>
+
+    @Query(QUERY_MORE_BY_ARTISTS)
+    fun getMoreByArtists(songId: Int): Flow<List<SongsEntity>>
+
+    @Query(QUERY_SONGS_BY_ARTIST)
+    fun getSongsByArtist(userId: Int): Flow<List<SongsEntity>>
+
+    @Query(QUERY_SONG_BY_ID)
+    fun getSongsById(songId: Int): Flow<SongsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllSongs(songs: List<SongsEntity>)

@@ -101,6 +101,7 @@ fun STFItem(
     label: String,
     title: String,
     labelChips: String = "",
+    iconId: Int = R.drawable.ic_24_close,
     type: STFItemType,
     size: STFItemSize,
     onItemClick: () -> Unit = {},
@@ -141,7 +142,6 @@ fun STFItem(
         }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         if (!isLoadFailed) {
             AsyncImage(modifier = Modifier
-                .shadowCustom(shapeRadius = if (type == STFItemType.Music) 8.dp else Int.MAX_VALUE.dp)
                 .size(itemSize)
                 .padding(animatedPadding)
                 .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
@@ -155,7 +155,6 @@ fun STFItem(
                        contentScale = ContentScale.Crop)
         } else {
             Box(modifier = Modifier
-                .shadowCustom(shapeRadius = if (type == STFItemType.Music) 8.dp else Int.MAX_VALUE.dp)
                 .size(itemSize)
                 .padding(animatedPadding)
                 .background(color = IconInvert, shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
@@ -186,7 +185,7 @@ fun STFItem(
             if (itemLayout.showChips) {
                 STFChips(text = labelChips, size = STFChipsSize.Normal, type = STFChipsType.Stroke, onClick = onIconClick)
             } else {
-                Icon(painter = painterResource(R.drawable.ic_24_close),
+                Icon(painter = painterResource(iconId),
                      contentDescription = null,
                      tint = IconSecondary,
                      modifier = Modifier

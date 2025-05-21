@@ -189,7 +189,12 @@ fun STFThumb(
         Row(modifier = Modifier
             .width(sizeImage)
             .alpha(if (hideSubtitle) 1f else 0f), verticalAlignment = resolveThumbAlignment.second) {
-            Text(text = subtitle, color = TextSecondary, style = Body6Regular, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier)
+            Text(text = subtitle,
+                 color = TextSecondary,
+                 style = Body6Regular,
+                 maxLines = 1,
+                 overflow = TextOverflow.Ellipsis,
+                 modifier = Modifier.weight(weight = 1f, fill = false))
 
             if (!hideDescription) {
                 Text(text = " • ", color = TextSecondary, style = Body6Regular)
@@ -198,8 +203,7 @@ fun STFThumb(
                      color = TextSecondary,
                      style = Body6Regular,
                      maxLines = 1,
-                     overflow = TextOverflow.Ellipsis,
-                     modifier = Modifier.weight(1f))
+                     overflow = TextOverflow.Ellipsis)
             }
         }
     }
@@ -285,7 +289,7 @@ fun ThumbMusicBigPreview() {
         STFThumb(imageUrl = IMAGE_URL,
                  title = "Nơi này có anh",
                  subtitle = "Sơn Tùng M-TP",
-                 description = "350M view",
+                 description = "350M",
                  type = STFThumbType.Music,
                  size = STFThumbSize.Big)
     }

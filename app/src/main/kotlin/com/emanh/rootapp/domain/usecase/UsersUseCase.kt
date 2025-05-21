@@ -8,7 +8,23 @@ import javax.inject.Inject
 class UsersUseCase @Inject constructor(
     private val usersRepository: UsersRepository
 ) {
-    fun getAllUsers(): Flow<List<UsersModel>> {
-        return usersRepository.getAllUsers()
+    fun getYourFavoriteArtists(userId: Int): Flow<UsersModel> {
+        return usersRepository.getYourFavoriteArtists(userId)
+    }
+
+    fun getSimilarArtists(userId: Int): Flow<List<UsersModel>> {
+        return usersRepository.getSimilarArtists(userId)
+    }
+
+    fun getOwnerPlaylist(userId: Int): Flow<UsersModel> {
+        return usersRepository.getOwnerPlaylist(userId)
+    }
+
+    fun getOwnerAlbum(albumId: Int): Flow<List<UsersModel>> {
+        return usersRepository.getOwnerAlbum(albumId)
+    }
+
+    fun getArtistById(userId: Int): Flow<UsersModel> {
+        return usersRepository.getArtistById(userId)
     }
 }

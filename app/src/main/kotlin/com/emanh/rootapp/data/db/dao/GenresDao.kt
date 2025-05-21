@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.emanh.rootapp.data.db.entity.GenresEntity
 import com.emanh.rootapp.utils.MyQuery.QUERY_GENRE_BY_ID
+import com.emanh.rootapp.utils.MyQuery.QUERY_GENRE_NAME_BY_ARTIST
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,6 +16,9 @@ interface GenresDao {
 
     @Query(QUERY_GENRE_BY_ID)
     fun getGenreById(genreId: Int): Flow<GenresEntity>
+
+    @Query(QUERY_GENRE_NAME_BY_ARTIST)
+    fun getGenreNameByArtist(userId: Int): Flow<List<Int>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllGenres(genres: List<GenresEntity>)
