@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.emanh.rootapp.data.db.entity.SongsEntity
+import com.emanh.rootapp.utils.MyQuery.QERRY_SEARCH_SONGS
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_SONGS_BY_SEARCH
 import com.emanh.rootapp.utils.MyQuery.QUERY_MORE_BY_ARTISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_RECENTLY_LISTENED_SONGS
 import com.emanh.rootapp.utils.MyQuery.QUERY_RECOMMENDED_YOUR
@@ -39,6 +41,12 @@ interface SongsDao {
 
     @Query(QUERY_SONG_BY_ID)
     fun getSongsById(songId: Int): Flow<SongsEntity>
+
+    @Query(QERRY_SEARCH_SONGS)
+    fun getSearchSong(value: String): Flow<List<SongsEntity>>
+
+    @Query(QUERY_GET_SONGS_BY_SEARCH)
+    fun getSongsBySearch(listId: List<Int>): Flow<List<SongsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllSongs(songs: List<SongsEntity>)

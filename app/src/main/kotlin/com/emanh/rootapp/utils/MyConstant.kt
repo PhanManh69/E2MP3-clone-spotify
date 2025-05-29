@@ -19,6 +19,16 @@ object MyConstant {
 
     const val PADDING_BOTTOM_BAR = 168
 
+    const val SONGS_SEARCH = "songs_search"
+
+    const val ARTISTS_SEARCH = "artists_search"
+
+    const val ALBUMS_SEARCH = "albums_search"
+
+    const val PLAYLISTS_SEARCH = "playlists_search"
+
+    const val VIEW_ALL_HISTORY = -91829
+
     const val IMAGE_URL =
         "https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w544-h544-l90-rj"
     const val AVATAR_URL = "https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-marquee-06.webp"

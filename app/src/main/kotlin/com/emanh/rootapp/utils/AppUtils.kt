@@ -12,12 +12,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.palette.graphics.Palette
+import com.emanh.rootapp.data.db.entity.AlbumsEntity
+import com.emanh.rootapp.data.db.entity.PlaylistsEntity
+import com.emanh.rootapp.data.db.entity.SearchEntity
+import com.emanh.rootapp.data.db.entity.SongsEntity
+import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.presentation.theme.SurfaceProductSuperDark
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.net.URL
+import java.text.Normalizer
 
 suspend fun loadProgress(
     timeSeconds: Long, startPositionSeconds: Long = 0, isPlaying: () -> Boolean, updateProgress: (Float) -> Unit, onFinish: () -> Unit
@@ -119,4 +125,47 @@ fun faunchedEffectAvatar(avatarUrl: String?): Color {
     }
 
     return backgroundColor
+}
+
+fun List<UsersEntity>.withNormalizedUsers(): List<UsersEntity> {
+    return this.map { user ->
+        user.copy(normalizedSearchValue = user.name?.removeAccents())
+    }
+}
+
+fun List<SongsEntity>.withNormalizedSongs(): List<SongsEntity> {
+    return this.map { song ->
+        song.copy(normalizedSearchValue = "${song.title?.removeAccents()} ${song.subtitle?.removeAccents()}")
+    }
+}
+
+fun List<PlaylistsEntity>.withNormalizedPlaylists(): List<PlaylistsEntity> {
+    return this.map { playlist ->
+        playlist.copy(normalizedSearchValue = playlist.title?.removeAccents())
+    }
+}
+
+fun List<AlbumsEntity>.withNormalizedAlbums(): List<AlbumsEntity> {
+    return this.map { album ->
+        album.copy(normalizedSearchValue = "${album.title?.removeAccents()} ${album.subtitle?.removeAccents()}")
+    }
+}
+
+fun String.removeAccents(): String {
+    val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
+    val noDiacritics = normalized.replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+    return noDiacritics.replace('đ', 'd')
+        .replace('Đ', 'D')
+        .replace('ă', 'a')
+        .replace('Ă', 'A')
+        .replace('â', 'a')
+        .replace('Â', 'A')
+        .replace('ê', 'e')
+        .replace('Ê', 'E')
+        .replace('ô', 'o')
+        .replace('Ô', 'O')
+        .replace('ơ', 'o')
+        .replace('Ơ', 'O')
+        .replace('ư', 'u')
+        .replace('Ư', 'U')
 }

@@ -32,6 +32,14 @@ class SongsUseCase @Inject constructor(
         return songsRepository.getSongsByArtist(userId)
     }
 
+    fun getSearchSong(value: String): Flow<List<SongsModel>> {
+        return songsRepository.getSearchSong(value)
+    }
+
+    fun getSongsBySearch(listId: List<Int>): Flow<List<SongsModel>> {
+        return songsRepository.getSongsBySearch(listId)
+    }
+
     fun getSongsById(songId: Int): Flow<SongsModel> {
         return songsRepository.getSongsById(songId)
     }

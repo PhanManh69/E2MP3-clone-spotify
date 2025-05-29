@@ -84,4 +84,5 @@
     <string name="about_the_artist">Thông tin nghệ sĩ</string>
     <string name="follow">Theo dõi</string>
     <string name="not_lyrics_song">Chúng tôi không tìm thấy lời bài hát của bài hát này.</string>
+    <string name="history_search">Lịch sử tìm kiếm</string>
 </resources>

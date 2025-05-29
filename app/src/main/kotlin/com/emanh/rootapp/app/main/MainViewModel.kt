@@ -39,6 +39,8 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
+
+
     fun onPlayPauseClick(isPlayed: Boolean, scope: CoroutineScope) {
         if (isPlayed == _uiState.value.isPlayed) return
 

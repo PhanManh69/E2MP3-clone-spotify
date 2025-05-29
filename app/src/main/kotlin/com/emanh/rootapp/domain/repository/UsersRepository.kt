@@ -16,5 +16,9 @@ interface UsersRepository {
 
     fun getArtistById(userId: Int): Flow<UsersModel>
 
+    fun getSearchArtists(value: String): Flow<List<UsersModel>>
+
+    fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>>
+
     suspend fun insertAllUsers(users: List<UsersModel>)
 }

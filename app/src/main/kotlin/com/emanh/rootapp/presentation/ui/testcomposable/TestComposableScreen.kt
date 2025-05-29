@@ -80,7 +80,6 @@ import com.emanh.rootapp.presentation.composable.ThumbVerticalSmallPreview
 import com.emanh.rootapp.presentation.composable.TitleArtistsPreview
 import com.emanh.rootapp.presentation.composable.TitlePodcastPreview
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
-import com.emanh.rootapp.utils.MyConstant.chipSearchInputList
 import kotlinx.coroutines.delay
 
 @Composable
@@ -152,7 +151,6 @@ fun TestComposableScreen() {
     }
 
     STFHeader(inputText = currentMessage,
-              searchChipsList = chipSearchInputList,
               type = STFHeaderType.HeaderSearchInput,
               onInputTextChange = { currentMessage = it },
               modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() },

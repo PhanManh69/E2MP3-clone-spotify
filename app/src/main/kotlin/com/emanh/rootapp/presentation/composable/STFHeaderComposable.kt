@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -62,6 +63,7 @@ import com.emanh.rootapp.utils.MyConstant.chipSearchInputList
 import com.emanh.rootapp.utils.MyConstant.sampleLibraryData
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import com.emanh.rootapp.presentation.theme.Body1Bold
 
 enum class STFHeaderType {
     HeaderHome, HeaderSearch, HeaderSearchInput, HeaderLibrary
@@ -83,7 +85,7 @@ fun STFHeader(
     userName: String = "",
     inputText: String = "",
     type: STFHeaderType,
-    searchChipsList: List<Int> = emptyList(),
+    searchChipsList: List<Int>? = null,
     libraryList: PrimaryLibraryData = PrimaryLibraryData(primaryLibrary = emptyList()),
     onAvatarClick: () -> Unit = {},
     onChipsHomeClick: (Int) -> Unit = {},
@@ -283,7 +285,7 @@ private fun STFHeaderSearchInput(
     modifier: Modifier = Modifier,
     inputText: String,
     currentPosition: Dp,
-    chipsList: List<Int>,
+    chipsList: List<Int>? = null,
     onInputTextChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onChipsClick: (Int) -> Unit,
@@ -347,19 +349,30 @@ private fun STFHeaderSearchInput(
         LazyRow(modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(chipsList.size) { index ->
-                STFChips(text = stringResource(chipsList[index]),
-                         size = STFChipsSize.Small,
-                         type = if (index == chipsSelected.intValue) STFChipsType.Stroke else STFChipsType.Default,
-                         onClick = {
-                             if (chipsSelected.intValue == index) {
-                                 chipsSelected.intValue = -1
-                                 onChipsClick(-1)
-                                 return@STFChips
-                             }
-                             chipsSelected.intValue = index
-                             onChipsClick(chipsSelected.intValue)
-                         })
+            if (chipsList != null) {
+                items(chipsList.size) { index ->
+                    STFChips(text = stringResource(chipsList[index]),
+                             size = STFChipsSize.Small,
+                             type = if (index == chipsSelected.intValue) STFChipsType.Stroke else STFChipsType.Default,
+                             onClick = {
+                                 if (chipsSelected.intValue == index) {
+                                     chipsSelected.intValue = -1
+                                     onChipsClick(-1)
+                                     return@STFChips
+                                 }
+                                 chipsSelected.intValue = index
+                                 onChipsClick(chipsSelected.intValue)
+                             })
+                }
+            } else {
+                item {
+                    Box(modifier = Modifier.height(30.dp)) {
+                        Text(text = stringResource(R.string.history_search),
+                             color = TextPrimary,
+                             style = Body1Bold,
+                             modifier = Modifier.align(Alignment.Center))
+                    }
+                }
             }
         }
     }
@@ -443,7 +456,7 @@ fun HeaderSearchStickPreview() {
 
 @Preview
 @Composable
-fun HeaderSearchInputPreview() {
+fun HeaderSearchInputPreview1() {
     E2MP3Theme {
         var currentMessage by remember { mutableStateOf("") }
 
@@ -451,6 +464,22 @@ fun HeaderSearchInputPreview() {
                 inputText = currentMessage,
                 currentPosition = 0.dp,
                 chipsList = chipSearchInputList,
+                onInputTextChange = { currentMessage = it },
+                onBackClick = {},
+                onChipsClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun HeaderSearchInputPreview2() {
+    E2MP3Theme {
+        var currentMessage by remember { mutableStateOf("") }
+
+        STFHeaderSearchInput(
+                inputText = currentMessage,
+                currentPosition = 0.dp,
                 onInputTextChange = { currentMessage = it },
                 onBackClick = {},
                 onChipsClick = {},

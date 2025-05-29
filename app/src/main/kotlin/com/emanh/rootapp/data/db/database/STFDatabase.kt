@@ -9,6 +9,8 @@ import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
 import com.emanh.rootapp.data.db.dao.GenresDao
 import com.emanh.rootapp.data.db.dao.PlaylistsDao
 import com.emanh.rootapp.data.db.dao.PodcastsDao
+import com.emanh.rootapp.data.db.dao.SearchDao
+import com.emanh.rootapp.data.db.dao.SearchHistoryDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
@@ -19,6 +21,8 @@ import com.emanh.rootapp.data.db.entity.crossref.SongGenreEntity
 import com.emanh.rootapp.data.db.entity.GenresEntity
 import com.emanh.rootapp.data.db.entity.PlaylistsEntity
 import com.emanh.rootapp.data.db.entity.PodcastsEntity
+import com.emanh.rootapp.data.db.entity.SearchEntity
+import com.emanh.rootapp.data.db.entity.SearchHistoryEntity
 import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.data.db.entity.ViewsSongEntity
@@ -27,7 +31,7 @@ import com.emanh.rootapp.data.db.entity.crossref.AlbumSongEntity
 import com.emanh.rootapp.data.db.entity.crossref.PlaylistSongEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 
-@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SongGenreEntity::class, SongArtistEntity::class, PlaylistSongEntity::class, AlbumSongEntity::class, AlbumArtistEntity::class],
+@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SearchEntity::class, SongGenreEntity::class, SongArtistEntity::class, PlaylistSongEntity::class, AlbumSongEntity::class, AlbumArtistEntity::class, SearchHistoryEntity::class],
           version = 1,
           exportSchema = false)
 @TypeConverters(Converters::class)
@@ -39,6 +43,8 @@ abstract class STFDatabase : RoomDatabase() {
     abstract fun songsDao(): SongsDao
     abstract fun usersDao(): UsersDao
     abstract fun viewsSongDao(): ViewsSongDao
+    abstract fun searchDao(): SearchDao
+    abstract fun searchHistoryDao(): SearchHistoryDao
     abstract fun crossRefSongDao(): CrossRefSongDao
     abstract fun crossRefPlaylistDao(): CrossRefPlaylistDao
     abstract fun crossRefAlbumDao(): CrossRefAlbumDao

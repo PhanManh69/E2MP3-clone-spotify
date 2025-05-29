@@ -29,6 +29,24 @@ class AlbumsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getSearchAlbums(value: String): Flow<List<AlbumsModel>> {
+        return albumsDataSource.getSearchAlbums(value).map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
+    override fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsModel>> {
+        return albumsDataSource.getAlbumsBySearch(listId).map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
+    override fun getAlbumsById(albumId: Int): Flow<AlbumsModel> {
+        return albumsDataSource.getAlbumsById(albumId).map { entity ->
+            mapToModel(entity)
+        }
+    }
+
     override suspend fun insertAllAlbums(albums: List<AlbumsModel>) {
         albumsDataSource.insertAlbums(albums.map { mapToEntity(it) })
     }

@@ -10,5 +10,11 @@ interface PlaylistsDataSource {
 
     fun getRadioForYou(): Flow<List<PlaylistsEntity>>
 
+    fun getSearchPlaylists(value: String): Flow<List<PlaylistsEntity>>
+
+    fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsEntity>>
+
+    fun getPlaylistsById(playlistId: Int): Flow<PlaylistsEntity>
+
     suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>)
 }

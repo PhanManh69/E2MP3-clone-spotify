@@ -5,6 +5,7 @@ data class AlbumsModel(
     val avatarUrl: String? = null,
     val title: String? = null,
     val subtitle: String? = null,
+    val normalizedSearchValue: String? = null,
     val albumType: String? = null,
     val releaseDate: String? = null,
     val artist: List<Int>? = null,

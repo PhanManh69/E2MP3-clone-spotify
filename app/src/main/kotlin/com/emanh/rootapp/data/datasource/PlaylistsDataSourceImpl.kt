@@ -20,6 +20,18 @@ class PlaylistsDataSourceImpl @Inject constructor(
         return playlistsDao.getRadioForYou()
     }
 
+    override fun getSearchPlaylists(value: String): Flow<List<PlaylistsEntity>> {
+        return playlistsDao.getSearchPlaylists(value)
+    }
+
+    override fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsEntity>> {
+        return playlistsDao.getPlaylistsBySearch(listId)
+    }
+
+    override fun getPlaylistsById(playlistId: Int): Flow<PlaylistsEntity> {
+        return playlistsDao.getPlaylistsById(playlistId)
+    }
+
     override suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>) {
         playlistsDao.insertAllPlaylists(playlists)
     }

@@ -9,6 +9,7 @@ data class PlaylistsEntity(
     @PrimaryKey(autoGenerate = true) val playlistId: Int = 0,
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
+    @ColumnInfo(name = "normalized_search_value") val normalizedSearchValue: String? = null,
     @ColumnInfo(name = "subtitle") val subtitle: String? = null,
     @ColumnInfo(name = "isRadio") val isRadio: Boolean = false,
     @ColumnInfo(name = "owner_id") val ownerId: Int? = null,

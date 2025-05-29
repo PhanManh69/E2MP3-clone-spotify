@@ -10,5 +10,11 @@ interface AlbumsRepository {
 
     fun getSimilarAlbums(): Flow<List<AlbumsModel>>
 
+    fun getSearchAlbums(value: String): Flow<List<AlbumsModel>>
+
+    fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsModel>>
+
+    fun getAlbumsById(albumId: Int): Flow<AlbumsModel>
+
     suspend fun insertAllAlbums(albums: List<AlbumsModel>)
 }

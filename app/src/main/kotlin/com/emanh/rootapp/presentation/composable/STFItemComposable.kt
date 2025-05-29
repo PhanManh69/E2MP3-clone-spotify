@@ -38,7 +38,6 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emanh.e2mp3.spotify.R
 import com.emanh.rootapp.presentation.composable.utils.debounceClickable
-import com.emanh.rootapp.presentation.composable.utils.shadowCustom
 import com.emanh.rootapp.presentation.composable.utils.shimmerEffect
 import com.emanh.rootapp.presentation.theme.Body3Regular
 import com.emanh.rootapp.presentation.theme.Body6Regular
@@ -78,7 +77,7 @@ private fun getItemLayoutDataFactory(type: STFItemType, size: STFItemSize): STFI
         STFItemType.Artists -> {
             when (size) {
                 STFItemSize.Medium -> STFItemLayoutData(showTitle = false)
-                STFItemSize.Small -> STFItemLayoutData(showRibbon = true)
+                STFItemSize.Small -> STFItemLayoutData(showTitle = false, showRibbon = true)
                 else -> STFItemLayoutData()
             }
         }

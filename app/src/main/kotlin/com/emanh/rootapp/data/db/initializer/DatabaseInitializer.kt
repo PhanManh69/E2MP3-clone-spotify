@@ -5,10 +5,12 @@ import com.emanh.rootapp.data.db.dao.AlbumsDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
 import com.emanh.rootapp.data.db.dao.GenresDao
 import com.emanh.rootapp.data.db.dao.PlaylistsDao
+import com.emanh.rootapp.data.db.dao.SearchDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefPlaylistDao
+import com.emanh.rootapp.data.db.fakedata.createSearchData
 import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefAlbumArtistData
 import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefAlbumSongData
 import com.emanh.rootapp.data.db.fakedata.crossref.fakeCrossRefPlaylistSongData
@@ -19,6 +21,10 @@ import com.emanh.rootapp.data.db.fakedata.fakeGenresData
 import com.emanh.rootapp.data.db.fakedata.fakePlaylistsData
 import com.emanh.rootapp.data.db.fakedata.fakeSongsData
 import com.emanh.rootapp.data.db.fakedata.fakeUsersData
+import com.emanh.rootapp.utils.withNormalizedAlbums
+import com.emanh.rootapp.utils.withNormalizedPlaylists
+import com.emanh.rootapp.utils.withNormalizedSongs
+import com.emanh.rootapp.utils.withNormalizedUsers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +46,7 @@ class DatabaseInitializer @Inject constructor(
     private val usersDao: UsersDao,
     private val albumsDao: AlbumsDao,
     private val playlistsDao: PlaylistsDao,
+    private val searchDao: SearchDao,
     private val crossRefSongDao: CrossRefSongDao,
     private val crossRefPlaylistDao: CrossRefPlaylistDao,
     private val crossRefAlbumDao: CrossRefAlbumDao
@@ -75,6 +82,9 @@ class DatabaseInitializer @Inject constructor(
                 val playlitsList = withTimeout(5000) {
                     playlistsDao.getAllPlaylists().first()
                 }
+                val searchList = withTimeout(5000) {
+                    searchDao.getAllSearch().first()
+                }
                 val crossRefSongList = withTimeout(5000) {
                     crossRefSongDao.getAllCrossRefSongs().first()
                 }
@@ -99,7 +109,9 @@ class DatabaseInitializer @Inject constructor(
                 if (songsList.isEmpty()) {
                     Log.d(TAG, "Inserting songs data: ${fakeSongsData().size} items")
                     try {
-                        songsDao.insertAllSongs(fakeSongsData())
+                        val rawSongs = fakeSongsData()
+                        val normalizedSongs = rawSongs.withNormalizedSongs()
+                        songsDao.insertAllSongs(normalizedSongs)
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to insert songs data: $e")
                         _isDatabaseInitialized.value = false
@@ -110,7 +122,9 @@ class DatabaseInitializer @Inject constructor(
                 if (usersList.isEmpty()) {
                     Log.d(TAG, "Inserting users data: ${fakeUsersData().size} items")
                     try {
-                        usersDao.insertAllUsers(fakeUsersData())
+                        val rawUsers = fakeUsersData()
+                        val normalizedUsers = rawUsers.withNormalizedUsers()
+                        usersDao.insertAllUsers(normalizedUsers)
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to insert users data: $e")
                         _isDatabaseInitialized.value = false
@@ -121,7 +135,9 @@ class DatabaseInitializer @Inject constructor(
                 if (albumsList.isEmpty()) {
                     Log.d(TAG, "Inserting albums data: ${fakeAlbumsData().size} items")
                     try {
-                        albumsDao.insertAllAlbums(fakeAlbumsData())
+                        val rawAlbums = fakeAlbumsData()
+                        val normalizedAlbums = rawAlbums.withNormalizedAlbums()
+                        albumsDao.insertAllAlbums(normalizedAlbums)
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to insert albums data: $e")
                         _isDatabaseInitialized.value = false
@@ -132,9 +148,28 @@ class DatabaseInitializer @Inject constructor(
                 if (playlitsList.isEmpty()) {
                     Log.d(TAG, "Inserting playlists data: ${fakePlaylistsData().size} items")
                     try {
-                        playlistsDao.insertAllPlaylists(fakePlaylistsData())
+                        val rawPlaylists = fakePlaylistsData()
+                        val normalizedPlaylists = rawPlaylists.withNormalizedPlaylists()
+                        playlistsDao.insertAllPlaylists(normalizedPlaylists)
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to insert playlists data: $e")
+                        _isDatabaseInitialized.value = false
+                        return@launch
+                    }
+                }
+
+                if (searchList.isEmpty()) {
+                    Log.d(TAG, "Creating search data from database")
+                    try {
+                        val searchData = createSearchData(songsDao.getAllSongs(),
+                                                          usersDao.getAllUsers(),
+                                                          albumsDao.getAllAlbums(),
+                                                          playlistsDao.getAllPlaylists()).first()
+
+                        Log.d(TAG, "Inserting search data: ${searchData.size} items")
+                        searchDao.insertAllSearch(searchData)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to insert search data: $e")
                         _isDatabaseInitialized.value = false
                         return@launch
                     }

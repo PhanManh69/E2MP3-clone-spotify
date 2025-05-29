@@ -13,6 +13,7 @@ data class UsersEntity(
     @ColumnInfo(name = "password") val password: String? = null,
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "name") val name: String? = null,
+    @ColumnInfo(name = "normalized_search_value") val normalizedSearchValue: String? = null,
     @ColumnInfo(name = "followers") val followers: Int? = null,
     @ColumnInfo(name = "following") val followingIdList: List<Int>? = null,
 )

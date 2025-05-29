@@ -9,4 +9,10 @@ interface PlaylistsRepository {
     fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsModel>>
 
     fun getRadioForYou(): Flow<List<PlaylistsModel>>
+
+    fun getSearchPlaylists(value: String): Flow<List<PlaylistsModel>>
+
+    fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsModel>>
+
+    fun getPlaylistsById(playlistId: Int): Flow<PlaylistsModel>
 }

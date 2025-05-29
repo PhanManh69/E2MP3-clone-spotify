@@ -49,6 +49,22 @@ class UsersRepositoryImpl @Inject constructor(
         return usersDataSource.getArtistById(userId).map { entity -> mapToModel(entity) }
     }
 
+    override fun getSearchArtists(value: String): Flow<List<UsersModel>> {
+        return usersDataSource.getSearchArtists(value).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
+    override fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>> {
+        return usersDataSource.getArtistsBySearch(listId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
     override suspend fun insertAllUsers(users: List<UsersModel>) {
         usersDataSource.insertAllUsers(users.map { mapToEntity(it) })
     }

@@ -5,9 +5,9 @@ import androidx.navigation.compose.composable
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.ui.searchinput.SearchInputScreen
 
-fun NavGraphBuilder.searchInputScreenGraph() {
+fun NavGraphBuilder.searchInputScreenGraph(onItemClick: (Int, String) -> Unit) {
     composable<AppNavigationRoute.SearchInput> {
-        SearchInputScreen()
+        SearchInputScreen(onItemClick)
     }
 }
 

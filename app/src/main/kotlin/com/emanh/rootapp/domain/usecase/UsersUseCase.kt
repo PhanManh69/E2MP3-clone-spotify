@@ -27,4 +27,12 @@ class UsersUseCase @Inject constructor(
     fun getArtistById(userId: Int): Flow<UsersModel> {
         return usersRepository.getArtistById(userId)
     }
+
+    fun getSearchArtists(value: String): Flow<List<UsersModel>> {
+        return usersRepository.getSearchArtists(value)
+    }
+
+    fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>> {
+        return usersRepository.getArtistsBySearch(listId)
+    }
 }

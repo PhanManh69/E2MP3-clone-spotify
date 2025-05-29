@@ -11,6 +11,7 @@ data class SongsEntity(
     @ColumnInfo(name = "song_url") val songUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "subtitle") val subtitle: String? = null,
+    @ColumnInfo(name = "normalized_search_value") val normalizedSearchValue: String? = null,
     @ColumnInfo(name = "timeline") val timeline: String? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String? = null,
     @ColumnInfo(name = "genres") val genresIdList: List<Int>? = null,

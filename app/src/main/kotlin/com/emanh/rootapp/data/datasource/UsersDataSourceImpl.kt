@@ -32,6 +32,14 @@ class UsersDataSourceImpl @Inject constructor(
         return usersDao.getArtistById(userId)
     }
 
+    override fun getSearchArtists(value: String): Flow<List<UsersEntity>> {
+        return usersDao.getSearchArtists(value)
+    }
+
+    override fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersEntity>> {
+        return usersDao.getArtistsBySearch(listId)
+    }
+
     override suspend fun insertAllUsers(users: List<UsersEntity>) {
         return usersDao.insertAllUsers(users)
     }

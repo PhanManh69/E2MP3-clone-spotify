@@ -20,5 +20,9 @@ interface SongsRepository {
 
     fun getSongsById(songId: Int): Flow<SongsModel>
 
+    fun getSearchSong(value: String): Flow<List<SongsModel>>
+
+    fun getSongsBySearch(listId: List<Int>): Flow<List<SongsModel>>
+
     suspend fun insertAllSongs(songs: List<SongsModel>)
 }

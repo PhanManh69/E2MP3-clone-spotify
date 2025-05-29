@@ -15,4 +15,16 @@ class PlaylistsUseCase @Inject constructor(
     fun getRadioForYou(): Flow<List<PlaylistsModel>> {
         return playlistsRepository.getRadioForYou()
     }
+
+    fun getSearchPlaylists(value: String): Flow<List<PlaylistsModel>> {
+        return playlistsRepository.getSearchPlaylists(value)
+    }
+
+    fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsModel>> {
+        return playlistsRepository.getPlaylistsBySearch(listId)
+    }
+
+    fun getPlaylistsById(playlistId: Int): Flow<PlaylistsModel> {
+        return playlistsRepository.getPlaylistsById(playlistId)
+    }
 }

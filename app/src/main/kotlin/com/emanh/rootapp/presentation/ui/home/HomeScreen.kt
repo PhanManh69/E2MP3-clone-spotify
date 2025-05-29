@@ -86,34 +86,22 @@ fun HomeScreen() {
                      yourFavoriteArtists = uiState.yourFavoriteArtists!!,
                      similarContent = uiState.similarContent,
                      playlistCard = uiState.playlistCard,
-                     onViewAll = {},
+                     onViewAll = homeViewModel::onViewAllHistory,
                      onPlayRecommendedAll = {},
                      onPlayTrendingAll = {},
                      onQuickPlayClick = { id, type ->
                          homeViewModel.onQuickPlayClick(id, type)
                      },
-                     onTopMixesClick = {
-                         homeViewModel.goToPlaylist(it)
-                     },
-                     onRecentylClick = {
-                         homeViewModel.goToSingle(it)
-                     },
-                     onRecommendedlClick = {
-                         homeViewModel.goToSingle(it)
-                     },
-                     onTrendingClick = {
-                         homeViewModel.goToSingle(it)
-                     },
+                     onTopMixesClick = { homeViewModel.goToPlaylist(it) },
+                     onRecentylClick = { homeViewModel.goToSingle(it) },
+                     onRecommendedlClick = { homeViewModel.goToSingle(it) },
+                     onTrendingClick = { homeViewModel.goToSingle(it) },
                      onAvatarClick = {},
                      onSimilarClick = { id, type ->
                          homeViewModel.onSimilarClick(id, type)
                      },
-                     onRadioClick = {
-                         homeViewModel.goToPlaylist(it)
-                     },
-                     onCardPlaylistClick = {
-                         homeViewModel.goToPlaylist(it)
-                     })
+                     onRadioClick = { homeViewModel.goToPlaylist(it) },
+                     onCardPlaylistClick = { homeViewModel.goToPlaylist(it) })
     }
 }
 

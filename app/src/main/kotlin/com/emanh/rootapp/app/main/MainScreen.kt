@@ -67,7 +67,10 @@ fun MainScreen(
             loginScreenGraph()
             homeScreenGraph()
             searchScreenGraph()
-            searchInputScreenGraph()
+            searchInputScreenGraph(onItemClick = { id, title ->
+                mainViewModel.getSongId(id)
+                mainViewModel.getTitleFromItem("Bài hát", title)
+            })
             yourLibraryScreenGraph()
             playlistScreenGraph(onItemClick = { songId, title ->
                 mainViewModel.getSongId(songId)

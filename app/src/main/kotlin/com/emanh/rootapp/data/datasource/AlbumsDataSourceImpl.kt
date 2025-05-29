@@ -20,6 +20,18 @@ class AlbumsDataSourceImpl @Inject constructor(
         return albumsDao.getSimilarAlbums()
     }
 
+    override fun getSearchAlbums(value: String): Flow<List<AlbumsEntity>> {
+        return albumsDao.getSearchAlbums(value)
+    }
+
+    override fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsEntity>> {
+        return albumsDao.getAlbumsBySearch(listId)
+    }
+
+    override fun getAlbumsById(albumId: Int): Flow<AlbumsEntity> {
+        return albumsDao.getAlbumsById(albumId)
+    }
+
     override suspend fun insertAlbums(albums: List<AlbumsEntity>) {
         albumsDao.insertAllAlbums(albums)
     }

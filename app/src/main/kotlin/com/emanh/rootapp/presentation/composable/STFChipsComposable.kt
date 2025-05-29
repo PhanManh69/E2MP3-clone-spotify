@@ -2,6 +2,7 @@ package com.emanh.rootapp.presentation.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +19,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.theme.AlphaN00_0
 import com.emanh.rootapp.presentation.theme.Body6Bold
 import com.emanh.rootapp.presentation.theme.Body6Regular
@@ -97,7 +97,7 @@ fun STFChips(
         .background(color = shipsResource.backgroundColor, shape = RoundedCornerShape(100))
         .border(width = shipsResource.border, color = shipsResource.borderColor, shape = RoundedCornerShape(100))
         .clip(shape = RoundedCornerShape(100))
-        .debounceClickable { onClick() }) {
+        .clickable { onClick() }) {
         Text(text = text,
              style = shipsResource.textStyle,
              color = shipsResource.textColor,

@@ -40,6 +40,14 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getSongsById(songId)
     }
 
+    override fun getSearchSong(value: String): Flow<List<SongsEntity>> {
+        return songsDao.getSearchSong(value)
+    }
+
+    override fun getSongsBySearch(listId: List<Int>): Flow<List<SongsEntity>> {
+        return songsDao.getSongsBySearch(listId)
+    }
+
     override suspend fun insertAllSongs(songs: List<SongsEntity>) {
         songsDao.insertAllSongs(songs)
     }

@@ -93,10 +93,8 @@ fun PlaylistScreen(onItemClick: (Int, String) -> Unit) {
                          onMoreClick = {},
                          onShuffleClick = {},
                          onPausePlayClick = {},
-                         onItemClick = {
-                             onItemClick(it, uiState.playlist!!.title.orEmpty())
-                         },
                          onIconClick = {},
+                         onItemClick = { onItemClick(it, uiState.playlist!!.title.orEmpty()) },
                          onBackClick = playlistViewModel::onBackClick)
     }
 }

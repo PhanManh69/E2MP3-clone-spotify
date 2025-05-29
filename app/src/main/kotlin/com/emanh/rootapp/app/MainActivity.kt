@@ -19,8 +19,7 @@ import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val TAG = "MainActivity"
+import androidx.core.content.edit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -30,17 +29,43 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var databaseInitializer: DatabaseInitializer
 
+    private companion object {
+        const val PREFS_NAME = "app_prefs"
+        const val KEY_FIRST_INSTALL = "is_first_install"
+        const val TAG = "MainActivity"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         enableEdgeToEdge()
         setImmersiveMode()
         super.onCreate(savedInstanceState)
+//        handleFirstInstall()
 //        deleteDatabase("e2mp3_db")
         databaseInitialized()
         setContent {
             E2MP3Theme {
                 MainScreen(appRouter = appRouter)
             }
+        }
+    }
+
+    private fun handleFirstInstall() {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val isFirstInstall = prefs.getBoolean(KEY_FIRST_INSTALL, true)
+
+        if (isFirstInstall) {
+
+            try {
+                deleteDatabase("e2mp3_db")
+
+                prefs.edit { putBoolean(KEY_FIRST_INSTALL, false) }
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to delete database: $e")
+            }
+        } else {
+            Log.d(TAG, "Not first install - keeping existing database")
         }
     }
 
@@ -57,7 +82,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 databaseInitializer.isDatabaseInitialized.collect { isInitialized ->
-                    Log.d(TAG, "Database initialized: $isInitialized")
                     if (!isInitialized) {
                         databaseInitializer.reinitializeDatabase()
                     }

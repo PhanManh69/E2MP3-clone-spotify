@@ -6,6 +6,7 @@ data class SongsModel(
     val songUrl: String? = null,
     val title: String? = null,
     val subtitle: String? = null,
+    val normalizedSearchValue: String? = null,
     val timeline: String? = null,
     val releaseDate: String? = null,
     val genres: List<Int>? = null,

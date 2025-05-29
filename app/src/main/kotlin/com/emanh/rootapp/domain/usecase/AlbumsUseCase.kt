@@ -11,7 +11,20 @@ class AlbumsUseCase @Inject constructor(
     fun getQuickAlbum(): Flow<List<AlbumsModel>> {
         return albumsRepository.getQuickAlbum()
     }
+
     fun getSimilarAlbums(): Flow<List<AlbumsModel>> {
         return albumsRepository.getSimilarAlbums()
+    }
+
+    fun getSearchAlbums(value: String): Flow<List<AlbumsModel>> {
+        return albumsRepository.getSearchAlbums(value)
+    }
+
+    fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsModel>> {
+        return albumsRepository.getAlbumsBySearch(listId)
+    }
+
+    fun getAlbumsById(albumId: Int): Flow<AlbumsModel> {
+        return albumsRepository.getAlbumsById(albumId)
     }
 }

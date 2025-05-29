@@ -12,6 +12,10 @@ import com.emanh.rootapp.data.datasource.MusixmatchDataSource
 import com.emanh.rootapp.data.datasource.MusixmatchDataSourceImpl
 import com.emanh.rootapp.data.datasource.PlaylistsDataSource
 import com.emanh.rootapp.data.datasource.PlaylistsDataSourceImpl
+import com.emanh.rootapp.data.datasource.SearchDataSource
+import com.emanh.rootapp.data.datasource.SearchDataSourceImpl
+import com.emanh.rootapp.data.datasource.SearchHistoryDataSource
+import com.emanh.rootapp.data.datasource.SearchHistoryDataSourceImpl
 import com.emanh.rootapp.data.datasource.SongsDataSource
 import com.emanh.rootapp.data.datasource.SongsDataSourceImpl
 import com.emanh.rootapp.data.datasource.UsersDataSource
@@ -27,6 +31,8 @@ import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
 import com.emanh.rootapp.data.db.dao.GenresDao
 import com.emanh.rootapp.data.db.dao.PlaylistsDao
 import com.emanh.rootapp.data.db.dao.PodcastsDao
+import com.emanh.rootapp.data.db.dao.SearchDao
+import com.emanh.rootapp.data.db.dao.SearchHistoryDao
 import com.emanh.rootapp.data.db.dao.SongsDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
@@ -40,6 +46,8 @@ import com.emanh.rootapp.data.repository.crossref.CrossRefSongRepositoryImpl
 import com.emanh.rootapp.data.repository.GenresRepositoryImpl
 import com.emanh.rootapp.data.repository.MusixmatchRepositoryImpl
 import com.emanh.rootapp.data.repository.PlaylistsRepositoryImpl
+import com.emanh.rootapp.data.repository.SearchHistoryRepositoryImpl
+import com.emanh.rootapp.data.repository.SearchRepositoryImpl
 import com.emanh.rootapp.data.repository.SongsRepositoryImpl
 import com.emanh.rootapp.data.repository.UsersRepositoryImpl
 import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
@@ -50,6 +58,8 @@ import com.emanh.rootapp.domain.repository.crossref.CrossRefSongRepository
 import com.emanh.rootapp.domain.repository.GenresRepository
 import com.emanh.rootapp.domain.repository.MusixmatchRepository
 import com.emanh.rootapp.domain.repository.PlaylistsRepository
+import com.emanh.rootapp.domain.repository.SearchHistoryRepository
+import com.emanh.rootapp.domain.repository.SearchRepository
 import com.emanh.rootapp.domain.repository.SongsRepository
 import com.emanh.rootapp.domain.repository.UsersRepository
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
@@ -115,6 +125,18 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideSearch(database: STFDatabase): SearchDao {
+        return database.searchDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchHistory(database: STFDatabase): SearchHistoryDao {
+        return database.searchHistoryDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideCrossRefSongDao(database: STFDatabase): CrossRefSongDao {
         return database.crossRefSongDao()
     }
@@ -139,11 +161,20 @@ object DatabaseModule {
         usersDao: UsersDao,
         albumsDao: AlbumsDao,
         palylistsDao: PlaylistsDao,
+        searchDao: SearchDao,
         crossRefSongDao: CrossRefSongDao,
         crossRefPlaylistDao: CrossRefPlaylistDao,
         crossRefAlbumDao: CrossRefAlbumDao
     ): DatabaseInitializer {
-        return DatabaseInitializer(genresDao, songsDao, usersDao, albumsDao, palylistsDao, crossRefSongDao, crossRefPlaylistDao, crossRefAlbumDao)
+        return DatabaseInitializer(genresDao,
+                                   songsDao,
+                                   usersDao,
+                                   albumsDao,
+                                   palylistsDao,
+                                   searchDao,
+                                   crossRefSongDao,
+                                   crossRefPlaylistDao,
+                                   crossRefAlbumDao)
     }
 
     @Provides
@@ -216,6 +247,30 @@ object DatabaseModule {
     @Singleton
     fun provideViewsSongRepository(viewsSongDataSource: ViewsSongDataSource): ViewsSongRepository {
         return ViewsSongRepositoryImpl(viewsSongDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchDataSource(searchDao: SearchDao): SearchDataSource {
+        return SearchDataSourceImpl(searchDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(searchDataSource: SearchDataSource): SearchRepository {
+        return SearchRepositoryImpl(searchDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchHistoryDataSource(searchHistoryDao: SearchHistoryDao): SearchHistoryDataSource {
+        return SearchHistoryDataSourceImpl(searchHistoryDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchHistoryRepository(searchHistoryDataSource: SearchHistoryDataSource): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(searchHistoryDataSource)
     }
 
     @Provides

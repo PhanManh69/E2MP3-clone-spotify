@@ -1,5 +1,10 @@
 package com.emanh.rootapp.utils
 
+import com.emanh.rootapp.utils.MyConstant.ALBUMS_SEARCH
+import com.emanh.rootapp.utils.MyConstant.ARTISTS_SEARCH
+import com.emanh.rootapp.utils.MyConstant.PLAYLISTS_SEARCH
+import com.emanh.rootapp.utils.MyConstant.SONGS_SEARCH
+
 object MyQuery {
     const val QUERY_GENRE_BY_ID = """
         SELECT * FROM genres WHERE genreId = :genreId
@@ -261,5 +266,122 @@ object MyQuery {
             WHERE u.userId = :userId
         )
         AND substr(v.date_time, 7, 4) || '-' || substr(v.date_time, 4, 2) = strftime('%Y-%m', 'now')
+    """
+
+    const val QERRY_SEARCH_SONGS = """
+        SELECT *
+        FROM songs
+        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%'
+        ORDER BY 
+            CASE 
+                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                ELSE 1
+            END,
+            RANDOM()
+        LIMIT 10
+    """
+
+    const val QERRY_SEARCH_ARTISTS = """
+        SELECT *
+        FROM users
+        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%' AND is_artist = 1
+        ORDER BY 
+            CASE 
+                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                ELSE 1
+            END,
+            RANDOM()
+        LIMIT 10
+    """
+
+    const val QERRY_SEARCH_ALBUMS = """
+        SELECT *
+        FROM albums
+        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%'
+        ORDER BY 
+            CASE 
+                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                ELSE 1
+            END,
+            RANDOM()
+        LIMIT 10
+    """
+
+    const val QERRY_SEARCH_PLAYLISTS = """
+        SELECT *
+        FROM playlists
+        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%'
+        ORDER BY 
+            CASE 
+                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                ELSE 1
+            END,
+            RANDOM()
+        LIMIT 10
+    """
+
+    const val QERRY_SEARCH = """
+        SELECT *
+        FROM search
+        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%'
+        ORDER BY 
+            CASE 
+                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                ELSE 1
+            END,
+            RANDOM()
+        LIMIT 10
+    """
+
+    const val QUERY_GET_SONGS_BY_SEARCH = """
+        SELECT songs.*
+        FROM songs
+        JOIN search ON songs.songId = search.idTable
+        WHERE search.isTable = "$SONGS_SEARCH" AND search.idTable IN (:listId)
+    """
+
+    const val QUERY_GET_ARTISTS_BY_SEARCH = """
+        SELECT users.*
+        FROM users
+        JOIN search ON users.userId = search.idTable
+        WHERE search.isTable = "$ARTISTS_SEARCH" AND search.idTable IN (:listId)
+    """
+
+    const val QUERY_GET_ALBUMS_BY_SEARCH = """
+        SELECT albums.*
+        FROM albums
+        JOIN search ON albums.albumId = search.idTable
+        WHERE search.isTable = "$ALBUMS_SEARCH" AND search.idTable IN (:listId)
+    """
+
+    const val QUERY_GET_PLAYLISTS_BY_SEARCH = """
+        SELECT playlists.*
+        FROM playlists
+        JOIN search ON playlists.playlistId = search.idTable
+        WHERE search.isTable = "$PLAYLISTS_SEARCH" AND search.idTable IN (:listId)
+    """
+
+    const val QUERY_GET_SEARCH_HISTORY = """
+        SELECT *
+        FROM search_history
+        WHERE user_id = :userId
+        ORDER BY searchHistoryId DESC
+    """
+
+    const val QUERY_GET_ALBUMS_BY_ID = """
+        SELECT *
+        FROM albums
+        WHERE albumId = :albumId
+    """
+
+    const val QUERY_GET_PLAYLIST_BY_ID = """
+        SELECT *
+        FROM playlists
+        WHERE playlistId = :playlistId
+    """
+
+    const val QUERY_DELETE_DUPLICATE = """
+        DELETE FROM search_history
+        WHERE user_id = :userId AND table_id = :tableId AND type = :type
     """
 }

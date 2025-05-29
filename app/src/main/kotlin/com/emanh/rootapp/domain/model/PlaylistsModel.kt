@@ -5,6 +5,7 @@ data class PlaylistsModel(
     val avatarUrl: String? = null,
     val title: String? = null,
     val subtitle: String? = null,
+    val normalizedSearchValue: String? = null,
     val isRadio: Boolean = false,
     val ownerId: Int? = null,
     val releaseDate: String = "",

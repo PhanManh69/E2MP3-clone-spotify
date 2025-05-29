@@ -16,5 +16,9 @@ interface UsersDataSource {
 
     fun getArtistById(userId: Int): Flow<UsersEntity>
 
+    fun getSearchArtists(value: String): Flow<List<UsersEntity>>
+
+    fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersEntity>>
+
     suspend fun insertAllUsers(users: List<UsersEntity>)
 }

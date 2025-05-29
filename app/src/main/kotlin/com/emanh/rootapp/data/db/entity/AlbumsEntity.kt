@@ -10,6 +10,7 @@ data class AlbumsEntity(
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "subtitle") val subtitle: String? = null,
+    @ColumnInfo(name = "normalized_search_value") val normalizedSearchValue: String? = null,
     @ColumnInfo(name = "album_type") val albumType: String? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String? = null,
     @ColumnInfo(name = "artists") val artistsIdList: List<Int>? = null,

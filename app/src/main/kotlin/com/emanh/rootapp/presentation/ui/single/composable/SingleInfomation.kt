@@ -25,7 +25,7 @@ fun SingleInfomation(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(text = date, color = TextPrimary, style = Body7Regular, modifier = Modifier.padding(horizontal = 16.dp))
 
-        Text(text = "1${stringResource(R.string.one_song)} - $time",
+        Text(text = "${stringResource(R.string.one_song)} - $time",
              color = TextPrimary,
              style = Body7Regular,
              modifier = Modifier.padding(horizontal = 16.dp))

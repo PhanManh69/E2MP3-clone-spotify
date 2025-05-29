@@ -8,6 +8,7 @@ data class UsersModel(
     val password: String? = null,
     val avatarUrl: String? = null,
     val name: String? = null,
+    val normalizedSearchValue: String? = null,
     val followers: Int? = null,
     val following: List<Int>? = null,
 )

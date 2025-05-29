@@ -18,6 +18,7 @@ import com.emanh.rootapp.utils.MyConstant.ALBUM_TYPE
 import com.emanh.rootapp.utils.MyConstant.ARTIST_TYPE
 import com.emanh.rootapp.utils.MyConstant.PLAYLIST_TYPE
 import com.emanh.rootapp.utils.MyConstant.SINGLE_TYPE
+import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_HISTORY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,6 +88,10 @@ class HomeViewModel @Inject constructor(
 
     fun goToArtist(artistId: Int) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+    }
+
+    fun onViewAllHistory() {
+        appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(VIEW_ALL_HISTORY))
     }
 
     private fun getRecommendedSongs() {
