@@ -89,12 +89,13 @@ fun SingleScreen(onItemClick: (Int, String) -> Unit) {
     } else {
         SingleScafflod(time = singleViewModel.totalTime(uiState.single!!),
                        single = uiState.single!!,
+                       isAddSong = uiState.isAddSong,
                        artistList = uiState.artistList,
                        moreByArtists = uiState.moreByArtists,
                        onOwnerClick = {
                            singleViewModel.goToArtist(it)
                        },
-                       onAddClick = {},
+                       onAddClick = singleViewModel::onAddClick,
                        onDownloadClick = {},
                        onMoreClick = {},
                        onShuffleClick = {},
@@ -117,6 +118,7 @@ fun SingleScreen(onItemClick: (Int, String) -> Unit) {
 private fun SingleScafflod(
     modifier: Modifier = Modifier,
     time: String,
+    isAddSong: Boolean,
     single: SongsModel,
     artistList: List<UsersModel>,
     moreByArtists: List<SongsModel>,
@@ -198,6 +200,7 @@ private fun SingleScafflod(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         SingleButton(modifier = Modifier.padding(horizontal = 16.dp),
+                                     isAddSong = isAddSong,
                                      single = single,
                                      artistList = artistList,
                                      onOwnerClick = onOwnerClick,
@@ -287,6 +290,7 @@ private fun SingleScafflod(
 private fun SingleScreenPreview() {
     E2MP3Theme {
         SingleScafflod(time = "2h03min",
+                       isAddSong = true,
                        artistList = listOf(UsersModel(name = "Artist 1", avatarUrl = ""), UsersModel(name = "Artist 2", avatarUrl = "")),
                        single = SongsModel(id = 0,
                                            avatarUrl = "https://lh3.googleusercontent.com/4oHGnuOLo9RVtk-N1EH1zqcWl6LWpisMka0ije1x1Y0PgU35_L-GD8gFCYwLgRd0NpeX2ZqAMyVU-Wr_=w544-h544-l90-rj",

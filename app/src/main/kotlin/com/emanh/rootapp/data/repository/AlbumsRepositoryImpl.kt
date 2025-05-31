@@ -47,6 +47,12 @@ class AlbumsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsModel>> {
+        return albumsDataSource.getAlbumLikeByUser(userId).map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
     override suspend fun insertAllAlbums(albums: List<AlbumsModel>) {
         albumsDataSource.insertAlbums(albums.map { mapToEntity(it) })
     }

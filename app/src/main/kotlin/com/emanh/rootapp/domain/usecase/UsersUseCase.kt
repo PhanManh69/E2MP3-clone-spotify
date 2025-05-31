@@ -35,4 +35,8 @@ class UsersUseCase @Inject constructor(
     fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>> {
         return usersRepository.getArtistsBySearch(listId)
     }
+
+    fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersModel>> {
+        return usersRepository.getFoveriteArtistsByUser(userId)
+    }
 }

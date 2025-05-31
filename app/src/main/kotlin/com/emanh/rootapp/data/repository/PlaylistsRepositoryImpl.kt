@@ -47,6 +47,18 @@ class PlaylistsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsModel>> {
+        return playlistsDataSource.getPlaylistsYourByUser(userId).map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
+    override fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsModel>> {
+        return playlistsDataSource.getPlaylistsForYouByUser(userId).map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
     private fun mapToModel(entity: PlaylistsEntity): PlaylistsModel {
         return PlaylistsModel(id = entity.playlistId,
                               avatarUrl = entity.avatarUrl,

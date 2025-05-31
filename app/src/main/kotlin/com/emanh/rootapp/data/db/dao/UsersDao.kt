@@ -12,6 +12,7 @@ import com.emanh.rootapp.utils.MyQuery.QUERY_OWNER_ALBUM
 import com.emanh.rootapp.utils.MyQuery.QUERY_SIMILAR_ARTISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_YOUR_FAVORITE_ARTISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_OWNER_PLAYLIST
+import com.emanh.rootapp.utils.MyQuery.QUETY_GET_FOVERITE_ARISTS_BY_USER
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -39,6 +40,9 @@ interface UsersDao {
 
     @Query(QUERY_GET_ARTISTS_BY_SEARCH)
     fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersEntity>>
+
+    @Query(QUETY_GET_FOVERITE_ARISTS_BY_USER)
+    fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllUsers(users: List<UsersEntity>)

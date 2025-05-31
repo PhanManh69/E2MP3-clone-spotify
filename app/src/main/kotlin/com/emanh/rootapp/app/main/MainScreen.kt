@@ -32,6 +32,7 @@ import com.emanh.rootapp.presentation.navigation.testComposableScreenGraph
 import com.emanh.rootapp.presentation.navigation.yourLibraryScreenGraph
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.emanh.rootapp.presentation.composable.STFPlayerStickyEmpty
 import com.emanh.rootapp.presentation.composable.STFPlayerStickyLoading
 import com.emanh.rootapp.presentation.ui.player.PlayerScreen
 import com.emanh.rootapp.presentation.ui.player.PlayerViewModel
@@ -119,6 +120,8 @@ fun MainScreen(
                                  onValueChange = { mainViewModel.onValueTimeLineChange(it) },
                                  onValueChangeFinished = { mainViewModel.onSliderPositionChangeFinished(it, scope) })
                 }
+            } else {
+                STFPlayerStickyEmpty()
             }
 
             STFTabbar(navController = navController)

@@ -15,4 +15,8 @@ interface PlaylistsRepository {
     fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsModel>>
 
     fun getPlaylistsById(playlistId: Int): Flow<PlaylistsModel>
+
+    fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsModel>>
+
+    fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsModel>>
 }

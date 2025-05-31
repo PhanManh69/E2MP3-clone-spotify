@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -51,6 +52,7 @@ import com.emanh.rootapp.presentation.theme.Title5Bold
 @Composable
 fun PlayerArtistAbout(
     modifier: Modifier = Modifier,
+    followingArtists: Set<Int>,
     artistsList: List<UsersModel>,
     viewMonthArtists: Map<Int, Int>,
     onFollowClick: (Int) -> Unit,
@@ -61,6 +63,7 @@ fun PlayerArtistAbout(
             var isImageLoaded by remember(artist.id) { mutableStateOf(false) }
             var isLoadFailed by remember(artist.id) { mutableStateOf(false) }
             val monthlyListeners = viewMonthArtists[artist.id] ?: 0
+            val isFollowing = followingArtists.contains(artist.id)
 
             Column(modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
@@ -113,14 +116,18 @@ fun PlayerArtistAbout(
 
                 Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = artist.name.orEmpty(), color = TextPrimary, style = Title5Bold)
+                        Text(text = artist.name.orEmpty(), color = TextPrimary, style = Title5Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
 
-                        Text(text = "$monthlyListeners ${stringResource(R.string.monthly_listeners)}", color = TextSecondary, style = Body6Regular)
+                        Text(text = "$monthlyListeners ${stringResource(R.string.monthly_listeners)}",
+                             color = TextSecondary,
+                             style = Body6Regular,
+                             maxLines = 1,
+                             overflow = TextOverflow.Ellipsis)
                     }
 
-                    STFChips(text = stringResource(R.string.follow),
+                    STFChips(text = stringResource(if (isFollowing) R.string.following else R.string.follow),
                              size = STFChipsSize.Normal,
-                             type = STFChipsType.Stroke,
+                             type = if (isFollowing) STFChipsType.Active else STFChipsType.Stroke,
                              onClick = { onFollowClick(artist.id) })
                 }
             }
@@ -132,7 +139,9 @@ fun PlayerArtistAbout(
 @Composable
 private fun PlayerArtistAboutPreview() {
     E2MP3Theme {
-        PlayerArtistAbout(artistsList = listOf(UsersModel(isArtist = true,
+        PlayerArtistAbout(followingArtists = setOf(1, 3, 5),
+                          artistsList = listOf(UsersModel(id = 1,
+                                                          isArtist = true,
                                                           username = "tlinh",
                                                           email = "tlinh@gmail.com",
                                                           password = "Phanmanh24",

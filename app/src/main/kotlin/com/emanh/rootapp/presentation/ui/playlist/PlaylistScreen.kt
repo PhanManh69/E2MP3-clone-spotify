@@ -84,11 +84,12 @@ fun PlaylistScreen(onItemClick: (Int, String) -> Unit) {
         }
     } else {
         PlaylistScaffold(time = playlistViewModel.totalTime(uiState.songList),
+                         isAddPlaylist = uiState.isAddPlaylist,
                          owner = uiState.owner!!,
                          playlist = uiState.playlist!!,
                          songsList = uiState.songList,
                          onOwnerClick = {},
-                         onAddClick = {},
+                         onAddClick = playlistViewModel::onAddClick,
                          onDownloadClick = {},
                          onMoreClick = {},
                          onShuffleClick = {},
@@ -103,6 +104,7 @@ fun PlaylistScreen(onItemClick: (Int, String) -> Unit) {
 private fun PlaylistScaffold(
     modifier: Modifier = Modifier,
     time: String,
+    isAddPlaylist: Boolean,
     owner: UsersModel,
     playlist: PlaylistsModel,
     songsList: List<SongsModel>,
@@ -175,6 +177,7 @@ private fun PlaylistScaffold(
                         PlaylistInfoButton(modifier = Modifier.padding(horizontal = 16.dp),
                                            time = time,
                                            owner = owner,
+                                           isAddPlaylist = isAddPlaylist,
                                            playlist = playlist,
                                            avatarSongUrl = songsList.firstOrNull()?.avatarUrl.orEmpty(),
                                            onOwnerClick = onOwnerClick,
@@ -259,6 +262,7 @@ private fun PlaylistScreenPreview() {
         PlaylistScaffold(owner = UsersModel(name = "emanh", avatarUrl = ""),
                          playlist = PlaylistsModel(title = "Tên playlist", subtitle = "Giới thiệu về playlist"),
                          time = "2h24",
+                         isAddPlaylist = true,
                          songsList = fakeSongs,
                          onOwnerClick = {},
                          onAddClick = {},

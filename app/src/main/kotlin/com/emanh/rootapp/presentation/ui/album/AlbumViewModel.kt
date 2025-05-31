@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emanh.rootapp.data.db.entity.crossref.AlbumLikeEntity
 import com.emanh.rootapp.domain.model.AlbumsModel
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.usecase.UsersUseCase
@@ -43,6 +44,7 @@ class AlbumViewModel @Inject constructor(
         if (albumId != -1) {
             Log.d(TAG, "Initializing with albumId: $albumId")
 
+            getPlaylistLike(albumId)
             loadAlbumDetails(albumId)
             loadAlbumData(albumId)
         }
@@ -74,6 +76,35 @@ class AlbumViewModel @Inject constructor(
         val totalMinutes = (totalSeconds % 3600) / 60
 
         return "${totalHours}h${totalMinutes}min"
+    }
+
+    fun onAddClick() {
+        val userId = 2
+
+        viewModelScope.launch {
+            if (_uiState.value.isAddAlbum) {
+                crossRefAlbumUseCase.deleteAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userId))
+                _uiState.update { it.copy(isAddAlbum = false) }
+                return@launch
+            } else {
+                crossRefAlbumUseCase.insertAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userId))
+                _uiState.update { it.copy(isAddAlbum = true) }
+                return@launch
+            }
+        }
+    }
+
+    private fun getPlaylistLike(albumId: Int) {
+        val userId = 2
+
+        viewModelScope.launch {
+            crossRefAlbumUseCase.getAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userId)).catch { error ->
+                Log.e(TAG, "Error fetching ArtistById: $error")
+            }.collect {
+                val isAdded = it != null
+                _uiState.update { it.copy(isAddAlbum = isAdded) }
+            }
+        }
     }
 
     private fun loadAlbumDetails(albumId: Int) {
@@ -121,10 +152,7 @@ class AlbumViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            combine(
-                    usersUseCase.getOwnerAlbum(albumId),
-                    viewsSongUseCase.getTotalListenerAlbum(albumId)
-            ) { artistList, views ->
+            combine(usersUseCase.getOwnerAlbum(albumId), viewsSongUseCase.getTotalListenerAlbum(albumId)) { artistList, views ->
                 Pair(artistList, views)
             }.catch { error ->
                 Log.e(TAG, "Error fetching album data: $error")
@@ -132,11 +160,7 @@ class AlbumViewModel @Inject constructor(
                 emit(Pair(emptyList(), 0))
             }.collect { (artistList, views) ->
                 _uiState.update { currentState ->
-                    currentState.copy(
-                            artistList = artistList,
-                            views = views,
-                            isLoading = false
-                    )
+                    currentState.copy(artistList = artistList, views = views, isLoading = false)
                 }
             }
         }

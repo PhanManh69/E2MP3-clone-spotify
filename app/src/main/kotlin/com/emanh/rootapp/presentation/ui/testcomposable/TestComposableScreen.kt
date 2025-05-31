@@ -48,10 +48,10 @@ import com.emanh.rootapp.presentation.composable.ChipsSmallDefaultPreview
 import com.emanh.rootapp.presentation.composable.ChipsSmallStrokePreview
 import com.emanh.rootapp.presentation.composable.EqualizerComposablePreview
 import com.emanh.rootapp.presentation.composable.ItemArtistsFollowSmallPreview
-import com.emanh.rootapp.presentation.composable.ItemArtistsMediumPreview
+import com.emanh.rootapp.presentation.composable.ItemArtistsMediumPreview1
 import com.emanh.rootapp.presentation.composable.ItemArtistsSmallPreview
 import com.emanh.rootapp.presentation.composable.ItemMusicBigPreview
-import com.emanh.rootapp.presentation.composable.ItemMusicMediumPreview
+import com.emanh.rootapp.presentation.composable.ItemMusicMediumPreview1
 import com.emanh.rootapp.presentation.composable.ItemMusicSmallPreview
 import com.emanh.rootapp.presentation.composable.LabelDefaultPreview
 import com.emanh.rootapp.presentation.composable.LabelSelectedPreview
@@ -133,8 +133,8 @@ fun TestComposableScreen() {
                                                   { TitlePodcastPreview() },
                                                   { TitleArtistsPreview() },
                                                   { ItemMusicBigPreview() },
-                                                  { ItemMusicMediumPreview() },
-                                                  { ItemArtistsMediumPreview() },
+                                                  { ItemMusicMediumPreview1() },
+                                                  { ItemArtistsMediumPreview1() },
                                                   { ItemMusicSmallPreview() },
                                                   { ItemArtistsSmallPreview() },
                                                   { ItemArtistsFollowSmallPreview() },

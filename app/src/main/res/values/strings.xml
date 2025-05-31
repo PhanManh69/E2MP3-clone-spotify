@@ -85,4 +85,8 @@
     <string name="follow">Theo dõi</string>
     <string name="not_lyrics_song">Chúng tôi không tìm thấy lời bài hát của bài hát này.</string>
     <string name="history_search">Lịch sử tìm kiếm</string>
+    <string name="following">Đang theo dõi</string>
+    <string name="unfollow">Huỷ theo dõi</string>
+    <string name="liked_songs">Bài hát đã thích</string>
+    <string name="for_you">Dành cho</string>
 </resources>

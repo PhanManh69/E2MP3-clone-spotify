@@ -84,6 +84,9 @@ fun STFHeader(
     avatarUrl: String? = null,
     userName: String = "",
     inputText: String = "",
+    secondaryChips: String = "",
+    primaryChips: SecondaryLibraryData? = null,
+    currentType: STFMenuLibraryType = STFMenuLibraryType.Default,
     type: STFHeaderType,
     searchChipsList: List<Int>? = null,
     libraryList: PrimaryLibraryData = PrimaryLibraryData(primaryLibrary = emptyList()),
@@ -94,8 +97,9 @@ fun STFHeader(
     onBackClick: () -> Unit = {},
     onChipsSearchInputClick: (Int) -> Unit = {},
     onPlusClick: () -> Unit = {},
-    onPrimaryChipsClick: () -> Unit = {},
-    onSecondaryChipsClick: () -> Unit = {},
+    onCloseClick: () -> Unit = {},
+    onPrimaryChipsClick: (SecondaryLibraryData, STFMenuLibraryType) -> Unit = { _, _ -> },
+    onSecondaryChipsClick: (String, STFMenuLibraryType) -> Unit = { _, _ -> },
     onInputTextChange: (String) -> Unit = {},
     focusRequester: FocusRequester? = null,
     content: @Composable (Modifier) -> Unit = {}
@@ -158,6 +162,9 @@ fun STFHeader(
                                                                     focusRequester = focusRequester)
 
             STFHeaderType.HeaderLibrary -> STFHeaderLibrary(modifier = modifier,
+                                                            primaryChips = primaryChips,
+                                                            secondaryChips = secondaryChips,
+                                                            currentType = currentType,
                                                             avatarUrl = avatarUrl,
                                                             userName = userName,
                                                             currentPosition = currentPosition,
@@ -165,6 +172,7 @@ fun STFHeader(
                                                             onAvatarClick = onAvatarClick,
                                                             onSearchClick = onSearchClick,
                                                             onPlusClick = onPlusClick,
+                                                            onCloseClick = onCloseClick,
                                                             onPrimaryChipsClick = onPrimaryChipsClick,
                                                             onSecondaryChipsClick = onSecondaryChipsClick)
         }
@@ -383,13 +391,17 @@ private fun STFHeaderLibrary(
     modifier: Modifier = Modifier,
     avatarUrl: String? = null,
     userName: String,
+    primaryChips: SecondaryLibraryData?,
+    secondaryChips: String,
+    currentType: STFMenuLibraryType,
     currentPosition: Dp,
     libraryList: PrimaryLibraryData,
     onAvatarClick: () -> Unit,
     onSearchClick: () -> Unit,
     onPlusClick: () -> Unit,
-    onPrimaryChipsClick: () -> Unit,
-    onSecondaryChipsClick: () -> Unit
+    onCloseClick: () -> Unit,
+    onPrimaryChipsClick: (SecondaryLibraryData, STFMenuLibraryType) -> Unit = { _, _ -> },
+    onSecondaryChipsClick: (String, STFMenuLibraryType) -> Unit = { _, _ -> },
 ) {
     Box(modifier = modifier
         .background(color = SurfacePrimary)
@@ -425,7 +437,13 @@ private fun STFHeaderLibrary(
                          .debounceClickable { onPlusClick() })
             }
 
-            STFMenuLibrary(libraryList = libraryList, onPrimaryChipsClick = onPrimaryChipsClick, onSecondaryChipsClick = onSecondaryChipsClick)
+            STFMenuLibrary(primaryChips = primaryChips,
+                           secondaryChips = secondaryChips,
+                           currentType = currentType,
+                           libraryList = libraryList,
+                           onCloseClick = onCloseClick,
+                           onPrimaryChipsClick = onPrimaryChipsClick,
+                           onSecondaryChipsClick = onSecondaryChipsClick)
         }
     }
 }
@@ -493,11 +511,15 @@ fun HeaderLibraryPreview() {
     E2MP3Theme {
         STFHeaderLibrary(userName = "emanh",
                          currentPosition = 0.dp,
+                         currentType = STFMenuLibraryType.Default,
                          libraryList = sampleLibraryData,
                          onAvatarClick = {},
                          onSearchClick = {},
                          onPlusClick = {},
-                         onPrimaryChipsClick = {},
-                         onSecondaryChipsClick = {})
+                         onCloseClick = {},
+                         onPrimaryChipsClick = { _, _ -> },
+                         onSecondaryChipsClick = { _, _ -> },
+                         primaryChips = null,
+                         secondaryChips = "")
     }
 }

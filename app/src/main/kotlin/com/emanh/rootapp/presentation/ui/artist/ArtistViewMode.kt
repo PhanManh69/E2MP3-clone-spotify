@@ -6,10 +6,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
 import com.emanh.rootapp.domain.usecase.GenresUseCase
 import com.emanh.rootapp.domain.usecase.SongsUseCase
 import com.emanh.rootapp.domain.usecase.UsersUseCase
 import com.emanh.rootapp.domain.usecase.ViewsSongUseCase
+import com.emanh.rootapp.domain.usecase.crossref.CrossRefUserUseCase
 import com.emanh.rootapp.presentation.navigation.extensions.NavActions.goBack
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +33,7 @@ class ArtistViewMode @Inject constructor(
     private val songsUseCase: SongsUseCase,
     private val genresUseCase: GenresUseCase,
     private val viewsSongUseCase: ViewsSongUseCase,
+    private val crossRefUserUseCase: CrossRefUserUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ArtistUiState())
     val uiState: StateFlow<ArtistUiState> = _uiState.asStateFlow()
@@ -41,6 +44,7 @@ class ArtistViewMode @Inject constructor(
         if (artistId != -1) {
             Log.d(TAG, "Initializing with albumId: $artistId")
 
+            getUserFollowing(artistId)
             loadArtistById(artistId)
             loadSongsByArtist(artistId)
             loadGenreNameByArtist(artistId)
@@ -58,6 +62,34 @@ class ArtistViewMode @Inject constructor(
         return names.joinToString(" • ")
     }
 
+    fun onFollowClick() {
+        val userId = 2
+
+        viewModelScope.launch {
+            if (_uiState.value.isFollowing) {
+                crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                _uiState.update { it.copy(isFollowing = false) }
+                return@launch
+            } else {
+                crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                _uiState.update { it.copy(isFollowing = true) }
+                return@launch
+            }
+        }
+    }
+
+    private fun getUserFollowing(artistId: Int) {
+        val userId = 2
+
+        viewModelScope.launch {
+            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId)).catch { error ->
+                Log.e(TAG, "Error fetching ArtistById: $error")
+            }.collect {
+                val isFollwing = it != null
+                _uiState.update { it.copy(isFollowing = isFollwing) }
+            }
+        }
+    }
 
     private fun loadArtistById(artistId: Int) {
         _uiState.update { it.copy(isLoading = true) }

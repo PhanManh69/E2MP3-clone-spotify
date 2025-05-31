@@ -6,6 +6,7 @@ import com.emanh.rootapp.domain.model.UsersModel
 
 data class AlbumUiState(
     val isLoading: Boolean = false,
+    val isAddAlbum: Boolean = false,
     val views: Int? = null,
     val album: AlbumsModel? = null,
     val artistList: List<UsersModel> = emptyList(),

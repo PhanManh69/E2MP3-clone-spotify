@@ -16,5 +16,7 @@ interface AlbumsDataSource {
 
     fun getAlbumsById(albumId: Int): Flow<AlbumsEntity>
 
+    fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsEntity>>
+
     suspend fun insertAlbums(albums: List<AlbumsEntity>)
 }

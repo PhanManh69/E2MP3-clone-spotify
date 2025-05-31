@@ -20,6 +20,7 @@ fun ArtistInfo(
     modifier: Modifier = Modifier,
     genre: String,
     viewMonth: Int,
+    isFollowing: Boolean,
     modifierPausePlay: Modifier,
     songsList: List<SongsModel>,
     onFollowClick: () -> Unit,
@@ -30,6 +31,7 @@ fun ArtistInfo(
     Column(modifier = modifier) {
         ArtistButton(modifier = Modifier.padding(16.dp),
                      viewMonth = viewMonth,
+                     isFollowing = isFollowing,
                      avatarSongUrl = songsList.firstOrNull()?.avatarUrl.orEmpty(),
                      onFollowClick = onFollowClick,
                      onMoreClick = onMoreClick,

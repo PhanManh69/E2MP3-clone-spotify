@@ -3,16 +3,24 @@ package com.emanh.rootapp.presentation.ui.player
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
+import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
+import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.domain.usecase.MusixmatchUseCase
 import com.emanh.rootapp.domain.usecase.ViewsSongUseCase
+import com.emanh.rootapp.domain.usecase.crossref.CrossRefSongUseCase
+import com.emanh.rootapp.domain.usecase.crossref.CrossRefUserUseCase
 import com.emanh.rootapp.presentation.navigation.ArtistScreenNavigation
 import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +32,8 @@ class PlayerViewModel @Inject constructor(
     private val appRouter: AppRouter,
     private val viewsSongUseCase: ViewsSongUseCase,
     private val musixmatchUseCase: MusixmatchUseCase,
+    private val crossRefSongUseCase: CrossRefSongUseCase,
+    private val crossRefUserUseCase: CrossRefUserUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PlayerUiState())
@@ -53,8 +63,92 @@ class PlayerViewModel @Inject constructor(
         hideLyrics()
     }
 
+    fun onAddClick(songId: Int) {
+        val userId = 2
+
+        viewModelScope.launch {
+            if (_uiState.value.isAddSong) {
+                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                _uiState.update { it.copy(isAddSong = false) }
+                return@launch
+            } else {
+                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                _uiState.update { it.copy(isAddSong = true) }
+                return@launch
+            }
+        }
+    }
+
+    fun onFollowClick(artistId: Int) {
+        val userId = 2
+        val isCurrentlyFollowing = _uiState.value.followingArtists.contains(artistId)
+
+        viewModelScope.launch {
+            try {
+                if (isCurrentlyFollowing) {
+                    crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                    _uiState.update { currentState ->
+                        currentState.copy(followingArtists = currentState.followingArtists - artistId)
+                    }
+                    Log.d(TAG, "Unfollowed artist: $artistId")
+                } else {
+                    crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                    _uiState.update { currentState ->
+                        currentState.copy(followingArtists = currentState.followingArtists + artistId)
+                    }
+                    Log.d(TAG, "Followed artist: $artistId")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error toggling follow status for artist $artistId: $e")
+            }
+        }
+    }
+
     fun goToArtist(artistId: Int) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+    }
+
+    fun getSongLike(songId: Int) {
+        val userId = 2
+
+        viewModelScope.launch {
+            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId)).catch { error ->
+                Log.e(TAG, "Error fetching ArtistById: $error")
+            }.collect {
+                val isAdded = it != null
+                _uiState.update { it.copy(isAddSong = isAdded) }
+            }
+        }
+    }
+
+    fun getUserFollowing(artistsList: List<UsersModel>) {
+        val userId = 2
+
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(followingArtists = setOf()) }
+
+                val followingResults = artistsList.map { artist ->
+                    async {
+                        try {
+                            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artist.id))
+                                .firstOrNull()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error fetching following status for artist ${artist.id}: $e")
+                            null
+                        }
+                    }
+                }
+
+                val results = followingResults.awaitAll()
+                val followingArtistIds = artistsList.zip(results).filter { (_, result) -> result != null }.map { (artist, _) -> artist.id }.toSet()
+
+                _uiState.update { it.copy(followingArtists = followingArtistIds) }
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in getUserFollowing: $e")
+            }
+        }
     }
 
     fun getLyrics(trackName: String, artistName: String) {
@@ -98,5 +192,4 @@ class PlayerViewModel @Inject constructor(
             }
         }
     }
-
 }

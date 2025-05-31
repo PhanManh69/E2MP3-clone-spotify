@@ -20,5 +20,7 @@ interface UsersDataSource {
 
     fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersEntity>>
 
+    fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersEntity>>
+
     suspend fun insertAllUsers(users: List<UsersEntity>)
 }

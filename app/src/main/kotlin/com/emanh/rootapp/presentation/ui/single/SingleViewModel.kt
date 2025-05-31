@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.domain.usecase.SongsUseCase
@@ -41,6 +42,7 @@ class SingleViewModel @Inject constructor(
         if (songId != -1) {
             Log.d(TAG, "Initializing with singleId: $songId")
 
+            getSongLike(songId)
             loadSingleDetails(songId)
             loadMoreSongsByArtists(songId)
         }
@@ -52,6 +54,22 @@ class SingleViewModel @Inject constructor(
 
     fun goToArtist(artistId: Int) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+    }
+
+    fun onAddClick() {
+        val userId = 2
+
+        viewModelScope.launch {
+            if (_uiState.value.isAddSong) {
+                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                _uiState.update { it.copy(isAddSong = false) }
+                return@launch
+            } else {
+                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                _uiState.update { it.copy(isAddSong = true) }
+                return@launch
+            }
+        }
     }
 
     fun goToSingle(singleId: Int) {
@@ -120,6 +138,19 @@ class SingleViewModel @Inject constructor(
                 _uiState.update { currentState ->
                     currentState.copy(moreByArtists = songsList, isLoading = false)
                 }
+            }
+        }
+    }
+
+    private fun getSongLike(songId: Int) {
+        val userId = 2
+
+        viewModelScope.launch {
+            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId)).catch { error ->
+                Log.e(TAG, "Error fetching ArtistById: $error")
+            }.collect {
+                val isAdded = it != null
+                _uiState.update { it.copy(isAddSong = isAdded) }
             }
         }
     }

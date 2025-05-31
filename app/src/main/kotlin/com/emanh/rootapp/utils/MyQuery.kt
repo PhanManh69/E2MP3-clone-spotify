@@ -384,4 +384,70 @@ object MyQuery {
         DELETE FROM search_history
         WHERE user_id = :userId AND table_id = :tableId AND type = :type
     """
+
+    const val QUERY_DELETE_SONG_LIKE = """
+        DELETE FROM cross_ref_song_like WHERE songId = :songId AND userId = :userId
+    """
+
+    const val QUERY_GET_SONG_LIKE = """
+        SELECT * FROM cross_ref_song_like WHERE songId = :songId AND userId = :userId
+    """
+
+    const val QUERY_DELETE_USER_FOLLOWING = """
+        DELETE FROM cross_ref_user_following WHERE userId = :userId AND artistId = :artistId
+    """
+
+    const val QUERY_GET_USER_FOLLWING = """
+        SELECT * FROM cross_ref_user_following WHERE userId = :userId AND artistId = :artistId
+    """
+
+    const val QUETY_GET_LIKED_SONGS_BY_USER = """
+        SELECT s.*
+        FROM songs s
+        JOIN cross_ref_song_like sl ON s.songId = sl.songId
+        WHERE sl.userId = :userId
+    """
+
+    const val QUETY_GET_PLAYLISTS_YOUR_BY_USER = """
+        SELECT *
+        FROM playlists
+        WHERE owner_id = :userId
+    """
+
+    const val QUETY_GET_PLAYLISTS_FOR_YOU_BY_USER = """
+        SELECT p.*
+        FROM playlists p
+        JOIN cross_ref_playlist_like pl ON p.playlistId = pl.playlistId
+        WHERE pl.userId = :userId
+    """
+
+    const val QUETY_GET_FOVERITE_ARISTS_BY_USER = """
+        SELECT u.*
+        FROM users u
+        JOIN cross_ref_user_following uf ON u.userId = uf.artistId
+        WHERE uf.userId = :userId
+    """
+
+    const val QUETY_GET_ALBUM_LIKE_BY_USER = """
+        SELECT *
+        FROM albums a
+        JOIN cross_ref_album_like al ON a.albumId = al.albumId
+        WHERE al.userId = :userId
+    """
+
+    const val QUERY_GET_PLAYLIST_LIKE = """
+        SELECT * FROM cross_ref_playlist_like WHERE playlistId = :playlistId AND userId = :userId
+    """
+
+    const val QUERY_DELETE_PLAYLIST_LIKE = """
+        DELETE FROM cross_ref_playlist_like WHERE playlistId = :playlistId AND userId = :userId
+    """
+
+    const val QUERY_GET_ALBUM_LIKE = """
+        SELECT * FROM cross_ref_album_like WHERE albumId = :albumId AND userId = :userId
+    """
+
+    const val QUERY_DELETE_ALBUM_LIKE = """
+        DELETE FROM cross_ref_album_like WHERE albumId = :albumId AND userId = :userId
+    """
 }

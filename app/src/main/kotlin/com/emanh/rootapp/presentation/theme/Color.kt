@@ -1,5 +1,6 @@
 package com.emanh.rootapp.presentation.theme
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
@@ -111,16 +112,12 @@ val SpecialB64 = Color(0xFF509BF5)
 val SpecialR63 = Color(0xFFFE6843)
 
 val GradientType = Brush.verticalGradient(0f to Color(0xFF191414).copy(alpha = 0.5f),
-                                        0.29f to Color(0xE6191414).copy(alpha = 0.5f),
-                                        0.73f to Color(0x00191414).copy(alpha = 0.5f))
-val GradientOverlayButton = Brush.radialGradient(0f to Color(0xFF191414),
-                                        1f to Color(0x00191414))
-val GradientOverlayTop = Brush.verticalGradient(0f to Color(0xFF191414),
-                                        1f to Color(0x00191414))
-val MaskIllustration = Brush.verticalGradient(0f to Color(0x00D9D9D9),
-                                        0.18f to Color(0xFFD4D4D4),
-                                        0.82f to Color(0xFFD0D0D0),
-                                        1f to Color(0x00737373))
+                                          0.29f to Color(0xE6191414).copy(alpha = 0.5f),
+                                          0.73f to Color(0x00191414).copy(alpha = 0.5f))
+val GradientOverlayButton = Brush.radialGradient(0f to Color(0xFF191414), 1f to Color(0x00191414))
+val GradientOverlayTop = Brush.verticalGradient(0f to Color(0xFF191414), 1f to Color(0x00191414))
+val MaskIllustration =
+    Brush.verticalGradient(0f to Color(0x00D9D9D9), 0.18f to Color(0xFFD4D4D4), 0.82f to Color(0xFFD0D0D0), 1f to Color(0x00737373))
 val GradientTabbar = Brush.verticalGradient(0f to Color(0x80121212),
                                             0.1f to Color(0x99121212),
                                             0.2f to Color(0xB3121212),
@@ -128,9 +125,9 @@ val GradientTabbar = Brush.verticalGradient(0f to Color(0x80121212),
                                             0.45f to Color(0xE6121212),
                                             0.65f to Color(0xF2121212),
                                             1f to Color(0xFF121212))
-val Player = Brush.verticalGradient(0f to Color(0xFF121212),
-                                        1f to Color(0x00191414))
-val ShadowTabbar = Brush.verticalGradient(0f to Color(0xFF121212),
-                                        1f to Color(0xCC000000))
-val StickyDefault = Brush.verticalGradient(0f to Color(0x00000000),
-                                           1f to Color(0x66000000))
+val Player = Brush.verticalGradient(0f to Color(0xFF121212), 1f to Color(0x00191414))
+val ShadowTabbar = Brush.verticalGradient(0f to Color(0xFF121212), 1f to Color(0xCC000000))
+val StickyDefault = Brush.verticalGradient(0f to Color(0x00000000), 1f to Color(0x66000000))
+val LikedSongs = Brush.linearGradient(colors = listOf(Color(0xFF4331F4), Color(0xFFC1EDD9)),
+                                      start = Offset(0f, 0f),
+                                      end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))

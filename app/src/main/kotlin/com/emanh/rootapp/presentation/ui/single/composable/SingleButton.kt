@@ -3,6 +3,7 @@ package com.emanh.rootapp.presentation.ui.single.composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,9 @@ import com.emanh.rootapp.presentation.theme.Body7Bold
 import com.emanh.rootapp.presentation.theme.Body7Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundDark
+import com.emanh.rootapp.presentation.theme.IconBackgroundPrimary
 import com.emanh.rootapp.presentation.theme.IconInvert
+import com.emanh.rootapp.presentation.theme.IconProduct
 import com.emanh.rootapp.presentation.theme.IconSecondary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
@@ -56,6 +59,7 @@ import com.emanh.rootapp.presentation.theme.Title4Bold
 fun SingleButton(
     modifier: Modifier = Modifier,
     modifierPausePlay: Modifier = Modifier,
+    isAddSong: Boolean,
     single: SongsModel,
     artistList: List<UsersModel>,
     onOwnerClick: (Int) -> Unit,
@@ -119,12 +123,12 @@ fun SingleButton(
                 }
             }
 
-            Icon(painter = painterResource(R.drawable.ic_24_plus_circle),
+            Icon(painter = painterResource(if (isAddSong) R.drawable.ic_24_plus_check else R.drawable.ic_24_plus_circle),
                  contentDescription = null,
-                 tint = IconSecondary,
+                 tint = if (isAddSong) IconProduct else IconBackgroundPrimary,
                  modifier = Modifier
-                     .clip(shape = RoundedCornerShape(8.dp))
-                     .debounceClickable(onClick = onAddClick))
+                     .clip(CircleShape)
+                     .clickable(onClick = onAddClick))
 
             Icon(painter = painterResource(R.drawable.ic_24_plus_arrrow_down),
                  contentDescription = null,
@@ -168,7 +172,8 @@ fun SingleButton(
 @Composable
 private fun AlbumInfoButtonPreview() {
     E2MP3Theme {
-        SingleButton(single = SongsModel(title = "Album Title", releaseDate = "24-02-2025"),
+        SingleButton(isAddSong = false,
+                     single = SongsModel(title = "Album Title", releaseDate = "24-02-2025"),
                      artistList = listOf(UsersModel(name = "Artist 1", avatarUrl = ""), UsersModel(name = "Artist 2", avatarUrl = "")),
                      onOwnerClick = {},
                      onAddClick = {},

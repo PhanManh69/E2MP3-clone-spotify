@@ -27,4 +27,8 @@ class AlbumsUseCase @Inject constructor(
     fun getAlbumsById(albumId: Int): Flow<AlbumsModel> {
         return albumsRepository.getAlbumsById(albumId)
     }
+
+    fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsModel>> {
+        return albumsRepository.getAlbumLikeByUser(userId)
+    }
 }

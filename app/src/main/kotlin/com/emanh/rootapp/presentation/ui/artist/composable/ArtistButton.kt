@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -34,8 +35,6 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emanh.e2mp3.spotify.R
-import com.emanh.rootapp.domain.model.PlaylistsModel
-import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.composable.utils.shimmerEffect
 import com.emanh.rootapp.presentation.theme.Body7Bold
@@ -45,9 +44,9 @@ import com.emanh.rootapp.presentation.theme.IconBackgroundDark
 import com.emanh.rootapp.presentation.theme.IconInvert
 import com.emanh.rootapp.presentation.theme.IconPrimary
 import com.emanh.rootapp.presentation.theme.IconSecondary
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
+import com.emanh.rootapp.presentation.theme.TextBackgroundDark
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextSecondary
 
@@ -57,6 +56,7 @@ fun ArtistButton(
     modifierPausePlay: Modifier = Modifier,
     viewMonth: Int,
     avatarSongUrl: String,
+    isFollowing: Boolean,
     onFollowClick: () -> Unit,
     onMoreClick: () -> Unit,
     onShuffleClick: () -> Unit,
@@ -103,7 +103,10 @@ fun ArtistButton(
                 .clip(shape = RoundedCornerShape(8.dp))
                 .border(width = 1.dp, color = IconPrimary, shape = RoundedCornerShape(8.dp))
                 .clickable(onClick = onFollowClick)) {
-                Text(text = "Follwing", color = TextPrimary, style = Body7Bold, modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+                Text(text = if (isFollowing) stringResource(R.string.unfollow) else stringResource(R.string.follow),
+                     color = TextPrimary,
+                     style = Body7Bold,
+                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
             }
 
             Icon(painter = painterResource(R.drawable.ic_24_bullet),
@@ -141,6 +144,12 @@ fun ArtistButton(
 @Composable
 private fun PlaylistInfoButtonPreview() {
     E2MP3Theme {
-        ArtistButton(viewMonth = 10283, avatarSongUrl = "", onFollowClick = {}, onMoreClick = {}, onShuffleClick = {}, onPausePlayClick = {})
+        ArtistButton(viewMonth = 10283,
+                     avatarSongUrl = "",
+                     isFollowing = true,
+                     onFollowClick = {},
+                     onMoreClick = {},
+                     onShuffleClick = {},
+                     onPausePlayClick = {})
     }
 }

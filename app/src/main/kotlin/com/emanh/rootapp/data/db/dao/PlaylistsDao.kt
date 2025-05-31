@@ -10,6 +10,8 @@ import com.emanh.rootapp.utils.MyQuery.QUERY_GET_PLAYLISTS_BY_SEARCH
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_PLAYLIST_BY_ID
 import com.emanh.rootapp.utils.MyQuery.QUERY_QUICK_PLAYLIST
 import com.emanh.rootapp.utils.MyQuery.QUERY_RADIO_FOR_YOU
+import com.emanh.rootapp.utils.MyQuery.QUETY_GET_PLAYLISTS_FOR_YOU_BY_USER
+import com.emanh.rootapp.utils.MyQuery.QUETY_GET_PLAYLISTS_YOUR_BY_USER
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -31,6 +33,12 @@ interface PlaylistsDao {
 
     @Query(QUERY_GET_PLAYLIST_BY_ID)
     fun getPlaylistsById(playlistId: Int): Flow<PlaylistsEntity>
+
+    @Query(QUETY_GET_PLAYLISTS_YOUR_BY_USER)
+    fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsEntity>>
+
+    @Query(QUETY_GET_PLAYLISTS_FOR_YOU_BY_USER)
+    fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>)

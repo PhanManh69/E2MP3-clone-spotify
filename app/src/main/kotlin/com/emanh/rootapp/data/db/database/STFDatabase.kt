@@ -16,6 +16,7 @@ import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefPlaylistDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefUserDao
 import com.emanh.rootapp.data.db.entity.AlbumsEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongGenreEntity
 import com.emanh.rootapp.data.db.entity.GenresEntity
@@ -27,11 +28,15 @@ import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.data.db.entity.ViewsSongEntity
 import com.emanh.rootapp.data.db.entity.crossref.AlbumArtistEntity
+import com.emanh.rootapp.data.db.entity.crossref.AlbumLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.AlbumSongEntity
+import com.emanh.rootapp.data.db.entity.crossref.PlaylistLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.PlaylistSongEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
+import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
+import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
 
-@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SearchEntity::class, SongGenreEntity::class, SongArtistEntity::class, PlaylistSongEntity::class, AlbumSongEntity::class, AlbumArtistEntity::class, SearchHistoryEntity::class],
+@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SearchEntity::class, SongGenreEntity::class, SongArtistEntity::class, SongLikeEntity::class, UserFollowingEntity::class, PlaylistSongEntity::class, AlbumSongEntity::class, AlbumArtistEntity::class, SearchHistoryEntity::class, PlaylistLikeEntity::class, AlbumLikeEntity::class],
           version = 1,
           exportSchema = false)
 @TypeConverters(Converters::class)
@@ -48,4 +53,5 @@ abstract class STFDatabase : RoomDatabase() {
     abstract fun crossRefSongDao(): CrossRefSongDao
     abstract fun crossRefPlaylistDao(): CrossRefPlaylistDao
     abstract fun crossRefAlbumDao(): CrossRefAlbumDao
+    abstract fun crossRefUserDao(): CrossRefUserDao
 }

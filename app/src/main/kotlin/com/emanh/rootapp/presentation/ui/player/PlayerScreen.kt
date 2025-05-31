@@ -61,6 +61,8 @@ fun PlayerScreen(
     val remainingTimeFormatted = "-" + formatTime(remainingTime)
 
     LaunchedEffect(song) {
+        playerViewModel.getSongLike(songId = song.id)
+        playerViewModel.getUserFollowing(artistsList = artistsList)
         playerViewModel.getLyrics(trackName = song.title.orEmpty(), artistName = song.subtitle.orEmpty())
 
         artistsList.forEach { artist ->
@@ -70,6 +72,8 @@ fun PlayerScreen(
 
     PlayerBottomSheet(song = song,
                       isPlayed = isPlayed,
+                      isAddSong = uiState.isAddSong,
+                      followingArtists = uiState.followingArtists,
                       headerTitle = headerTitle,
                       headerSubtitle = headerSubtitle,
                       viewMonthArtists = uiState.viewMonthArtists,
@@ -81,7 +85,9 @@ fun PlayerScreen(
                       onDismiss = playerViewModel::hidePlayer,
                       onDownClick = playerViewModel::onDownPlayerClick,
                       onMoreClick = {},
-                      onAddClick = {},
+                      onAddClick = {
+                          playerViewModel.onAddClick(song.id)
+                      },
                       onShuffleClick = {},
                       onBackClick = {},
                       onPlayPauseClick = onPlayPauseClick,
@@ -91,7 +97,9 @@ fun PlayerScreen(
                       onShareClick = {},
                       onListClick = {},
                       onShowLyrics = playerViewModel::showLyrics,
-                      onFollowClick = {},
+                      onFollowClick = {
+                          playerViewModel.onFollowClick(it)
+                      },
                       onArtistsClick = {
                           playerViewModel.hidePlayer()
                           playerViewModel.goToArtist(it)
@@ -123,6 +131,8 @@ private fun PlayerBottomSheet(
     viewMonthArtists: Map<Int, Int>,
     valueSlider: Float,
     isPlayed: Boolean,
+    isAddSong: Boolean,
+    followingArtists: Set<Int>,
     song: SongsModel,
     artistsList: List<UsersModel>,
     onDismiss: () -> Unit,
@@ -174,6 +184,7 @@ private fun PlayerBottomSheet(
                     .padding(bottom = 86.dp)
                     .align(Alignment.BottomCenter),
                                     isPlayed = isPlayed,
+                                    isAddSong = isAddSong,
                                     currentTime = currentTime,
                                     remainingTime = remainingTime,
                                     valueSlider = valueSlider,
@@ -202,6 +213,7 @@ private fun PlayerBottomSheet(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .offset(y = (-48).dp),
+                    followingArtists = followingArtists,
                     artistsList = artistsList,
                     viewMonthArtists = viewMonthArtists,
                     onFollowClick = onFollowClick,
@@ -223,6 +235,8 @@ private fun PlayerScreenPreview() {
         val remainingTimeFormatted = "-" + formatTime(remainingTime)
 
         PlayerBottomSheet(isPlayed = false,
+                          isAddSong = true,
+                          followingArtists = setOf(1, 3, 5),
                           headerTitle = "Playlist",
                           headerSubtitle = "Hip Hop Mix",
                           viewMonthArtists = emptyMap(),

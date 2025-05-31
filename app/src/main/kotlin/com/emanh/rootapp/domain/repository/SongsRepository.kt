@@ -24,5 +24,7 @@ interface SongsRepository {
 
     fun getSongsBySearch(listId: List<Int>): Flow<List<SongsModel>>
 
+    fun getLikedSongsByUser(userId: Int): Flow<List<SongsModel>>
+
     suspend fun insertAllSongs(songs: List<SongsModel>)
 }

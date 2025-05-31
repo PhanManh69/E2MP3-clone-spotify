@@ -26,6 +26,8 @@ import com.emanh.rootapp.data.datasource.crossref.CrossRefAlbumDataSource
 import com.emanh.rootapp.data.datasource.crossref.CrossRefAlbumDataSourceImpl
 import com.emanh.rootapp.data.datasource.crossref.CrossRefPlaylistDataSource
 import com.emanh.rootapp.data.datasource.crossref.CrossRefPlaylistDataSourceImpl
+import com.emanh.rootapp.data.datasource.crossref.CrossRefUserDataSource
+import com.emanh.rootapp.data.datasource.crossref.CrossRefUserDataSourceImpl
 import com.emanh.rootapp.data.db.dao.AlbumsDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
 import com.emanh.rootapp.data.db.dao.GenresDao
@@ -38,6 +40,7 @@ import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefPlaylistDao
+import com.emanh.rootapp.data.db.dao.crossref.CrossRefUserDao
 import com.emanh.rootapp.data.db.database.STFDatabase
 import com.emanh.rootapp.data.db.initializer.DatabaseInitializer
 import com.emanh.rootapp.data.db.service.MusixmatchService
@@ -53,6 +56,7 @@ import com.emanh.rootapp.data.repository.UsersRepositoryImpl
 import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
 import com.emanh.rootapp.data.repository.crossref.CrossRefAlbumRepositoryImpl
 import com.emanh.rootapp.data.repository.crossref.CrossRefPlaylistRepositoryImpl
+import com.emanh.rootapp.data.repository.crossref.CrossRefUserRepositoryImpl
 import com.emanh.rootapp.domain.repository.AlbumsRepository
 import com.emanh.rootapp.domain.repository.crossref.CrossRefSongRepository
 import com.emanh.rootapp.domain.repository.GenresRepository
@@ -65,6 +69,7 @@ import com.emanh.rootapp.domain.repository.UsersRepository
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
 import com.emanh.rootapp.domain.repository.crossref.CrossRefAlbumRepository
 import com.emanh.rootapp.domain.repository.crossref.CrossRefPlaylistRepository
+import com.emanh.rootapp.domain.repository.crossref.CrossRefUserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -151,6 +156,12 @@ object DatabaseModule {
     @Singleton
     fun provideCrossRefAlbumDao(database: STFDatabase): CrossRefAlbumDao {
         return database.crossRefAlbumDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefUserDao(database: STFDatabase): CrossRefUserDao {
+        return database.crossRefUserDao()
     }
 
     @Provides
@@ -307,6 +318,18 @@ object DatabaseModule {
     @Singleton
     fun provideCrossRefAlbumSongRepository(crossRefAlbumDataSource: CrossRefAlbumDataSource): CrossRefAlbumRepository {
         return CrossRefAlbumRepositoryImpl(crossRefAlbumDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefUserDataSource(crossRefCrossRefUserDao: CrossRefUserDao): CrossRefUserDataSource {
+        return CrossRefUserDataSourceImpl(crossRefCrossRefUserDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrossRefUserRepository(crossRefUserDataSource: CrossRefUserDataSource): CrossRefUserRepository {
+        return CrossRefUserRepositoryImpl(crossRefUserDataSource)
     }
 
     @Provides

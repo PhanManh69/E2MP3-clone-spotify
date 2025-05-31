@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PlaylistsDataSourceImpl @Inject constructor(
-        private val playlistsDao: PlaylistsDao
+    private val playlistsDao: PlaylistsDao
 ) : PlaylistsDataSource {
     override fun getAllPlaylists(): Flow<List<PlaylistsEntity>> {
         return playlistsDao.getAllPlaylists()
@@ -30,6 +30,14 @@ class PlaylistsDataSourceImpl @Inject constructor(
 
     override fun getPlaylistsById(playlistId: Int): Flow<PlaylistsEntity> {
         return playlistsDao.getPlaylistsById(playlistId)
+    }
+
+    override fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsEntity>> {
+        return playlistsDao.getPlaylistsYourByUser(userId)
+    }
+
+    override fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsEntity>> {
+        return playlistsDao.getPlaylistsForYouByUser(userId)
     }
 
     override suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>) {

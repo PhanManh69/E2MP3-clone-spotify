@@ -38,6 +38,7 @@ import com.emanh.rootapp.presentation.composable.utils.shimmerEffect
 import com.emanh.rootapp.presentation.theme.Body3Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundPrimary
+import com.emanh.rootapp.presentation.theme.IconProduct
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextTertiary
 import com.emanh.rootapp.presentation.theme.Title4Bold
@@ -46,6 +47,7 @@ import com.emanh.rootapp.presentation.theme.Title4Bold
 fun PlayerContentButton(
     modifier: Modifier = Modifier,
     isPlayed: Boolean,
+    isAddSong: Boolean,
     currentTime: String,
     remainingTime: String,
     valueSlider: Float,
@@ -89,9 +91,9 @@ fun PlayerContentButton(
                 Text(text = song.subtitle.orEmpty(), color = TextTertiary, style = Body3Regular, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
 
-            Icon(painter = painterResource(R.drawable.ic_32_plus_circle),
+            Icon(painter = painterResource(if (isAddSong) R.drawable.ic_24_plus_check else R.drawable.ic_24_plus_circle),
                  contentDescription = null,
-                 tint = IconBackgroundPrimary,
+                 tint = if (isAddSong) IconProduct else IconBackgroundPrimary,
                  modifier = Modifier
                      .clip(CircleShape)
                      .clickable(onClick = onAddClick))
@@ -126,6 +128,7 @@ private fun PlayerContentButtonPreview() {
 
     E2MP3Theme {
         PlayerContentButton(isPlayed = false,
+                            isAddSong = true,
                             song = SongsModel(title = "Nơi này có anh", subtitle = "Sơn Tùng MTP", timeline = "03:03"),
                             valueSlider = sliderPosition,
                             currentTime = "1:52",

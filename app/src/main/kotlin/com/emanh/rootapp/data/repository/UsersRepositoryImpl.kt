@@ -65,6 +65,14 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersModel>> {
+        return usersDataSource.getFoveriteArtistsByUser(userId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
     override suspend fun insertAllUsers(users: List<UsersModel>) {
         usersDataSource.insertAllUsers(users.map { mapToEntity(it) })
     }

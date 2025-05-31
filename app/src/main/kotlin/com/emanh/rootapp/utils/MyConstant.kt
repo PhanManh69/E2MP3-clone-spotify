@@ -10,24 +10,20 @@ import com.emanh.rootapp.presentation.ui.home.HomePoscastData
 
 object MyConstant {
     const val ALBUM_TYPE = "album_type"
-
     const val PLAYLIST_TYPE = "palylist_type"
-
     const val SINGLE_TYPE = "single_type"
-
     const val ARTIST_TYPE = "artist_type"
-
     const val PADDING_BOTTOM_BAR = 168
-
     const val SONGS_SEARCH = "songs_search"
-
     const val ARTISTS_SEARCH = "artists_search"
-
     const val ALBUMS_SEARCH = "albums_search"
-
     const val PLAYLISTS_SEARCH = "playlists_search"
-
     const val VIEW_ALL_HISTORY = -91829
+    const val VIEW_ALL_LIKED = -19823
+    const val PLAYLIST = "Danh sách phát"
+    const val YOUR = "Của bạn"
+    const val FOR_YOUR = "Dành cho bạn"
+    const val ARTIST = "Nghệ sĩ"
 
     const val IMAGE_URL =
         "https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w544-h544-l90-rj"
@@ -41,23 +37,9 @@ object MyConstant {
                                    R.drawable.ic_24_equalizer_6,
                                    R.drawable.ic_24_equalizer_7)
 
-    val sampleLibraryData = PrimaryLibraryData(primaryLibrary = listOf(SecondaryLibraryData(title = "Your library",
-                                                                                            secondaryLibrary = listOf("Playlist 1",
-                                                                                                                      "Playlist 2",
-                                                                                                                      "Playlist 3",
-                                                                                                                      "Playlist 4")),
-                                                                       SecondaryLibraryData(title = "Music genre",
-                                                                                            secondaryLibrary = listOf("Art music",
-                                                                                                                      "Rock",
-                                                                                                                      "Popular",
-                                                                                                                      "Jazz",
-                                                                                                                      "Latin music",
-                                                                                                                      "Funk",
-                                                                                                                      "Country",
-                                                                                                                      "Hip-Hop",
-                                                                                                                      "Electronic")),
-                                                                       SecondaryLibraryData(title = "Mood",
-                                                                                            secondaryLibrary = listOf("Happy", "Sad", "Excited"))))
+    val sampleLibraryData = PrimaryLibraryData(primaryLibrary = listOf(SecondaryLibraryData(title = PLAYLIST,
+                                                                                            secondaryLibrary = listOf(YOUR, FOR_YOUR)),
+                                                                       SecondaryLibraryData(title = ARTIST, secondaryLibrary = emptyList())))
 
     val carouselThumbData =
         listOf(STFCarouselThumbData(imageUrl = IMAGE_URL, title = "Nơi này có anh", subtitle = "Sơn Tùng M-TP", description = "350M view"),

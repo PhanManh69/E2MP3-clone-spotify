@@ -91,7 +91,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onViewAllHistory() {
-        appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(VIEW_ALL_HISTORY))
+        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_HISTORY))
     }
 
     private fun getRecommendedSongs() {

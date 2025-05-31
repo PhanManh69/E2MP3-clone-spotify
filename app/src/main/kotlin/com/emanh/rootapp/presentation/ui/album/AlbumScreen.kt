@@ -86,13 +86,14 @@ fun AlbumScreen(onItemClick: (Int, String) -> Unit) {
     } else {
         AlbumScaffold(time = albumViewModel.totalTime(uiState.songList),
                       views = uiState.views ?: 0,
+                      isAddAlbum = uiState.isAddAlbum,
                       album = uiState.album!!,
                       songsList = uiState.songList,
                       artistList = uiState.artistList,
                       onOwnerClick = {
                           albumViewModel.goToArtist(it)
                       },
-                      onAddClick = {},
+                      onAddClick = albumViewModel::onAddClick,
                       onDownloadClick = {},
                       onMoreClick = {},
                       onShuffleClick = {},
@@ -113,6 +114,7 @@ private fun AlbumScaffold(
     modifier: Modifier = Modifier,
     time: String,
     views: Int,
+    isAddAlbum: Boolean,
     album: AlbumsModel,
     songsList: List<SongsModel>,
     artistList: List<UsersModel>,
@@ -185,6 +187,7 @@ private fun AlbumScaffold(
 
                         AlbumButton(modifier = Modifier.padding(horizontal = 16.dp),
                                     views = views,
+                                    isAddAlbum = isAddAlbum,
                                     avatarSongUrl = songsList.firstOrNull()?.avatarUrl.orEmpty(),
                                     album = album,
                                     artistList = artistList,
@@ -279,6 +282,7 @@ private fun AlbumScreenPreview() {
     E2MP3Theme {
         AlbumScaffold(views = 240203,
                       time = "2h03min",
+                      isAddAlbum = true,
                       album = AlbumsModel(title = "Album Title", albumType = "EP", releaseDate = "24-02-2025"),
                       artistList = listOf(UsersModel(name = "Artist 1", avatarUrl = ""), UsersModel(name = "Artist 2", avatarUrl = "")),
                       songsList = fakeSongs,

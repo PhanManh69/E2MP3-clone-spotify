@@ -7,10 +7,10 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongGenreEntity
-import com.emanh.rootapp.domain.model.crossref.CrossRefAlbumsModel
+import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefSongsModel
-import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUM_SONGS
-import com.emanh.rootapp.utils.MyQuery.QUERY_SONGS_BY_ARTIST
+import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_SONG_LIKE
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_SONG_LIKE
 import com.emanh.rootapp.utils.MyQuery.QUERY_SONG_BY_ID
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +23,16 @@ interface CrossRefSongDao {
     @Transaction
     @Query(QUERY_SONG_BY_ID)
     fun getSongDetailsById(songId: Int): Flow<CrossRefSongsModel>
+
+    @Transaction
+    @Query(QUERY_GET_SONG_LIKE)
+    fun getSongLike(songId: Int, userId: Int): Flow<SongLikeEntity?>
+
+    @Query(QUERY_DELETE_SONG_LIKE)
+    suspend fun deleteSongLike(songId: Int, userId: Int)
+
+    @Insert()
+    suspend fun insertSongLike(songLikeEntity: SongLikeEntity)
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAllCrossRefSongGenre(songGenreEntity: List<SongGenreEntity>)

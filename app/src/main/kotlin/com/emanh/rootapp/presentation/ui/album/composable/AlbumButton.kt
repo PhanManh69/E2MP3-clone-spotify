@@ -44,6 +44,7 @@ import com.emanh.rootapp.presentation.theme.Body7Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundDark
 import com.emanh.rootapp.presentation.theme.IconInvert
+import com.emanh.rootapp.presentation.theme.IconProduct
 import com.emanh.rootapp.presentation.theme.IconSecondary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
@@ -57,6 +58,7 @@ fun AlbumButton(
     modifierPausePlay: Modifier = Modifier,
     views: Int,
     avatarSongUrl: String,
+    isAddAlbum: Boolean,
     album: AlbumsModel,
     artistList: List<UsersModel>,
     onOwnerClick: (Int) -> Unit,
@@ -120,9 +122,9 @@ fun AlbumButton(
                 }
             }
 
-            Icon(painter = painterResource(R.drawable.ic_24_plus_circle),
+            Icon(painter = painterResource(if (isAddAlbum) R.drawable.ic_24_plus_check else R.drawable.ic_24_plus_circle),
                  contentDescription = null,
-                 tint = IconSecondary,
+                 tint = if (isAddAlbum) IconProduct else IconSecondary,
                  modifier = Modifier
                      .clip(shape = RoundedCornerShape(8.dp))
                      .debounceClickable(onClick = onAddClick))
@@ -171,6 +173,7 @@ private fun AlbumInfoButtonPreview() {
     E2MP3Theme {
         AlbumButton(views = 6,
                     avatarSongUrl = "",
+                    isAddAlbum = true,
                     album = AlbumsModel(title = "Album Title", albumType = "Album Type"),
                     artistList = listOf(UsersModel(name = "Artist 1", avatarUrl = ""), UsersModel(name = "Artist 2", avatarUrl = "")),
                     onOwnerClick = {},

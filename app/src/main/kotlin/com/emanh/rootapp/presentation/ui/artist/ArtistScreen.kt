@@ -82,9 +82,10 @@ fun ArtistScreen(onItemClick: (Int, String) -> Unit) {
         ArtistScaffold(
                 genre = artistViewModel.getGenreName(uiState.genreNameList),
                 viewMonth = uiState.viewsMonth ?: 0,
+                isFollowing = uiState.isFollowing,
                 artist = uiState.artist!!,
                 songsList = uiState.songsList,
-                onFollowClick = {},
+                onFollowClick = artistViewModel::onFollowClick,
                 onMoreClick = {},
                 onShuffleClick = {},
                 onPausePlayClick = {},
@@ -102,6 +103,7 @@ private fun ArtistScaffold(
     modifier: Modifier = Modifier,
     genre: String,
     viewMonth: Int,
+    isFollowing: Boolean,
     artist: UsersModel,
     songsList: List<SongsModel>,
     onFollowClick: () -> Unit,
@@ -163,6 +165,7 @@ private fun ArtistScaffold(
 
                     ArtistInfo(genre = genre,
                                viewMonth = viewMonth,
+                               isFollowing = isFollowing,
                                songsList = songsList,
                                onFollowClick = onFollowClick,
                                onMoreClick = onMoreClick,
@@ -225,6 +228,7 @@ private fun ArtistScreenPreview() {
     E2MP3Theme {
         ArtistScaffold(genre = "From The Ritz To The Rubble • 505 • Mardy Bum • Hello You • Bigger Boys and Stolen Sweethearts • RU Mine? • No Buses • Do Me a Favour • Arabella • Only Ones Who Know My Propeller • Do I Wanna Know? • and more",
                        viewMonth = 19283943,
+                       isFollowing = true,
                        artist = UsersModel(name = "emanh",
                                            avatarUrl = "https://thumbs.dreamstime.com/b/summer-travel-destination-design-summer-vacation-holiday-concept-perfect-tranquil-beach-scene-soft-sunlight-white-sand-111325841.jpg"),
                        songsList = fakeSongs,

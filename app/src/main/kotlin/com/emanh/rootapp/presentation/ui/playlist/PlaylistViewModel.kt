@@ -14,10 +14,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import com.emanh.rootapp.data.db.entity.crossref.PlaylistLikeEntity
+import com.emanh.rootapp.domain.usecase.SongsUseCase
 import com.emanh.rootapp.domain.usecase.UsersUseCase
 import com.emanh.rootapp.presentation.navigation.extensions.NavActions.goBack
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
+import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_HISTORY
+import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_LIKED
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 private const val TAG = "PlaylistViewModel"
 
@@ -25,6 +32,7 @@ private const val TAG = "PlaylistViewModel"
 class PlaylistViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val appRouter: AppRouter,
+    private val songsUseCase: SongsUseCase,
     private val usersUseCase: UsersUseCase,
     private val crossRefPlaylistUseCase: CrossRefPlaylistUseCase,
 ) : ViewModel() {
@@ -37,7 +45,15 @@ class PlaylistViewModel @Inject constructor(
         if (playlistId != -1) {
             Log.d(TAG, "Initializing with playlistId: $playlistId")
 
-            loadPlaylistDetails(playlistId)
+            getPlaylistLike(playlistId)
+
+            if (playlistId == VIEW_ALL_HISTORY) {
+                getHisyorySongs()
+            } else if (playlistId == VIEW_ALL_LIKED) {
+                getLikedSongs()
+            } else {
+                loadPlaylistDetails(playlistId)
+            }
         }
     }
 
@@ -63,6 +79,37 @@ class PlaylistViewModel @Inject constructor(
         val totalMinutes = (totalSeconds % 3600) / 60
 
         return "${totalHours}h${totalMinutes}min"
+    }
+
+    fun onAddClick() {
+        val userId = 2
+
+        viewModelScope.launch {
+            if (_uiState.value.isAddPlaylist) {
+                crossRefPlaylistUseCase.deletePlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userId))
+                _uiState.update { it.copy(isAddPlaylist = false) }
+                return@launch
+            } else {
+                crossRefPlaylistUseCase.insertPlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userId))
+                _uiState.update { it.copy(isAddPlaylist = true) }
+                return@launch
+            }
+        }
+    }
+
+    private fun getPlaylistLike(playlistId: Int) {
+        val userId = 2
+
+        viewModelScope.launch {
+            crossRefPlaylistUseCase.getPlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userId))
+                .catch { error ->
+                    Log.e(TAG, "Error fetching ArtistById: $error")
+                }
+                .collect {
+                    val isAdded = it != null
+                    _uiState.update { it.copy(isAddPlaylist = isAdded) }
+                }
+        }
     }
 
     private fun loadPlaylistDetails(playlistId: Int) {
@@ -113,5 +160,55 @@ class PlaylistViewModel @Inject constructor(
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
+    }
+
+    private fun getHisyorySongs() {
+        val userId = 2
+        _uiState.update { it.copy(isLoading = true) }
+
+        songsUseCase.getRecentlyListenedSongs(userId).onEach { songsList ->
+            _uiState.update { currentState ->
+                currentState.copy(playlist = PlaylistsModel(avatarUrl = songsList.first().avatarUrl,
+                                                            title = "Bài hát nghe gần đây",
+                                                            subtitle = "Các bài hát được nghe gần đây của bạn"),
+                                  songList = songsList,
+                                  isLoading = false)
+            }
+
+            try {
+                val owner = usersUseCase.getArtistById(userId).first()
+                _uiState.update { it.copy(owner = owner) }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading Owner: ${e.message}")
+            }
+        }.catch { error ->
+            Log.e(TAG, "Error fetching RecentlyListenedSongs: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getLikedSongs() {
+        val userId = 2
+        _uiState.update { it.copy(isLoading = true) }
+
+        songsUseCase.getLikedSongsByUser(userId).onEach { songsList ->
+            _uiState.update { currentState ->
+                currentState.copy(playlist = PlaylistsModel(avatarUrl = songsList.first().avatarUrl,
+                                                            title = "Bài hát yêu thích",
+                                                            subtitle = "Các bài hát được được yêu thích của bạn của bạn"),
+                                  songList = songsList,
+                                  isLoading = false)
+            }
+
+            try {
+                val owner = usersUseCase.getArtistById(userId).first()
+                _uiState.update { it.copy(owner = owner) }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading Owner: ${e.message}")
+            }
+        }.catch { error ->
+            Log.e(TAG, "Error fetching getLikedSongByUser: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
     }
 }

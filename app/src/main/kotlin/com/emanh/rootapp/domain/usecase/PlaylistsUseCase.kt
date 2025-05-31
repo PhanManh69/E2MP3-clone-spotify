@@ -27,4 +27,12 @@ class PlaylistsUseCase @Inject constructor(
     fun getPlaylistsById(playlistId: Int): Flow<PlaylistsModel> {
         return playlistsRepository.getPlaylistsById(playlistId)
     }
+
+    fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsModel>> {
+        return playlistsRepository.getPlaylistsYourByUser(userId)
+    }
+
+    fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsModel>> {
+        return playlistsRepository.getPlaylistsForYouByUser(userId)
+    }
 }

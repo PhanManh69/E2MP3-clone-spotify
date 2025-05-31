@@ -20,5 +20,7 @@ interface UsersRepository {
 
     fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>>
 
+    fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersModel>>
+
     suspend fun insertAllUsers(users: List<UsersModel>)
 }

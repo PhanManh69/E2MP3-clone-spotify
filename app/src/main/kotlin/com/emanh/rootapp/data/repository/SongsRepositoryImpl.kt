@@ -89,6 +89,14 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getLikedSongsByUser(userId: Int): Flow<List<SongsModel>> {
+        return songsDataSource.getLikedSongsByUser(userId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
     override suspend fun insertAllSongs(songs: List<SongsModel>) {
         songsDataSource.insertAllSongs(songs.map { mapToEntity(it) })
     }

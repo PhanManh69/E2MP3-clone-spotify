@@ -10,6 +10,7 @@ import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUMS_BY_SEARCH
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUMS_BY_ID
 import com.emanh.rootapp.utils.MyQuery.QUERY_QUICK_ALBUM
 import com.emanh.rootapp.utils.MyQuery.QUERY_SIMILAR_ALBUMS
+import com.emanh.rootapp.utils.MyQuery.QUETY_GET_ALBUM_LIKE_BY_USER
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -31,6 +32,9 @@ interface AlbumsDao {
 
     @Query(QUERY_GET_ALBUMS_BY_ID)
     fun getAlbumsById(albumId: Int): Flow<AlbumsEntity>
+
+    @Query(QUETY_GET_ALBUM_LIKE_BY_USER)
+    fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllAlbums(albums: List<AlbumsEntity>)

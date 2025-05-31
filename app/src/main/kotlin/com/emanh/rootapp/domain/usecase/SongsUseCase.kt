@@ -43,4 +43,8 @@ class SongsUseCase @Inject constructor(
     fun getSongsById(songId: Int): Flow<SongsModel> {
         return songsRepository.getSongsById(songId)
     }
+
+    fun getLikedSongsByUser(userId: Int): Flow<List<SongsModel>> {
+        return songsRepository.getLikedSongsByUser(userId)
+    }
 }

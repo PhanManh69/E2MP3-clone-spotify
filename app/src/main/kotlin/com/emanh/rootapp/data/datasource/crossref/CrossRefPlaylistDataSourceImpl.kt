@@ -1,6 +1,7 @@
 package com.emanh.rootapp.data.datasource.crossref
 
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefPlaylistDao
+import com.emanh.rootapp.data.db.entity.crossref.PlaylistLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.PlaylistSongEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,18 @@ class CrossRefPlaylistDataSourceImpl @Inject constructor(
 
     override fun getPlaylistDetailsById(playlistId: Int): Flow<CrossRefPlaylistsModel> {
         return crossRefPlaylistDao.getPlaylistDetailsById(playlistId)
+    }
+
+    override fun getPlaylistLike(playlistLikeEntity: PlaylistLikeEntity): Flow<PlaylistLikeEntity?> {
+        return crossRefPlaylistDao.getPlaylistLike(playlistId = playlistLikeEntity.playlistId, userId = playlistLikeEntity.userId)
+    }
+
+    override suspend fun deletePlaylistLike(playlistLikeEntity: PlaylistLikeEntity) {
+        return crossRefPlaylistDao.deletePlaylistLike(playlistId = playlistLikeEntity.playlistId, userId = playlistLikeEntity.userId)
+    }
+
+    override suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity) {
+        return crossRefPlaylistDao.insertPlaylistLike(playlistLikeEntity)
     }
 
     override suspend fun insertAllCrossRefPlaylistSong(playlistSongEntity: List<PlaylistSongEntity>) {

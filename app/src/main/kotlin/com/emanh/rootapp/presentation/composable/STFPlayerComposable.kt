@@ -43,6 +43,7 @@ import com.emanh.rootapp.presentation.theme.Body6Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.GreyN100
 import com.emanh.rootapp.presentation.theme.IconBackgroundPrimary
+import com.emanh.rootapp.presentation.theme.SurfaceSecondary
 import com.emanh.rootapp.presentation.theme.TextBackgroundPrimary
 import com.emanh.rootapp.utils.MyConstant.IMAGE_URL
 import com.emanh.rootapp.utils.faunchedEffectAvatar
@@ -151,6 +152,40 @@ fun STFPlayerStickyLoading(modifier: Modifier = Modifier) {
         .padding(horizontal = 8.dp)
         .clip(shape = RoundedCornerShape(8.dp))
         .shimmerEffect())
+}
+
+@Composable
+fun STFPlayerStickyEmpty(modifier: Modifier = Modifier) {
+    Box(modifier = modifier
+        .padding(horizontal = 8.dp)
+        .clip(shape = RoundedCornerShape(8.dp))
+        .background(color = SurfaceSecondary, shape = RoundedCornerShape(8.dp))
+        .debounceClickable(indication = null, onClick = {})) {
+        Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier
+                .shadowCustom(shapeRadius = 8.dp)
+                .size(40.dp)
+                .clip(shape = RoundedCornerShape(8.dp)))
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Icon(painter = painterResource(R.drawable.ic_32_musical_box),
+                 contentDescription = null,
+                 tint = AlphaN100_60,
+                 modifier = Modifier
+                     .size(32.dp)
+                     .clip(shape = RoundedCornerShape(8.dp)))
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Icon(painter = painterResource(R.drawable.ic_32_pause),
+                 contentDescription = null,
+                 tint = IconBackgroundPrimary,
+                 modifier = Modifier
+                     .size(32.dp)
+                     .clip(shape = RoundedCornerShape(8.dp)))
+        }
+    }
 }
 
 @Preview

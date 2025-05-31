@@ -14,6 +14,7 @@ import com.emanh.rootapp.utils.MyQuery.QUERY_SIMILAR_SONGS
 import com.emanh.rootapp.utils.MyQuery.QUERY_SONGS_BY_ARTIST
 import com.emanh.rootapp.utils.MyQuery.QUERY_SONG_BY_ID
 import com.emanh.rootapp.utils.MyQuery.QUERY_TRENDING
+import com.emanh.rootapp.utils.MyQuery.QUETY_GET_LIKED_SONGS_BY_USER
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -47,6 +48,9 @@ interface SongsDao {
 
     @Query(QUERY_GET_SONGS_BY_SEARCH)
     fun getSongsBySearch(listId: List<Int>): Flow<List<SongsEntity>>
+
+    @Query(QUETY_GET_LIKED_SONGS_BY_USER)
+    fun getLikedSongsByUser(userId: Int): Flow<List<SongsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllSongs(songs: List<SongsEntity>)

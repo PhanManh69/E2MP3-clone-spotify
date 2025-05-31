@@ -26,10 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,15 +66,14 @@ data class SecondaryLibraryData(
 @Composable
 fun STFMenuLibrary(
     modifier: Modifier = Modifier,
-    type: STFMenuLibraryType = STFMenuLibraryType.Default,
+    primaryChips: SecondaryLibraryData?,
+    secondaryChips: String,
+    currentType: STFMenuLibraryType = STFMenuLibraryType.Default,
     libraryList: PrimaryLibraryData,
-    onPrimaryChipsClick: () -> Unit = {},
-    onSecondaryChipsClick: () -> Unit = {}
+    onCloseClick: () -> Unit = {},
+    onPrimaryChipsClick: (SecondaryLibraryData, STFMenuLibraryType) -> Unit = { _, _ -> },
+    onSecondaryChipsClick: (String, STFMenuLibraryType) -> Unit = { _, _ -> },
 ) {
-    var currentType by remember { mutableStateOf(type) }
-    var selectedPrimary by remember { mutableStateOf<SecondaryLibraryData?>(null) }
-    var selectedSecondary by remember { mutableStateOf("") }
-
     val current = LocalDensity.current
     val chipsDirection = remember { mutableStateOf(Size.Zero) }
     val visible = currentType != STFMenuLibraryType.Default
@@ -88,9 +85,7 @@ fun STFMenuLibrary(
         AnimatedVisibility(visible = visible, enter = fadeIn() + expandHorizontally(), exit = fadeOut() + shrinkHorizontally()) {
             Row {
                 STFIconClose {
-                    currentType = STFMenuLibraryType.Default
-                    selectedPrimary = null
-                    selectedSecondary = ""
+                    onCloseClick()
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -104,16 +99,14 @@ fun STFMenuLibrary(
                     .clip(shape = RoundedCornerShape(100)), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(libraryList.primaryLibrary) { item ->
                         STFChips(text = item.title, size = STFChipsSize.Small, onClick = {
-                            onPrimaryChipsClick()
-                            selectedPrimary = item
-                            currentType = STFMenuLibraryType.Category
+                            onPrimaryChipsClick(item, STFMenuLibraryType.Category)
                         })
                     }
                 }
             }
 
             STFMenuLibraryType.Category -> {
-                selectedPrimary?.let { primary ->
+                primaryChips?.let { primary ->
                     Box(modifier = Modifier.weight(1f)) {
                         LazyRow(modifier = Modifier
                             .fillMaxWidth()
@@ -122,9 +115,7 @@ fun STFMenuLibrary(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             items(primary.secondaryLibrary) { item ->
                                 STFChips(text = item, size = STFChipsSize.Small, onClick = {
-                                    onSecondaryChipsClick()
-                                    selectedSecondary = item
-                                    currentType = STFMenuLibraryType.Subcategory
+                                    onSecondaryChipsClick(item, STFMenuLibraryType.Subcategory)
                                 })
                             }
                         }
@@ -134,18 +125,18 @@ fun STFMenuLibrary(
                                  size = STFChipsSize.Small,
                                  type = STFChipsType.Active,
                                  onClick = {
-                                     currentType = STFMenuLibraryType.Default
+                                     onPrimaryChipsClick(primary, STFMenuLibraryType.Default)
                                  })
                     }
                 }
             }
 
             STFMenuLibraryType.Subcategory -> {
-                selectedPrimary?.let { primary ->
-                    ChipsWithBadge(modifier = Modifier, primaryText = primary.title, badgeText = selectedSecondary, onBadgeClick = {
-                        currentType = STFMenuLibraryType.Category
+                primaryChips?.let { primary ->
+                    ChipsWithBadge(modifier = Modifier, primaryText = primary.title, badgeText = secondaryChips, onBadgeClick = {
+                        onSecondaryChipsClick("", STFMenuLibraryType.Category)
                     }, onPrimaryClick = {
-                        currentType = STFMenuLibraryType.Default
+                        onPrimaryChipsClick(primary, STFMenuLibraryType.Default)
                     })
                 }
             }
@@ -204,6 +195,9 @@ fun MenuLibraryPreview() {
     E2MP3Theme {
         STFMenuLibrary(modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp), libraryList = sampleLibraryData)
+            .padding(horizontal = 16.dp),
+                       libraryList = sampleLibraryData,
+                       primaryChips = null,
+                       secondaryChips = "")
     }
 }

@@ -6,9 +6,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.emanh.rootapp.data.db.entity.crossref.AlbumArtistEntity
+import com.emanh.rootapp.data.db.entity.crossref.AlbumLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.AlbumSongEntity
+import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefAlbumsModel
+import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_ALBUM_LIKE
+import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_USER_FOLLOWING
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUM_LIKE
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUM_SONGS
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_USER_FOLLWING
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,6 +26,16 @@ interface CrossRefAlbumDao {
     @Transaction
     @Query(QUERY_GET_ALBUM_SONGS)
     fun getAlbumDetailsById(albumId: Int): Flow<CrossRefAlbumsModel>
+
+    @Transaction
+    @Query(QUERY_GET_ALBUM_LIKE)
+    fun getAlbumLike(albumId: Int, userId: Int): Flow<AlbumLikeEntity?>
+
+    @Query(QUERY_DELETE_ALBUM_LIKE)
+    suspend fun deleteAlbumLike(albumId: Int, userId: Int)
+
+    @Insert()
+    suspend fun insertAlbumLike(albumLikeEntity: AlbumLikeEntity)
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAllCrossRefAlbumSong(albumSongEntity: List<AlbumSongEntity>)

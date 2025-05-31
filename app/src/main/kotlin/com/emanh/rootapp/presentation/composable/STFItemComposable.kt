@@ -43,7 +43,9 @@ import com.emanh.rootapp.presentation.theme.Body3Regular
 import com.emanh.rootapp.presentation.theme.Body6Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconInvert
+import com.emanh.rootapp.presentation.theme.IconPrimary
 import com.emanh.rootapp.presentation.theme.IconSecondary
+import com.emanh.rootapp.presentation.theme.LikedSongs
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextSecondary
 import com.emanh.rootapp.utils.MyConstant.IMAGE_URL
@@ -52,7 +54,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 enum class STFItemType {
-    Music, Artists, ArtistsFollow
+    Music, Artists, ArtistsLibrary, ArtistsFollow
 }
 
 enum class STFItemSize {
@@ -96,9 +98,10 @@ private fun getItemLayoutDataFactory(type: STFItemType, size: STFItemSize): STFI
 @Composable
 fun STFItem(
     modifier: Modifier = Modifier,
-    imageUrl: String,
+    imageUrl: String? = null,
     label: String,
     title: String,
+    isLiked: Boolean = false,
     labelChips: String = "",
     iconId: Int = R.drawable.ic_24_close,
     type: STFItemType,
@@ -139,29 +142,42 @@ fun STFItem(
                 onItemClick()
             }
         }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        if (!isLoadFailed) {
-            AsyncImage(modifier = Modifier
-                .size(itemSize)
-                .padding(animatedPadding)
-                .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
-                .then(if (!isImageLoaded) Modifier.shimmerEffect() else Modifier),
-                       model = ImageRequest.Builder(LocalContext.current)
-                           .data(imageUrl)
-                           .crossfade(true)
-                           .listener(onSuccess = { _, _ -> isImageLoaded = true }, onError = { _, _ -> })
-                           .build(),
-                       contentDescription = null,
-                       contentScale = ContentScale.Crop)
-        } else {
+        if (isLiked) {
             Box(modifier = Modifier
                 .size(itemSize)
                 .padding(animatedPadding)
-                .background(color = IconInvert, shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
+                .background(brush = LikedSongs, shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
                 .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)) {
-                Image(painter = painterResource(R.drawable.img_loading_failed),
-                      contentDescription = null,
-                      contentScale = ContentScale.Crop,
-                      modifier = Modifier.padding(16.dp))
+                Icon(painter = painterResource(R.drawable.ic_48_heart_fill),
+                     contentDescription = null,
+                     tint = IconPrimary,
+                     modifier = Modifier.padding(18.dp))
+            }
+        } else {
+            if (!isLoadFailed) {
+                AsyncImage(modifier = Modifier
+                    .size(itemSize)
+                    .padding(animatedPadding)
+                    .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
+                    .then(if (!isImageLoaded) Modifier.shimmerEffect() else Modifier),
+                           model = ImageRequest.Builder(LocalContext.current)
+                               .data(imageUrl)
+                               .crossfade(true)
+                               .listener(onSuccess = { _, _ -> isImageLoaded = true }, onError = { _, _ -> })
+                               .build(),
+                           contentDescription = null,
+                           contentScale = ContentScale.Crop)
+            } else {
+                Box(modifier = Modifier
+                    .size(itemSize)
+                    .padding(animatedPadding)
+                    .background(color = IconInvert, shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
+                    .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)) {
+                    Image(painter = painterResource(R.drawable.img_loading_failed),
+                          contentDescription = null,
+                          contentScale = ContentScale.Crop,
+                          modifier = Modifier.padding(16.dp))
+                }
             }
         }
 
@@ -214,7 +230,7 @@ fun ItemMusicBigPreview() {
 
 @Preview
 @Composable
-fun ItemMusicMediumPreview() {
+fun ItemMusicMediumPreview1() {
     E2MP3Theme {
         STFItem(imageUrl = IMAGE_URL,
                 title = "Nơi này có anh",
@@ -228,12 +244,40 @@ fun ItemMusicMediumPreview() {
 
 @Preview
 @Composable
-fun ItemArtistsMediumPreview() {
+fun ItemMusicMediumPreview2() {
+    E2MP3Theme {
+        STFItem(title = "Nơi này có anh",
+                label = "Sơn Tùng M-TP",
+                isLiked = true,
+                type = STFItemType.Music,
+                size = STFItemSize.Medium,
+                onItemClick = {},
+                onIconClick = {})
+    }
+}
+
+@Preview
+@Composable
+fun ItemArtistsMediumPreview1() {
     E2MP3Theme {
         STFItem(imageUrl = IMAGE_URL,
                 title = "Nơi này có anh",
                 label = "Sơn Tùng M-TP",
                 type = STFItemType.Artists,
+                size = STFItemSize.Medium,
+                onItemClick = {},
+                onIconClick = {})
+    }
+}
+
+@Preview
+@Composable
+fun ItemArtistsMediumPreview2() {
+    E2MP3Theme {
+        STFItem(imageUrl = IMAGE_URL,
+                title = "Nơi này có anh",
+                label = "Sơn Tùng M-TP",
+                type = STFItemType.ArtistsLibrary,
                 size = STFItemSize.Medium,
                 onItemClick = {},
                 onIconClick = {})

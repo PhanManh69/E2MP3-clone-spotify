@@ -16,5 +16,7 @@ interface AlbumsRepository {
 
     fun getAlbumsById(albumId: Int): Flow<AlbumsModel>
 
+    fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsModel>>
+
     suspend fun insertAllAlbums(albums: List<AlbumsModel>)
 }

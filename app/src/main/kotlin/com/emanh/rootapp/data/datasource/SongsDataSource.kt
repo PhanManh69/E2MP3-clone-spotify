@@ -24,5 +24,7 @@ interface SongsDataSource {
 
     fun getSongsBySearch(listId: List<Int>): Flow<List<SongsEntity>>
 
+    fun getLikedSongsByUser(userId: Int): Flow<List<SongsEntity>>
+
     suspend fun insertAllSongs(songs: List<SongsEntity>)
 }

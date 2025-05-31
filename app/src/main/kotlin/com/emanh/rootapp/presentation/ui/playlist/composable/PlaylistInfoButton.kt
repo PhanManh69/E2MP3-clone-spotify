@@ -44,6 +44,7 @@ import com.emanh.rootapp.presentation.theme.Body7Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundDark
 import com.emanh.rootapp.presentation.theme.IconInvert
+import com.emanh.rootapp.presentation.theme.IconProduct
 import com.emanh.rootapp.presentation.theme.IconSecondary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
@@ -56,6 +57,7 @@ fun PlaylistInfoButton(
     modifierPausePlay: Modifier = Modifier,
     time: String,
     avatarSongUrl: String,
+    isAddPlaylist: Boolean,
     owner: UsersModel,
     playlist: PlaylistsModel,
     onOwnerClick: () -> Unit,
@@ -119,9 +121,9 @@ fun PlaylistInfoButton(
                 }
             }
 
-            Icon(painter = painterResource(R.drawable.ic_24_plus_circle),
+            Icon(painter = painterResource(if (isAddPlaylist) R.drawable.ic_24_plus_check else R.drawable.ic_24_plus_circle),
                  contentDescription = null,
-                 tint = IconSecondary,
+                 tint = if (isAddPlaylist) IconProduct else IconSecondary,
                  modifier = Modifier
                      .clip(shape = RoundedCornerShape(8.dp))
                      .debounceClickable(onClick = onAddClick))
@@ -168,11 +170,11 @@ fun PlaylistInfoButton(
 @Composable
 private fun PlaylistInfoButtonPreview() {
     E2MP3Theme {
-        PlaylistInfoButton(
-                           owner = UsersModel(name = "emanh"),
+        PlaylistInfoButton(owner = UsersModel(name = "emanh"),
                            playlist = PlaylistsModel(title = "Tên playlist", subtitle = "Giới thiệu về playlist"),
                            time = "2h24",
                            avatarSongUrl = "",
+                           isAddPlaylist = true,
                            onOwnerClick = {},
                            onAddClick = {},
                            onDownloadClick = {},

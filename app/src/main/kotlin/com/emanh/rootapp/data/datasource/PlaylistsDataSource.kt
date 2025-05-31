@@ -16,5 +16,9 @@ interface PlaylistsDataSource {
 
     fun getPlaylistsById(playlistId: Int): Flow<PlaylistsEntity>
 
+    fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsEntity>>
+
+    fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsEntity>>
+
     suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>)
 }
