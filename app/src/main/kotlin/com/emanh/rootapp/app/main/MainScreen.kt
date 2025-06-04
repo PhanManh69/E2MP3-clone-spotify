@@ -1,5 +1,6 @@
 package com.emanh.rootapp.app.main
 
+import androidx.annotation.OptIn
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,11 +33,13 @@ import com.emanh.rootapp.presentation.navigation.testComposableScreenGraph
 import com.emanh.rootapp.presentation.navigation.yourLibraryScreenGraph
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.common.util.UnstableApi
 import com.emanh.rootapp.presentation.composable.STFPlayerStickyEmpty
 import com.emanh.rootapp.presentation.composable.STFPlayerStickyLoading
 import com.emanh.rootapp.presentation.ui.player.PlayerScreen
 import com.emanh.rootapp.presentation.ui.player.PlayerViewModel
 
+@OptIn(UnstableApi::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier, appRouter: AppRouter, navController: NavHostController = rememberNavController()
@@ -69,24 +72,24 @@ fun MainScreen(
             homeScreenGraph()
             searchScreenGraph()
             searchInputScreenGraph(onItemClick = { id, title ->
-                mainViewModel.getSongId(id)
+                mainViewModel.getSongId(songId = id)
                 mainViewModel.getTitleFromItem("Bài hát", title)
             })
             yourLibraryScreenGraph()
-            playlistScreenGraph(onItemClick = { songId, title ->
-                mainViewModel.getSongId(songId)
+            playlistScreenGraph(onItemClick = { id, title ->
+                mainViewModel.getSongId(songId = id)
                 mainViewModel.getTitleFromItem("Playlist", title)
             })
-            albumScreenGraph(onItemClick = { songId, title ->
-                mainViewModel.getSongId(songId)
+            albumScreenGraph(onItemClick = { id, title ->
+                mainViewModel.getSongId(songId = id)
                 mainViewModel.getTitleFromItem("Album", title)
             })
-            singleScreenGraph(onItemClick = { songId, title ->
-                mainViewModel.getSongId(songId)
+            singleScreenGraph(onItemClick = { id, title ->
+                mainViewModel.getSongId(songId = id)
                 mainViewModel.getTitleFromItem("Bài hát", title)
             })
-            artistScreenGraph(onItemClick = { songId, title ->
-                mainViewModel.getSongId(songId)
+            artistScreenGraph(onItemClick = { id, title ->
+                mainViewModel.getSongId(songId = id)
                 mainViewModel.getTitleFromItem("Nghệ sĩ", title)
             })
         }

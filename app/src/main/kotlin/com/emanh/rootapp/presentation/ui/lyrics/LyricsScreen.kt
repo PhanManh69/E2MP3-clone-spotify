@@ -136,7 +136,7 @@ private fun LyricsBottomSheet(
                                      .padding(horizontal = 32.dp)
                                      .padding(top = 48.dp))
                         } else {
-                            Text(text = lyrics, color = TextBackgroundPrimary, style = Title6Bold, modifier = Modifier.padding(horizontal = 32.dp))
+                            Text(text = lyrics, color = TextBackgroundPrimary, style = Title6Bold, modifier = Modifier.padding(horizontal = 16.dp))
                         }
                     }
                 }

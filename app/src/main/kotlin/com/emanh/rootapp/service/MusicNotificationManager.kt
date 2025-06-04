@@ -20,7 +20,7 @@ class MusicNotificationManager(
     init {
         val mediaDescriptionAdapter = object : PlayerNotificationManager.MediaDescriptionAdapter {
             override fun getCurrentContentTitle(player: Player): String {
-                return player.currentMediaItem?.mediaMetadata?.title.toString()
+                return player.currentMediaItem?.mediaMetadata?.title?.toString() ?: "Unknown Title"
             }
 
             override fun createCurrentContentIntent(player: Player): PendingIntent? {
@@ -29,7 +29,7 @@ class MusicNotificationManager(
             }
 
             override fun getCurrentContentText(player: Player): String {
-                return player.currentMediaItem?.mediaMetadata?.artist.toString()
+                return player.currentMediaItem?.mediaMetadata?.artist?.toString() ?: "Unknown Artist"
             }
 
             override fun getCurrentLargeIcon(
@@ -43,7 +43,7 @@ class MusicNotificationManager(
             .setMediaDescriptionAdapter(mediaDescriptionAdapter)
             .setNotificationListener(notificationListener)
             .setChannelImportance(NotificationManager.IMPORTANCE_LOW)
-            .setSmallIconResourceId(R.drawable.ic_logo_app)
+            .setSmallIconResourceId(R.drawable.ic_24_equalizer_3)
             .build()
 
         notificationManager.setMediaSessionToken(session.sessionCompatToken)

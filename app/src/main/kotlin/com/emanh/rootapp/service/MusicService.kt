@@ -41,40 +41,40 @@ class MusicService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, "MusicService onCreate")
 
         createNotificationChannel()
-
-        // Configure ExoPlayer
         setupExoPlayer()
+        mediaSession = MediaSession.Builder(this, exoPlayer).setSessionActivity(getSessionActivityPendingIntent()).build()
+        musicNotificationManager = MusicNotificationManager(this, mediaSession, MusicPlayerNotificationListener(this))
+        setupPlayerListener()
+    }
 
-        // Create MediaSession - không cần custom callback
-        mediaSession = MediaSession.Builder(this, exoPlayer)
-            .setSessionActivity(getSessionActivityPendingIntent())
-            .build()
+    private fun setupExoPlayer() {
+        exoPlayer.apply {
+            setAudioAttributes(AudioAttributes.Builder().setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build(), true)
+            setWakeMode(C.WAKE_MODE_NONE)
+            setHandleAudioBecomingNoisy(true)
+        }
+    }
 
-        musicNotificationManager = MusicNotificationManager(
-                this,
-                mediaSession,
-                MusicPlayerNotificationListener(this)
-        )
-
-        // Add listener for playback state changes
+    private fun setupPlayerListener() {
         exoPlayer.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
-                Log.d(TAG, "Playback state changed: $playbackState")
                 when (playbackState) {
                     Player.STATE_READY -> {
                         Log.d(TAG, "Player is ready")
                     }
+
                     Player.STATE_BUFFERING -> {
                         Log.d(TAG, "Player is buffering")
                     }
+
                     Player.STATE_ENDED -> {
                         Log.d(TAG, "Playback ended")
                         exoPlayer.seekTo(0)
                         exoPlayer.pause()
                     }
+
                     Player.STATE_IDLE -> {
                         Log.d(TAG, "Player is idle")
                     }
@@ -91,28 +91,10 @@ class MusicService : MediaSessionService() {
         })
     }
 
-    private fun setupExoPlayer() {
-        exoPlayer.apply {
-            // Configure audio attributes for music playback
-            setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-                        .setUsage(C.USAGE_MEDIA)
-                        .build(),
-                    true // Handle audio focus automatically
-            )
-
-            // Set wake mode to prevent sleep during playback
-            setWakeMode(C.WAKE_MODE_NONE)
-
-            // Handle audio becoming noisy (headphones unplugged)
-            setHandleAudioBecomingNoisy(true)
-        }
-    }
 
     override fun onDestroy() {
-        Log.d(TAG, "MusicService onDestroy")
         super.onDestroy()
+
         serviceScope.cancel()
         exoPlayer.stop()
         exoPlayer.release()
@@ -122,29 +104,19 @@ class MusicService : MediaSessionService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "MusicService onStartCommand")
         super.onStartCommand(intent, flags, startId)
+
         return START_NOT_STICKY
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
-        Log.d(TAG, "onGetSession called")
         return mediaSession
-    }
-
-    override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(TAG, "MusicService onUnbind")
-        return super.onUnbind(intent)
     }
 
     @SuppressLint("ObsoleteSdkInt")
     fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    MUSIC_PLAYBACK,
-                    NotificationManager.IMPORTANCE_LOW
-            ).apply {
+            val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, MUSIC_PLAYBACK, NotificationManager.IMPORTANCE_LOW).apply {
                 setSound(null, null)
                 description = "Music playback notifications"
             }

@@ -1,8 +1,15 @@
 package com.emanh.rootapp.app.main
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.session.MediaController
 import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.domain.model.SongsModel
@@ -10,11 +17,9 @@ import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.domain.model.crossref.CrossRefSongsModel
 import com.emanh.rootapp.domain.usecase.ViewsSongUseCase
 import com.emanh.rootapp.domain.usecase.crossref.CrossRefSongUseCase
-import com.emanh.rootapp.utils.loadProgress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,59 +27,102 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.SessionToken
+import com.emanh.rootapp.service.MusicService
+import com.google.common.util.concurrent.ListenableFuture
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
+import androidx.core.net.toUri
 
-private const val TAG = "MainViewModel"
-
+@UnstableApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val viewsSongUseCase: ViewsSongUseCase,
     private val crossRefSongUseCase: CrossRefSongUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+
+    private var mediaController: MediaController? = null
+    private val controllerFuture: ListenableFuture<MediaController> by lazy {
+        val intent = Intent(context, MusicService::class.java)
+        context.startService(intent)
+
+        MediaController.Builder(context, SessionToken(context, ComponentName(context, MusicService::class.java))).buildAsync()
+    }
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineException: ${exception.message}")
         _uiState.update { it.copy(isLoading = false) }
     }
 
+    init {
+        initializeMediaController()
+    }
+
+    private fun initializeMediaController() {
+        controllerFuture.addListener({
+                                         try {
+                                             mediaController = controllerFuture.get()
+                                             setupMediaControllerListener()
+                                         } catch (e: Exception) {
+                                             Log.e(TAG, "Failed to create MediaController: ${e.message}")
+                                         }
+                                     }, ContextCompat.getMainExecutor(context))
+    }
+
+    private fun setupMediaControllerListener() {
+        mediaController?.addListener(object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                _uiState.update { it.copy(isPlayed = isPlaying) }
+
+                if (isPlaying) {
+                    _uiState.value.progressJob?.cancel()
+                    startProgressTracking(viewModelScope)
+                } else {
+                    stopProgressTracking()
+                }
+            }
+
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                if (playbackState == Player.STATE_ENDED) {
+                    _uiState.update { it.copy(isPlayed = false, currentProgress = 0f) }
+                }
+            }
+
+            override fun onPositionDiscontinuity(
+                oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int
+            ) {
+                updateProgress()
+            }
+        })
+    }
+
     fun onPlayPauseClick(isPlayed: Boolean, scope: CoroutineScope) {
-        if (isPlayed == _uiState.value.isPlayed) return
-
-        _uiState.update { it.copy(isPlayed = isPlayed) }
-
-        if (isPlayed) {
-            startProgressTracking(scope)
-        } else {
-            stopProgressTracking()
+        mediaController?.let { controller ->
+            if (isPlayed) {
+                controller.play()
+                startProgressTracking(scope)
+            } else {
+                controller.pause()
+                stopProgressTracking()
+            }
         }
     }
 
-    private fun startProgressTracking(scope: CoroutineScope) {
-        stopProgressTracking()
+    private fun updateProgress() {
+        mediaController?.let { controller ->
+            val duration = controller.duration
+            val currentPosition = controller.currentPosition
 
-        val currentPosition = (_uiState.value.currentProgress * _uiState.value.timeline).toLong()
-        val job = scope.launch(SupervisorJob()) {
-            try {
-                loadProgress(timeSeconds = _uiState.value.timeline,
-                             startPositionSeconds = currentPosition,
-                             isPlaying = { _uiState.value.isPlayed },
-                             updateProgress = { progress ->
-                                 _uiState.update { it.copy(currentProgress = progress) }
-                             },
-                             onFinish = {
-                                 _uiState.update { it.copy(isPlayed = false, progressJob = null) }
-                             })
-            } catch (e: CancellationException) {
-                Log.d(TAG, "Progress tracking cancelled: ${e.message}")
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in progress tracking: ${e.message}")
-                _uiState.update { it.copy(isPlayed = false, progressJob = null) }
+            if (duration > 0) {
+                val progress = currentPosition.toFloat() / duration.toFloat()
+                _uiState.update { it.copy(currentProgress = progress) }
             }
         }
-
-        _uiState.update { it.copy(progressJob = job) }
     }
 
     private fun stopProgressTracking() {
@@ -101,12 +149,16 @@ class MainViewModel @Inject constructor(
     }
 
     fun onSliderPositionChangeFinished(newProgress: Float, scope: CoroutineScope) {
-        stopProgressTracking()
+        mediaController?.let { controller ->
+            val duration = controller.duration
+            val newPosition = (newProgress * duration).toLong()
+            controller.seekTo(newPosition)
 
-        _uiState.update { it.copy(currentProgress = newProgress) }
+            _uiState.update { it.copy(currentProgress = newProgress) }
 
-        if (_uiState.value.isPlayed) {
-            startProgressTracking(scope)
+            if (controller.isPlaying) {
+                startProgressTracking(scope)
+            }
         }
     }
 
@@ -129,14 +181,19 @@ class MainViewModel @Inject constructor(
         val artistsList = single.artistsList
         val timelineSeconds = convertStringToTime(song.timeline ?: "00:00:00")
 
-        stopProgressTracking()
+        mediaController?.let { controller ->
+            val mediaItem = MediaItem.Builder()
+                .setUri(song.songUrl)
+                .setMediaMetadata(MediaMetadata.Builder()
+                                      .setTitle(song.title)
+                                      .setArtist(song.subtitle)
+                                      .setArtworkUri(song.avatarUrl?.toUri())
+                                      .build())
+                .build()
 
-        val job = viewModelScope.launch {
-            loadProgress(timeSeconds = timelineSeconds, startPositionSeconds = 0L, isPlaying = { true }, updateProgress = { progress ->
-                _uiState.update { it.copy(currentProgress = progress) }
-            }, onFinish = {
-                _uiState.update { it.copy(isPlayed = false, progressJob = null) }
-            })
+            controller.setMediaItem(mediaItem)
+            controller.prepare()
+            controller.play()
         }
 
         _uiState.update { currentState ->
@@ -144,7 +201,6 @@ class MainViewModel @Inject constructor(
                               timeline = timelineSeconds,
                               artistsList = mapToUsersList(song.artistsIdList, artistsList),
                               currentProgress = 0f,
-                              progressJob = job,
                               isPlayed = true,
                               isLoading = false)
         }
@@ -205,5 +261,28 @@ class MainViewModel @Inject constructor(
             1 -> parts[0]
             else -> 0L
         }
+    }
+
+    private fun startProgressTracking(scope: CoroutineScope) {
+        stopProgressTracking()
+
+        val job = scope.launch {
+            while (mediaController?.isPlaying == true) {
+                updateProgress()
+                delay(16)
+            }
+        }
+
+        _uiState.update { it.copy(progressJob = job) }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        MediaController.releaseFuture(controllerFuture)
+        mediaController = null
+    }
+
+    companion object {
+        private const val TAG = "MainViewModel"
     }
 }

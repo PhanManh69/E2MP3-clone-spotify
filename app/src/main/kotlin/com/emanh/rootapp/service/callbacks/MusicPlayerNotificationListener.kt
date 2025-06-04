@@ -39,11 +39,10 @@ class MusicPlayerNotificationListener(
                     }
 
                     createNotificationChannel()
-
                     ContextCompat.startForegroundService(this, Intent(applicationContext, this::class.java))
 
                     if (notification.extras == null || notification.contentIntent == null) {
-                        Log.e("EManh Debug", "Failed Notification!")
+                        Log.e("MusicService", "Failed Notification!")
                         return
                     }
 
@@ -51,7 +50,7 @@ class MusicPlayerNotificationListener(
                     isForegroundService = true
 
                 } catch (e: IllegalStateException) {
-                    Log.e("EManh Debug", "Failed to startForeground: ${e.message}")
+                    Log.e("MusicService", "Failed to startForeground: ${e.message}")
                 }
             }
         }
