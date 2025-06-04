@@ -12,11 +12,11 @@ class GenresDataSourceImpl @Inject constructor(
         return genresDao.getAllGenres()
     }
 
-    override fun getGenreById(genreId: Int): Flow<GenresEntity> {
+    override fun getGenreById(genreId: Long): Flow<GenresEntity> {
         return genresDao.getGenreById(genreId)
     }
 
-    override fun getGenreNameByArtist(userId: Int): Flow<List<Int>> {
+    override fun getGenreNameByArtist(userId: Long): Flow<List<Int>> {
         return genresDao.getGenreNameByArtist(userId)
     }
 

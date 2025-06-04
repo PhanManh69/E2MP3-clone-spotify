@@ -29,7 +29,7 @@ import com.emanh.rootapp.utils.MyConstant.SONGS_SEARCH
 
 @Composable
 fun SearchListItem(
-    modifier: Modifier = Modifier, searchList: List<Any>, onItemClick: (Int, String, String) -> Unit, onIconClick: (Int, String) -> Unit
+    modifier: Modifier = Modifier, searchList: List<Any>, onItemClick: (Long, String, String) -> Unit, onIconClick: (Long, String) -> Unit
 ) {
     val isKeyboardOpen = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 

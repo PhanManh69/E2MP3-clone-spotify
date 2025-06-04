@@ -14,7 +14,9 @@ import com.emanh.rootapp.presentation.composable.STFMenuLibraryType
 import com.emanh.rootapp.presentation.composable.SecondaryLibraryData
 import com.emanh.rootapp.presentation.navigation.AlbumScreenNavigation
 import com.emanh.rootapp.presentation.navigation.ArtistScreenNavigation
+import com.emanh.rootapp.presentation.navigation.CreatePlaylistScreenNavigation
 import com.emanh.rootapp.presentation.navigation.PlaylistScreenNavigation
+import com.emanh.rootapp.presentation.navigation.PlaylistYourScreenNavigation
 import com.emanh.rootapp.presentation.navigation.SearchInputScreenNavigation
 import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
@@ -60,6 +62,10 @@ class YourLibraryViewModel @Inject constructor(
         appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_LIKED))
     }
 
+    fun onCreatePlaylist() {
+        appRouter.getNavController()?.navigateTo(CreatePlaylistScreenNavigation.getRoute())
+    }
+
     fun onPrimaryChipsClick(item: SecondaryLibraryData, type: STFMenuLibraryType) {
         _uiState.update { it.copy(currentType = type) }
 
@@ -81,7 +87,7 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     fun onPlaylistYourClick(playlist: PlaylistsModel) {
-        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlist.id))
+        appRouter.getNavController()?.navigateTo(PlaylistYourScreenNavigation.getRoute(playlist.id))
     }
 
     fun onPlaylistForYouClick(playlist: PlaylistsModel) {
@@ -97,12 +103,12 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     private fun getUserById() {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                usersUseCase.getArtistById(userId).catch { error ->
+                usersUseCase.getArtistById(userIdFake).catch { error ->
                     Log.e(TAG, "Error fetching Users: $error")
                 }.collect { user ->
                     _uiState.update { it.copy(user = user, isLoading = false) }
@@ -138,10 +144,10 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     private suspend fun getLikedSongByUser() {
-        val userId = 2
+        val userIdFake = 2L
 
         try {
-            songsUseCase.getLikedSongsByUser(userId).catch { error ->
+            songsUseCase.getLikedSongsByUser(userIdFake).catch { error ->
                 Log.e(TAG, "Error fetching LikedSongsByUser: $error")
             }.collect { listSongs ->
                 _uiState.update { it.copy(listLikedSongs = listSongs) }
@@ -152,10 +158,10 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     private suspend fun getPlaylistsYourByUser() {
-        val userId = 2
+        val userIdFake = 2L
 
         try {
-            playlistUseCase.getPlaylistsYourByUser(userId).catch { error ->
+            playlistUseCase.getPlaylistsYourByUser(userIdFake).catch { error ->
                 Log.e(TAG, "Error fetching PlaylistsYourByUser: $error")
             }.collect { listPlaylists ->
                 _uiState.update { it.copy(listPlaylistYour = listPlaylists) }
@@ -166,10 +172,10 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     private suspend fun getPlaylistsForYouByUser() {
-        val userId = 2
+        val userIdFake = 2L
 
         try {
-            playlistUseCase.getPlaylistsForYouByUser(userId).catch { error ->
+            playlistUseCase.getPlaylistsForYouByUser(userIdFake).catch { error ->
                 Log.e(TAG, "Error fetching PlaylistsForYouByUser: $error")
             }.collect { listPlaylists ->
                 _uiState.update { it.copy(listPlaylistForYou = listPlaylists) }
@@ -180,10 +186,10 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     private suspend fun getFavoriteArtistsByUser() {
-        val userId = 2
+        val userIdFake = 2L
 
         try {
-            usersUseCase.getFoveriteArtistsByUser(userId).catch { error ->
+            usersUseCase.getFoveriteArtistsByUser(userIdFake).catch { error ->
                 Log.e(TAG, "Error fetching FavoriteArtistsByUser: $error")
             }.collect { listArtists ->
                 _uiState.update { it.copy(listFavoriteArtist = listArtists) }
@@ -194,10 +200,10 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     private suspend fun getLikedAlbumByUser() {
-        val userId = 2
+        val userIdFake = 2L
 
         try {
-            albumUseCase.getAlbumLikeByUser(userId).catch { error ->
+            albumUseCase.getAlbumLikeByUser(userIdFake).catch { error ->
                 Log.e(TAG, "Error fetching LikedAlbumByUser: $error")
             }.collect { listAlbum ->
                 _uiState.update { it.copy(listLikedAlbum = listAlbum) }

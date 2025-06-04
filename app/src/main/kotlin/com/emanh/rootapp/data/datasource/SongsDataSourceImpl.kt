@@ -12,11 +12,11 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getAllSongs()
     }
 
-    override fun getRecommendedSongs(userId: Int): Flow<List<SongsEntity>> {
+    override fun getRecommendedSongs(userId: Long): Flow<List<SongsEntity>> {
         return songsDao.getRecommendedSongs(userId)
     }
 
-    override fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsEntity>> {
+    override fun getRecentlyListenedSongs(userId: Long): Flow<List<SongsEntity>> {
         return songsDao.getRecentlyListenedSongs(userId)
     }
 
@@ -28,15 +28,15 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getSimilarSongs()
     }
 
-    override fun getMoreByArtists(songId: Int): Flow<List<SongsEntity>> {
+    override fun getMoreByArtists(songId: Long): Flow<List<SongsEntity>> {
         return songsDao.getMoreByArtists(songId)
     }
 
-    override fun getSongsByArtist(userId: Int): Flow<List<SongsEntity>> {
+    override fun getSongsByArtist(userId: Long): Flow<List<SongsEntity>> {
         return songsDao.getSongsByArtist(userId)
     }
 
-    override fun getSongsById(songId: Int): Flow<SongsEntity> {
+    override fun getSongsById(songId: Long): Flow<SongsEntity> {
         return songsDao.getSongsById(songId)
     }
 
@@ -44,12 +44,20 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getSearchSong(value)
     }
 
-    override fun getSongsBySearch(listId: List<Int>): Flow<List<SongsEntity>> {
+    override fun getSongsBySearch(listId: List<Long>): Flow<List<SongsEntity>> {
         return songsDao.getSongsBySearch(listId)
     }
 
-    override fun getLikedSongsByUser(userId: Int): Flow<List<SongsEntity>> {
+    override fun getLikedSongsByUser(userId: Long): Flow<List<SongsEntity>> {
         return songsDao.getLikedSongsByUser(userId)
+    }
+
+    override fun getSongsRecommend(albumId: Long): Flow<List<SongsEntity>> {
+        return songsDao.getSongsRecommend(albumId)
+    }
+
+    override fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity> {
+        return songsDao.getRandomSongExcluding(excludeIds)
     }
 
     override suspend fun insertAllSongs(songs: List<SongsEntity>) {

@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface GenresDataSource {
     fun getAllGenres(): Flow<List<GenresEntity>>
 
-    fun getGenreById(genreId: Int): Flow<GenresEntity>
+    fun getGenreById(genreId: Long): Flow<GenresEntity>
 
-    fun getGenreNameByArtist(userId: Int): Flow<List<Int>>
+    fun getGenreNameByArtist(userId: Long): Flow<List<Int>>
 
     suspend fun insertAllGenres(genres: List<GenresEntity>)
 }

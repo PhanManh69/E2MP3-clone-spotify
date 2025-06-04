@@ -39,10 +39,10 @@ class PlaylistViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PlaylistUiState())
     val uiState: StateFlow<PlaylistUiState> = _uiState.asStateFlow()
 
-    private val playlistId: Int = savedStateHandle.get<Int>("playlistId") ?: -1
+    private val playlistId: Long = savedStateHandle.get<Long>("playlistId") ?: -1
 
     init {
-        if (playlistId != -1) {
+        if (playlistId != -1L) {
             Log.d(TAG, "Initializing with playlistId: $playlistId")
 
             getPlaylistLike(playlistId)
@@ -82,26 +82,26 @@ class PlaylistViewModel @Inject constructor(
     }
 
     fun onAddClick() {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
             if (_uiState.value.isAddPlaylist) {
-                crossRefPlaylistUseCase.deletePlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userId))
+                crossRefPlaylistUseCase.deletePlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userIdFake))
                 _uiState.update { it.copy(isAddPlaylist = false) }
                 return@launch
             } else {
-                crossRefPlaylistUseCase.insertPlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userId))
+                crossRefPlaylistUseCase.insertPlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userIdFake))
                 _uiState.update { it.copy(isAddPlaylist = true) }
                 return@launch
             }
         }
     }
 
-    private fun getPlaylistLike(playlistId: Int) {
-        val userId = 2
+    private fun getPlaylistLike(playlistId: Long) {
+        val userIdFake = 2L
 
         viewModelScope.launch {
-            crossRefPlaylistUseCase.getPlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userId))
+            crossRefPlaylistUseCase.getPlaylistLike(playlistLikeEntity = PlaylistLikeEntity(playlistId = playlistId, userId = userIdFake))
                 .catch { error ->
                     Log.e(TAG, "Error fetching ArtistById: $error")
                 }
@@ -112,7 +112,7 @@ class PlaylistViewModel @Inject constructor(
         }
     }
 
-    private fun loadPlaylistDetails(playlistId: Int) {
+    private fun loadPlaylistDetails(playlistId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
@@ -163,10 +163,10 @@ class PlaylistViewModel @Inject constructor(
     }
 
     private fun getHisyorySongs() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        songsUseCase.getRecentlyListenedSongs(userId).onEach { songsList ->
+        songsUseCase.getRecentlyListenedSongs(userIdFake).onEach { songsList ->
             _uiState.update { currentState ->
                 currentState.copy(playlist = PlaylistsModel(avatarUrl = songsList.first().avatarUrl,
                                                             title = "Bài hát nghe gần đây",
@@ -176,7 +176,7 @@ class PlaylistViewModel @Inject constructor(
             }
 
             try {
-                val owner = usersUseCase.getArtistById(userId).first()
+                val owner = usersUseCase.getArtistById(userIdFake).first()
                 _uiState.update { it.copy(owner = owner) }
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading Owner: ${e.message}")
@@ -188,10 +188,10 @@ class PlaylistViewModel @Inject constructor(
     }
 
     private fun getLikedSongs() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        songsUseCase.getLikedSongsByUser(userId).onEach { songsList ->
+        songsUseCase.getLikedSongsByUser(userIdFake).onEach { songsList ->
             _uiState.update { currentState ->
                 currentState.copy(playlist = PlaylistsModel(avatarUrl = songsList.first().avatarUrl,
                                                             title = "Bài hát yêu thích",
@@ -201,7 +201,7 @@ class PlaylistViewModel @Inject constructor(
             }
 
             try {
-                val owner = usersUseCase.getArtistById(userId).first()
+                val owner = usersUseCase.getArtistById(userIdFake).first()
                 _uiState.update { it.copy(owner = owner) }
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading Owner: ${e.message}")

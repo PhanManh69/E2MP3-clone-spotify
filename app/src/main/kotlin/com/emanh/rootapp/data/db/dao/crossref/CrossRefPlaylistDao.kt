@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.emanh.rootapp.data.db.entity.crossref.PlaylistLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.PlaylistSongEntity
+import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_PLAYLIST_LIKE
@@ -34,17 +35,20 @@ interface CrossRefPlaylistDao {
 
     @Transaction
     @Query(QUERY_GET_PLAYLIST_SONGS)
-    fun getPlaylistDetailsById(playlistId: Int): Flow<CrossRefPlaylistsModel>
+    fun getPlaylistDetailsById(playlistId: Long): Flow<CrossRefPlaylistsModel>
 
     @Transaction
     @Query(QUERY_GET_PLAYLIST_LIKE)
-    fun getPlaylistLike(playlistId: Int, userId: Int): Flow<PlaylistLikeEntity?>
+    fun getPlaylistLike(playlistId: Long, userId: Long): Flow<PlaylistLikeEntity?>
 
     @Query(QUERY_DELETE_PLAYLIST_LIKE)
-    suspend fun deletePlaylistLike(playlistId: Int, userId: Int)
+    suspend fun deletePlaylistLike(playlistId: Long, userId: Long)
 
     @Insert()
     suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity)
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertSongToPlaylist(playlistSongEntity: PlaylistSongEntity)
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAllCrossRefPlaylistSong(playlistSongEntity: List<PlaylistSongEntity>)

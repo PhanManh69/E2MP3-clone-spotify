@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface CrossRefAlbumRepository {
     fun getAllCrossRefAlbums(): Flow<List<CrossRefAlbumsModel>>
 
-    fun getAlbumDetailsById(albumId: Int): Flow<CrossRefAlbumsModel>
+    fun getAlbumDetailsById(albumId: Long): Flow<CrossRefAlbumsModel>
 
     fun getAlbumLike(albumLikeEntity: AlbumLikeEntity): Flow<AlbumLikeEntity?>
 

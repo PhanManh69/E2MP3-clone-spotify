@@ -2,6 +2,7 @@ package com.emanh.rootapp.data.repository.crossref
 
 import com.emanh.rootapp.data.datasource.crossref.CrossRefPlaylistDataSource
 import com.emanh.rootapp.data.db.entity.crossref.PlaylistLikeEntity
+import com.emanh.rootapp.data.db.entity.crossref.PlaylistSongEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.domain.repository.crossref.CrossRefPlaylistRepository
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,7 @@ class CrossRefPlaylistRepositoryImpl @Inject constructor(
         return crossRefPlaylistDataSource.getPlaylistCard()
     }
 
-    override fun getPlaylistDetailsById(playlistId: Int): Flow<CrossRefPlaylistsModel> {
+    override fun getPlaylistDetailsById(playlistId: Long): Flow<CrossRefPlaylistsModel> {
         return crossRefPlaylistDataSource.getPlaylistDetailsById(playlistId)
     }
 
@@ -36,5 +37,9 @@ class CrossRefPlaylistRepositoryImpl @Inject constructor(
 
     override suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity) {
         return crossRefPlaylistDataSource.insertPlaylistLike(playlistLikeEntity)
+    }
+
+    override suspend fun insertSongToPlaylist(playlistSongEntity: PlaylistSongEntity) {
+        return crossRefPlaylistDataSource.insertSongToPlaylist(playlistSongEntity)
     }
 }

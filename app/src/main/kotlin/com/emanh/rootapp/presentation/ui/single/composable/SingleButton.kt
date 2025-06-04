@@ -62,7 +62,7 @@ fun SingleButton(
     isAddSong: Boolean,
     single: SongsModel,
     artistList: List<UsersModel>,
-    onOwnerClick: (Int) -> Unit,
+    onOwnerClick: (Long) -> Unit,
     onAddClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onMoreClick: () -> Unit,

@@ -43,7 +43,7 @@ enum class STFCarouselHeroType {
 }
 
 @Immutable
-data class STFCarouselHeroThumbData(val id: Int = 0, val imageUrl: String = "", val title: String = "", val subtitle: String = "")
+data class STFCarouselHeroThumbData(val id: Long = 0, val imageUrl: String = "", val title: String = "", val subtitle: String = "")
 
 @Immutable
 data class STFLayoutCarouselHeroData(
@@ -72,7 +72,7 @@ fun STFCarouselHero(
     type: STFCarouselHeroType,
     thumbItem: List<STFCarouselHeroThumbData>,
     onViewAll: () -> Unit = {},
-    onThumbClick: (Int) -> Unit = {},
+    onThumbClick: (Long) -> Unit = {},
 ) {
     var toggled by remember { mutableStateOf(false) }
 

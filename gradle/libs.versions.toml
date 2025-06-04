@@ -1,5 +1,6 @@
 [versions]
 androidGradlePlugin = "8.2.2"
+coilCompose = "2.7.0"
 kotlinPlugin = "2.0.21"
 kspKotlinPlugin = "2.0.21-1.0.27"
 hiltAndroidPlugin = "2.51"
@@ -38,6 +39,7 @@ kotlin = "1.9.25"
 serialization = "1.9.22"
 kotlinxSerializationJson = "1.6.3"
 coil3 = "3.0.4"
+media = "1.7.0"
 media3 = "1.2.1"
 lottie = "6.6.2"
 palette = "1.0.0"
@@ -64,6 +66,7 @@ androidx-compose-paging = { module = "androidx.paging:paging-compose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintLayoutCompose" }
 
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 androidx-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
@@ -126,14 +129,19 @@ coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp"
 coil-svg = { group = "io.coil-kt.coil3", name = "coil-svg", version.ref = "coil3" }
 coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version.ref = "coil3" }
 
-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
-
 #lottie animation
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 #palette color
 palette-ktx = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette" }
+
+#exoplayer
+androidx-media = { group = "androidx.media", name = "media", version.ref = "media" }
+androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
+androidx-media3-exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "media3" }
+androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3" }
+androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -144,3 +152,12 @@ dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hi
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinPlugin" }
 serialization-compiler = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 
+[bundles]
+exo-player = [
+    "androidx-media",
+    "androidx-media3-exoplayer",
+    "androidx-media3-exoplayer-dash",
+    "androidx-media3-ui",
+    "androidx-media3-session",
+    "androidx-media3-common",
+]

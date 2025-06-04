@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.emanh.rootapp.data.db.entity.PlaylistsEntity
 import com.emanh.rootapp.utils.MyQuery.QERRY_SEARCH_PLAYLISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_PLAYLISTS_BY_SEARCH
@@ -20,7 +21,7 @@ interface PlaylistsDao {
     fun getAllPlaylists(): Flow<List<PlaylistsEntity>>
 
     @Query(QUERY_QUICK_PLAYLIST)
-    fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsEntity>>
+    fun getQuickPlaylist(userId: Long): Flow<List<PlaylistsEntity>>
 
     @Query(QUERY_RADIO_FOR_YOU)
     fun getRadioForYou(): Flow<List<PlaylistsEntity>>
@@ -29,16 +30,22 @@ interface PlaylistsDao {
     fun getSearchPlaylists(value: String): Flow<List<PlaylistsEntity>>
 
     @Query(QUERY_GET_PLAYLISTS_BY_SEARCH)
-    fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsEntity>>
+    fun getPlaylistsBySearch(listId: List<Long>): Flow<List<PlaylistsEntity>>
 
     @Query(QUERY_GET_PLAYLIST_BY_ID)
-    fun getPlaylistsById(playlistId: Int): Flow<PlaylistsEntity>
+    fun getPlaylistsById(playlistId: Long): Flow<PlaylistsEntity>
 
     @Query(QUETY_GET_PLAYLISTS_YOUR_BY_USER)
-    fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsEntity>>
+    fun getPlaylistsYourByUser(userId: Long): Flow<List<PlaylistsEntity>>
 
     @Query(QUETY_GET_PLAYLISTS_FOR_YOU_BY_USER)
-    fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsEntity>>
+    fun getPlaylistsForYouByUser(userId: Long): Flow<List<PlaylistsEntity>>
+
+    @Update
+    suspend fun updatePlaylist(playlists: PlaylistsEntity)
+
+    @Insert()
+    suspend fun insertPlaylistYour(playlists: PlaylistsEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllPlaylists(playlists: List<PlaylistsEntity>)

@@ -10,15 +10,15 @@ import javax.inject.Inject
 class ViewsSongRepositoryImpl @Inject constructor(
     private val viewsSongDataSource: ViewsSongDataSource
 ) : ViewsSongRepository {
-    override fun getTotalListenerAlbum(albumId: Int): Flow<Int> {
+    override fun getTotalListenerAlbum(albumId: Long): Flow<Long> {
         return viewsSongDataSource.getTotalListenerAlbum(albumId)
     }
 
-    override fun getListenerMonth(userId: Int): Flow<Int> {
+    override fun getListenerMonth(userId: Long): Flow<Long> {
         return viewsSongDataSource.getListenerMonth(userId)
     }
 
-    override suspend fun findViewRecord(userId: Int, songId: Int): ViewsSongModel? {
+    override suspend fun findViewRecord(userId: Long, songId: Long): ViewsSongModel? {
         val entity = viewsSongDataSource.findViewRecord(userId, songId)
         return entity?.let { mapToModel(it) }
     }

@@ -128,6 +128,7 @@ val GradientTabbar = Brush.verticalGradient(0f to Color(0x80121212),
 val Player = Brush.verticalGradient(0f to Color(0xFF121212), 1f to Color(0x00191414))
 val ShadowTabbar = Brush.verticalGradient(0f to Color(0xFF121212), 1f to Color(0xCC000000))
 val StickyDefault = Brush.verticalGradient(0f to Color(0x00000000), 1f to Color(0x66000000))
+val CreatePlaylist = Brush.verticalGradient(0f to Color(0xFFB3B3B3), 1f to Color(0xFF121212))
 val LikedSongs = Brush.linearGradient(colors = listOf(Color(0xFF4331F4), Color(0xFFC1EDD9)),
                                       start = Offset(0f, 0f),
                                       end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))

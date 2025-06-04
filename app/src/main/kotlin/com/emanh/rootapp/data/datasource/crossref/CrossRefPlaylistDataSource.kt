@@ -12,13 +12,15 @@ interface CrossRefPlaylistDataSource {
 
     fun getPlaylistCard(): Flow<List<CrossRefPlaylistsModel>>
 
-    fun getPlaylistDetailsById(playlistId: Int): Flow<CrossRefPlaylistsModel>
+    fun getPlaylistDetailsById(playlistId: Long): Flow<CrossRefPlaylistsModel>
 
     fun getPlaylistLike(playlistLikeEntity: PlaylistLikeEntity): Flow<PlaylistLikeEntity?>
 
     suspend fun deletePlaylistLike(playlistLikeEntity: PlaylistLikeEntity)
 
     suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity)
+
+    suspend fun insertSongToPlaylist(playlistSongEntity: PlaylistSongEntity)
 
     suspend fun insertAllCrossRefPlaylistSong(playlistSongEntity: List<PlaylistSongEntity>)
 }

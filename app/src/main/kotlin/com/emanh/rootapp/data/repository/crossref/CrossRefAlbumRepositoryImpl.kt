@@ -14,7 +14,7 @@ class CrossRefAlbumRepositoryImpl @Inject constructor(
         return crossRefAlbumDataSource.getAllCrossRefAlbums()
     }
 
-    override fun getAlbumDetailsById(albumId: Int): Flow<CrossRefAlbumsModel> {
+    override fun getAlbumDetailsById(albumId: Long): Flow<CrossRefAlbumsModel> {
         return crossRefAlbumDataSource.getAlbumDetailsById(albumId)
     }
 

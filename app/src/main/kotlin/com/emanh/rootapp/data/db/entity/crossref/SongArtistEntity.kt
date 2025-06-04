@@ -5,5 +5,5 @@ import androidx.room.Entity
 
 @Entity(tableName = "cross_ref_song_artist", primaryKeys = ["songId", "userId"])
 data class SongArtistEntity(
-    @ColumnInfo(name = "songId") val songId: Int, @ColumnInfo(name = "userId") val userId: Int
+    @ColumnInfo(name = "songId") val songId: Long, @ColumnInfo(name = "userId") val userId: Long
 )

@@ -36,10 +36,10 @@ class SingleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SingleUiState())
     val uiState: StateFlow<SingleUiState> = _uiState.asStateFlow()
 
-    private val songId: Int = savedStateHandle.get<Int>("singleId") ?: -1
+    private val songId: Long = savedStateHandle.get<Long>("singleId") ?: -1
 
     init {
-        if (songId != -1) {
+        if (songId != -1L) {
             Log.d(TAG, "Initializing with singleId: $songId")
 
             getSongLike(songId)
@@ -52,27 +52,27 @@ class SingleViewModel @Inject constructor(
         appRouter.getNavController()?.goBack()
     }
 
-    fun goToArtist(artistId: Int) {
+    fun goToArtist(artistId: Long) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
     fun onAddClick() {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
             if (_uiState.value.isAddSong) {
-                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
                 _uiState.update { it.copy(isAddSong = false) }
                 return@launch
             } else {
-                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
                 _uiState.update { it.copy(isAddSong = true) }
                 return@launch
             }
         }
     }
 
-    fun goToSingle(singleId: Int) {
+    fun goToSingle(singleId: Long) {
         appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
     }
 
@@ -84,7 +84,7 @@ class SingleViewModel @Inject constructor(
         return formatted
     }
 
-    private fun loadSingleDetails(songId: Int) {
+    private fun loadSingleDetails(songId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
@@ -126,7 +126,7 @@ class SingleViewModel @Inject constructor(
         }
     }
 
-    private fun loadMoreSongsByArtists(songId: Int) {
+    private fun loadMoreSongsByArtists(songId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
@@ -142,11 +142,11 @@ class SingleViewModel @Inject constructor(
         }
     }
 
-    private fun getSongLike(songId: Int) {
-        val userId = 2
+    private fun getSongLike(songId: Long) {
+        val userIdFake = 2L
 
         viewModelScope.launch {
-            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId)).catch { error ->
+            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isAdded = it != null

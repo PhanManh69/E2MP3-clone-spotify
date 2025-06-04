@@ -89,4 +89,12 @@
     <string name="unfollow">Huỷ theo dõi</string>
     <string name="liked_songs">Bài hát đã thích</string>
     <string name="for_you">Dành cho</string>
+    <string name="name_for_playlist">Đặt tên cho danh sách phát của bạn</string>
+    <string name="name_playlist">Tên danh sách phát</string>
+    <string name="cancel">Huỷ</string>
+    <string name="create">Tạo</string>
+    <string name="edit">Chỉnh sửa</string>
+    <string name="song_recomment">Bài hát Gợi ý</string>
+    <string name="refresh">Làm mới</string>
+    <string name="based_songs_in_this_playlist">Dựa trên các bài hát trong playlist này</string>
 </resources>

@@ -11,15 +11,15 @@ import javax.inject.Inject
 class ViewsSongUseCase @Inject constructor(
     private val viewsSongRepository: ViewsSongRepository
 ) {
-    fun getTotalListenerAlbum(albumId: Int): Flow<Int> {
+    fun getTotalListenerAlbum(albumId: Long): Flow<Long> {
         return viewsSongRepository.getTotalListenerAlbum(albumId)
     }
 
-    fun getListenerMonth(userId: Int): Flow<Int> {
+    fun getListenerMonth(userId: Long): Flow<Long> {
         return viewsSongRepository.getListenerMonth(userId)
     }
 
-    suspend fun trackSongView(userId: Int, songId: Int): ViewsSongModel {
+    suspend fun trackSongView(userId: Long, songId: Long): ViewsSongModel {
         val currentDateTime = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
         val existingRecord = viewsSongRepository.findViewRecord(userId, songId)
 

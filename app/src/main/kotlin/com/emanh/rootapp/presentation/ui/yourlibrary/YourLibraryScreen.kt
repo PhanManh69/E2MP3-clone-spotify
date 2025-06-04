@@ -34,6 +34,7 @@ import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.utils.MyConstant.YOUR
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.FOR_YOUR
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.sampleLibraryData
 
 @Composable
@@ -66,6 +67,7 @@ fun YourLibraryScreen() {
                             goToSearchInput = viewModel::goToSearchInput,
                             onCloseClick = viewModel::onCloseClick,
                             onLikedSongsClick = viewModel::onLikedSongsClick,
+                            onCreatePlaylist = viewModel::onCreatePlaylist,
                             onPrimaryChipsClick = { item, type ->
                                 viewModel.onPrimaryChipsClick(item, type)
                             },
@@ -102,6 +104,7 @@ fun YourLibraryScaffold(
     goToSearchInput: () -> Unit,
     onLikedSongsClick: () -> Unit,
     onCloseClick: () -> Unit,
+    onCreatePlaylist: () -> Unit,
     onPrimaryChipsClick: (SecondaryLibraryData, STFMenuLibraryType) -> Unit = { _, _ -> },
     onSecondaryChipsClick: (String, STFMenuLibraryType) -> Unit = { _, _ -> },
     onPlaylistYourClick: (PlaylistsModel) -> Unit,
@@ -194,6 +197,7 @@ fun YourLibraryScaffold(
               type = STFHeaderType.HeaderLibrary,
               libraryList = sampleLibraryData,
               onSearchClick = goToSearchInput,
+              onPlusClick = onCreatePlaylist,
               onCloseClick = onCloseClick,
               onPrimaryChipsClick = onPrimaryChipsClick,
               onSecondaryChipsClick = onSecondaryChipsClick,
@@ -212,7 +216,8 @@ fun YourLibraryScaffold(
                           val item = mergedLibraryItems[index]
                           when (item) {
                               is LibraryItem.LikedSongs -> {
-                                  STFItem(title = stringResource(R.string.liked_songs),
+                                  STFItem(imageUrl = NOT_AVATAR,
+                                          title = stringResource(R.string.liked_songs),
                                           label = "${stringResource(R.string.playlist)} · ${item.songs.size}",
                                           isLiked = true,
                                           type = STFItemType.Music,
@@ -221,7 +226,7 @@ fun YourLibraryScaffold(
                               }
 
                               is LibraryItem.YourPlaylist -> {
-                                  STFItem(imageUrl = item.playlist.avatarUrl,
+                                  STFItem(imageUrl = item.playlist.avatarUrl ?: NOT_AVATAR,
                                           title = item.title,
                                           label = "${stringResource(R.string.playlist)} · ${user.name}",
                                           type = STFItemType.Music,
@@ -230,7 +235,7 @@ fun YourLibraryScaffold(
                               }
 
                               is LibraryItem.ForYouPlaylist -> {
-                                  STFItem(imageUrl = item.playlist.avatarUrl,
+                                  STFItem(imageUrl = item.playlist.avatarUrl ?: NOT_AVATAR,
                                           title = item.title,
                                           label = "${stringResource(R.string.playlist)} · ${stringResource(R.string.for_you)} ${user.name}",
                                           type = STFItemType.Music,
@@ -239,7 +244,7 @@ fun YourLibraryScaffold(
                               }
 
                               is LibraryItem.FavoriteArtist -> {
-                                  STFItem(imageUrl = item.artist.avatarUrl,
+                                  STFItem(imageUrl = item.artist.avatarUrl ?: NOT_AVATAR,
                                           title = item.title,
                                           label = stringResource(R.string.artist),
                                           type = STFItemType.ArtistsLibrary,
@@ -248,7 +253,7 @@ fun YourLibraryScaffold(
                               }
 
                               is LibraryItem.LikedAlbum -> {
-                                  STFItem(imageUrl = item.album.avatarUrl,
+                                  STFItem(imageUrl = item.album.avatarUrl ?: NOT_AVATAR,
                                           title = item.title,
                                           label = "${stringResource(R.string.album)} · ${stringResource(R.string.for_you)} ${user.name}",
                                           type = STFItemType.Music,

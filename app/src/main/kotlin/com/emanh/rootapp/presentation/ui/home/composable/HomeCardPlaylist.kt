@@ -7,10 +7,11 @@ import androidx.compose.ui.res.stringResource
 import com.emanh.e2mp3.spotify.R
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFCardImage
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 
 @Composable
 fun HomeCardPlaylist(
-    modifier: Modifier = Modifier, maxItems: Int = 2, isLiked: Boolean = false, playlistCard: List<CrossRefPlaylistsModel>, onClick: (Int) -> Unit
+    modifier: Modifier = Modifier, maxItems: Int = 2, isLiked: Boolean = false, playlistCard: List<CrossRefPlaylistsModel>, onClick: (Long) -> Unit
 ) {
     val limitedList = playlistCard.shuffled().take(maxItems)
     val cardId = limitedList.map { it.playlists.playlistId }
@@ -60,7 +61,7 @@ fun HomeCardPlaylist(
                          subtitle = cardSubtitle[index],
                          type = stringResource(R.string.playlist),
                          description = cardDescription[index],
-                         avatarUrl = cardAavatarUrl[index].orEmpty(),
+                         avatarUrl = cardAavatarUrl[index] ?: NOT_AVATAR,
                          imageUrlList = cardImageUrlList[index],
                          isLiked = isLiked,
                          onClick = {

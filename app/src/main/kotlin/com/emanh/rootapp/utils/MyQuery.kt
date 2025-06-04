@@ -450,4 +450,33 @@ object MyQuery {
     const val QUERY_DELETE_ALBUM_LIKE = """
         DELETE FROM cross_ref_album_like WHERE albumId = :albumId AND userId = :userId
     """
+
+    const val QUERY_GET_OWNER_ALBUM = """
+        SELECT u.*
+        FROM users u
+        JOIN playlists p ON u.userId = p.owner_id
+        WHERE p.playlistId = :playlistId
+    """
+
+    const val QUERY_GET_SONGS_RECOMMEND = """
+        SELECT *
+        FROM songs s
+        JOIN cross_ref_song_genre sg ON s.songId = sg.songId
+        WHERE sg.genreId = 1
+            AND s.songId NOT IN (
+                SELECT songId
+                FROM cross_ref_album_song
+                WHERE albumId = :albumId
+            )
+        ORDER BY RANDOM()
+        LIMIT 5
+    """
+
+    const val QUERY_GET_RANDOM_SONG_EXCLUDING = """
+        SELECT * 
+        FROM songs
+        WHERE songId NOT IN (:excludeIds)
+        ORDER BY RANDOM()
+        LIMIT 1
+    """
 }

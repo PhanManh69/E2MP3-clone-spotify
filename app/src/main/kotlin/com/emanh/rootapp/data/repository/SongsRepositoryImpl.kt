@@ -19,7 +19,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getRecommendedSongs(userId: Int): Flow<List<SongsModel>> {
+    override fun getRecommendedSongs(userId: Long): Flow<List<SongsModel>> {
         return songsDataSource.getRecommendedSongs(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -27,7 +27,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>> {
+    override fun getRecentlyListenedSongs(userId: Long): Flow<List<SongsModel>> {
         return songsDataSource.getRecentlyListenedSongs(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -51,7 +51,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMoreByArtists(songId: Int): Flow<List<SongsModel>> {
+    override fun getMoreByArtists(songId: Long): Flow<List<SongsModel>> {
         return songsDataSource.getMoreByArtists(songId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -59,7 +59,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSongsByArtist(userId: Int): Flow<List<SongsModel>> {
+    override fun getSongsByArtist(userId: Long): Flow<List<SongsModel>> {
         return songsDataSource.getSongsByArtist(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -67,7 +67,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSongsById(songId: Int): Flow<SongsModel> {
+    override fun getSongsById(songId: Long): Flow<SongsModel> {
         return songsDataSource.getSongsById(songId).map { entity ->
             mapToModel(entity)
         }
@@ -81,7 +81,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSongsBySearch(listId: List<Int>): Flow<List<SongsModel>> {
+    override fun getSongsBySearch(listId: List<Long>): Flow<List<SongsModel>> {
         return songsDataSource.getSongsBySearch(listId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -89,11 +89,25 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getLikedSongsByUser(userId: Int): Flow<List<SongsModel>> {
+    override fun getLikedSongsByUser(userId: Long): Flow<List<SongsModel>> {
         return songsDataSource.getLikedSongsByUser(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
             }
+        }
+    }
+
+    override fun getSongsRecommend(albumId: Long): Flow<List<SongsModel>> {
+        return songsDataSource.getSongsRecommend(albumId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
+    override fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel> {
+        return songsDataSource.getRandomSongExcluding(excludeIds).map { entity ->
+            mapToModel(entity)
         }
     }
 
@@ -107,6 +121,7 @@ class SongsRepositoryImpl @Inject constructor(
                           songUrl = entity.songUrl,
                           title = entity.title,
                           subtitle = entity.subtitle,
+                          normalizedSearchValue = entity.normalizedSearchValue,
                           timeline = entity.timeline,
                           releaseDate = entity.releaseDate,
                           genres = entity.genresIdList,
@@ -120,6 +135,7 @@ class SongsRepositoryImpl @Inject constructor(
                            songUrl = model.songUrl,
                            title = model.title,
                            subtitle = model.subtitle,
+                           normalizedSearchValue = model.normalizedSearchValue,
                            timeline = model.timeline,
                            releaseDate = model.releaseDate,
                            genresIdList = model.genres,

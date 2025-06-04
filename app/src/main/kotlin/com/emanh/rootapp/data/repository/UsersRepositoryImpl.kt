@@ -19,13 +19,13 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getYourFavoriteArtists(userId: Int): Flow<UsersModel> {
+    override fun getYourFavoriteArtists(userId: Long): Flow<UsersModel> {
         return usersDataSource.getYourFavoriteArtists(userId).map { entity ->
             mapToModel(entity)
         }
     }
 
-    override fun getSimilarArtists(userId: Int): Flow<List<UsersModel>> {
+    override fun getSimilarArtists(userId: Long): Flow<List<UsersModel>> {
         return usersDataSource.getSimilarArtists(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -33,11 +33,11 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getOwnerPlaylist(userId: Int): Flow<UsersModel> {
+    override fun getOwnerPlaylist(userId: Long): Flow<UsersModel> {
         return usersDataSource.getOwnerPlaylist(userId).map { entity -> mapToModel(entity) }
     }
 
-    override fun getOwnerAlbum(albumId: Int): Flow<List<UsersModel>> {
+    override fun getOwnerAlbum(albumId: Long): Flow<List<UsersModel>> {
         return usersDataSource.getOwnerAlbum(albumId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -45,7 +45,7 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getArtistById(userId: Int): Flow<UsersModel> {
+    override fun getArtistById(userId: Long): Flow<UsersModel> {
         return usersDataSource.getArtistById(userId).map { entity -> mapToModel(entity) }
     }
 
@@ -57,7 +57,7 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>> {
+    override fun getArtistsBySearch(listId: List<Long>): Flow<List<UsersModel>> {
         return usersDataSource.getArtistsBySearch(listId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -65,11 +65,17 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersModel>> {
+    override fun getFoveriteArtistsByUser(userId: Long): Flow<List<UsersModel>> {
         return usersDataSource.getFoveriteArtistsByUser(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
             }
+        }
+    }
+
+    override fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersModel> {
+        return usersDataSource.getOwnerPlaylistYour(playlistId).map { entity ->
+            mapToModel(entity)
         }
     }
 
@@ -85,6 +91,7 @@ class UsersRepositoryImpl @Inject constructor(
                           password = entity.password,
                           avatarUrl = entity.avatarUrl,
                           name = entity.name,
+                          normalizedSearchValue = entity.normalizedSearchValue,
                           followers = entity.followers,
                           following = entity.followingIdList)
     }
@@ -97,6 +104,7 @@ class UsersRepositoryImpl @Inject constructor(
                            password = model.password,
                            avatarUrl = model.avatarUrl,
                            name = model.name,
+                           normalizedSearchValue = model.normalizedSearchValue,
                            followers = model.followers,
                            followingIdList = model.following)
     }

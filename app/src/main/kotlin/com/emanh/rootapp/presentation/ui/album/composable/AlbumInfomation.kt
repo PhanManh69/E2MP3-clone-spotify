@@ -17,7 +17,7 @@ import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.TextPrimary
 
 @Composable
-fun AlbumInfomation(modifier: Modifier = Modifier, date: String, time: String, songs: Int, artistList: List<UsersModel>, onItemClick: (Int) -> Unit) {
+fun AlbumInfomation(modifier: Modifier = Modifier, date: String, time: String, songs: Int, artistList: List<UsersModel>, onItemClick: (Long) -> Unit) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(text = date, color = TextPrimary, style = Body7Regular, modifier = Modifier.padding(horizontal = 16.dp))
 

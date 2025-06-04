@@ -123,10 +123,8 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.lottie.compose)
     implementation(libs.palette.ktx)
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
+    implementation(libs.coil.kt.coil.compose)
+    implementation(libs.bundles.exo.player)
     implementation(platform(libs.androidx.compose.bom))
     implementation(platform(libs.okhttp.bom))
-
-    implementation("io.coil-kt:coil-compose:2.7.0")
 }

@@ -11,7 +11,7 @@ import com.emanh.rootapp.presentation.composable.STFCarouselType
 
 @Composable
 fun HomeRadioForYou(
-    modifier: Modifier = Modifier, radioForYouPlaylist: List<PlaylistsModel>, onThumbClick: (Int) -> Unit
+    modifier: Modifier = Modifier, radioForYouPlaylist: List<PlaylistsModel>, onThumbClick: (Long) -> Unit
 ) {
     val thumbItem = radioForYouPlaylist.map { playlist ->
         STFCarouselThumbData(id = playlist.id,

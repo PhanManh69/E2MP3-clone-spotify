@@ -12,11 +12,11 @@ class SearchHistoryDataSourceImpl @Inject constructor(
         return searchHistoryDao.getAllSearchHistory()
     }
 
-    override fun getSearchHistory(userId: Int): Flow<List<SearchHistoryEntity>> {
+    override fun getSearchHistory(userId: Long): Flow<List<SearchHistoryEntity>> {
         return searchHistoryDao.getSearchHistory(userId)
     }
 
-    override suspend fun deleteDuplicate(userId: Int, tableId: Int, type: String?) {
+    override suspend fun deleteDuplicate(userId: Long, tableId: Long, type: String?) {
         return searchHistoryDao.deleteDuplicate(userId, tableId, type)
     }
 

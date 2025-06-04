@@ -20,22 +20,22 @@ sealed class AppNavigationRoute {
     data object SearchInput : AppNavigationRoute()
 
     @Serializable
-    data class Playlist(val playlistId: Int = 0) : AppNavigationRoute()
+    data object CreatePlaylist : AppNavigationRoute()
 
     @Serializable
-    data class Album(val albumId: Int = 0) : AppNavigationRoute()
+    data class Playlist(val playlistId: Long = 0) : AppNavigationRoute()
 
     @Serializable
-    data class Single(val singleId: Int = 0) : AppNavigationRoute()
+    data class PlaylistYour(val playlistId: Long = 0) : AppNavigationRoute()
 
     @Serializable
-    data class Artist(val artistId: Int = 0) : AppNavigationRoute()
+    data class Album(val albumId: Long = 0) : AppNavigationRoute()
 
     @Serializable
-    data object Player : AppNavigationRoute()
+    data class Single(val singleId: Long = 0) : AppNavigationRoute()
 
     @Serializable
-    data object Lyrics : AppNavigationRoute()
+    data class Artist(val artistId: Long = 0) : AppNavigationRoute()
 
     @Serializable
     data object TestComposable : AppNavigationRoute()

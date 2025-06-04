@@ -9,7 +9,7 @@ import javax.inject.Inject
 class CrossRefAlbumUseCase @Inject constructor(
     private val crossRefAlbumRepository: CrossRefAlbumRepository
 ) {
-    fun getAlbumDetailsById(albumId: Int): Flow<CrossRefAlbumsModel> {
+    fun getAlbumDetailsById(albumId: Long): Flow<CrossRefAlbumsModel> {
         return crossRefAlbumRepository.getAlbumDetailsById(albumId)
     }
 

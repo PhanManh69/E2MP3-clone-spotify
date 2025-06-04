@@ -57,12 +57,13 @@ import com.emanh.rootapp.presentation.ui.artist.composable.ArtistAbout
 import com.emanh.rootapp.presentation.ui.artist.composable.ArtistAvatar
 import com.emanh.rootapp.presentation.ui.artist.composable.ArtistHeader
 import com.emanh.rootapp.presentation.ui.artist.composable.ArtistInfo
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun ArtistScreen(onItemClick: (Int, String) -> Unit) {
+fun ArtistScreen(onItemClick: (Long, String) -> Unit) {
     val artistViewModel = hiltViewModel<ArtistViewMode>()
     val uiState by artistViewModel.uiState.collectAsState()
 
@@ -102,7 +103,7 @@ fun ArtistScreen(onItemClick: (Int, String) -> Unit) {
 private fun ArtistScaffold(
     modifier: Modifier = Modifier,
     genre: String,
-    viewMonth: Int,
+    viewMonth: Long,
     isFollowing: Boolean,
     artist: UsersModel,
     songsList: List<SongsModel>,
@@ -110,8 +111,8 @@ private fun ArtistScaffold(
     onMoreClick: () -> Unit,
     onShuffleClick: () -> Unit,
     onPausePlayClick: () -> Unit,
-    onItemClick: (Int) -> Unit,
-    onIconClick: (Int) -> Unit,
+    onItemClick: (Long) -> Unit,
+    onIconClick: (Long) -> Unit,
     onBackClick: () -> Unit,
 ) {
     val context = LocalDensity.current
@@ -182,7 +183,7 @@ private fun ArtistScaffold(
 
             items(songsList) { item ->
                 STFItem(modifier = Modifier.background(TextBackgroundDark),
-                        imageUrl = item.avatarUrl.orEmpty(),
+                        imageUrl = item.avatarUrl ?: NOT_AVATAR,
                         title = item.title.orEmpty(),
                         label = item.subtitle.orEmpty(),
                         iconId = R.drawable.ic_24_bullet,
@@ -205,7 +206,7 @@ private fun ArtistScaffold(
                              .padding(horizontal = 16.dp)
                              .padding(top = 24.dp, bottom = 16.dp))
 
-                    ArtistAbout(modifier = Modifier.padding(horizontal = 16.dp), avatarUrl = artist.avatarUrl.orEmpty(), viewMonth = viewMonth)
+                    ArtistAbout(modifier = Modifier.padding(horizontal = 16.dp), avatarUrl = artist.avatarUrl ?: NOT_AVATAR, viewMonth = viewMonth)
                 }
             }
         }

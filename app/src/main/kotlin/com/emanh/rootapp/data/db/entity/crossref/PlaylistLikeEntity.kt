@@ -5,5 +5,5 @@ import androidx.room.Entity
 
 @Entity(tableName = "cross_ref_playlist_like", primaryKeys = ["playlistId", "userId"])
 data class PlaylistLikeEntity(
-    @ColumnInfo(name = "playlistId") val playlistId: Int, @ColumnInfo(name = "userId") val userId: Int
+    @ColumnInfo(name = "playlistId") val playlistId: Long, @ColumnInfo(name = "userId") val userId: Long
 )

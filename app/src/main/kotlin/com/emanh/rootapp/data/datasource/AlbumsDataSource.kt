@@ -12,11 +12,11 @@ interface AlbumsDataSource {
 
     fun getSearchAlbums(value: String): Flow<List<AlbumsEntity>>
 
-    fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsEntity>>
+    fun getAlbumsBySearch(listId: List<Long>): Flow<List<AlbumsEntity>>
 
-    fun getAlbumsById(albumId: Int): Flow<AlbumsEntity>
+    fun getAlbumsById(albumId: Long): Flow<AlbumsEntity>
 
-    fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsEntity>>
+    fun getAlbumLikeByUser(userId: Long): Flow<List<AlbumsEntity>>
 
     suspend fun insertAlbums(albums: List<AlbumsEntity>)
 }

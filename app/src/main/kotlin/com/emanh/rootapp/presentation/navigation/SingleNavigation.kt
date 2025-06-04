@@ -5,12 +5,12 @@ import androidx.navigation.compose.composable
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.ui.single.SingleScreen
 
-fun NavGraphBuilder.singleScreenGraph(onItemClick: (Int, String) -> Unit) {
+fun NavGraphBuilder.singleScreenGraph(onItemClick: (Long, String) -> Unit) {
     composable<AppNavigationRoute.Single> {
         SingleScreen(onItemClick)
     }
 }
 
 object SingleScreenNavigation {
-    fun getRoute(singleId: Int = 0) = AppNavigationRoute.Single(singleId)
+    fun getRoute(singleId: Long = 0) = AppNavigationRoute.Single(singleId)
 }

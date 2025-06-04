@@ -8,7 +8,7 @@ import javax.inject.Inject
 class PlaylistsUseCase @Inject constructor(
     private val playlistsRepository: PlaylistsRepository
 ) {
-    fun getQuickPlaylist(userId: Int): Flow<List<PlaylistsModel>> {
+    fun getQuickPlaylist(userId: Long): Flow<List<PlaylistsModel>> {
         return playlistsRepository.getQuickPlaylist(userId)
     }
 
@@ -20,19 +20,27 @@ class PlaylistsUseCase @Inject constructor(
         return playlistsRepository.getSearchPlaylists(value)
     }
 
-    fun getPlaylistsBySearch(listId: List<Int>): Flow<List<PlaylistsModel>> {
+    fun getPlaylistsBySearch(listId: List<Long>): Flow<List<PlaylistsModel>> {
         return playlistsRepository.getPlaylistsBySearch(listId)
     }
 
-    fun getPlaylistsById(playlistId: Int): Flow<PlaylistsModel> {
+    fun getPlaylistsById(playlistId: Long): Flow<PlaylistsModel> {
         return playlistsRepository.getPlaylistsById(playlistId)
     }
 
-    fun getPlaylistsYourByUser(userId: Int): Flow<List<PlaylistsModel>> {
+    fun getPlaylistsYourByUser(userId: Long): Flow<List<PlaylistsModel>> {
         return playlistsRepository.getPlaylistsYourByUser(userId)
     }
 
-    fun getPlaylistsForYouByUser(userId: Int): Flow<List<PlaylistsModel>> {
+    fun getPlaylistsForYouByUser(userId: Long): Flow<List<PlaylistsModel>> {
         return playlistsRepository.getPlaylistsForYouByUser(userId)
+    }
+
+    suspend fun updatePlaylist(playlists: PlaylistsModel) {
+        playlistsRepository.updatePlaylist(playlists)
+    }
+
+    suspend fun insertPlaylistYour(playlists: PlaylistsModel): Long {
+        return playlistsRepository.insertPlaylistYour(playlists)
     }
 }

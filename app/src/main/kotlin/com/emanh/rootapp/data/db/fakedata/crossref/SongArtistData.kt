@@ -8,7 +8,7 @@ fun fakeCrossRefSongArtistData(): List<SongArtistEntity> {
     val crossRefList = mutableListOf<SongArtistEntity>()
 
     songsData.forEachIndexed { index, item ->
-        val songId = index + 1
+        val songId = index + 1L
 
         item.artistsIdList?.forEach { artistsId ->
             crossRefList.add(SongArtistEntity(songId, artistsId))

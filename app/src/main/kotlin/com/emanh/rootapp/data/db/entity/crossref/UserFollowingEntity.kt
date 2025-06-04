@@ -5,5 +5,5 @@ import androidx.room.Entity
 
 @Entity(tableName = "cross_ref_user_following", primaryKeys = ["userId", "artistId"])
 data class UserFollowingEntity(
-    @ColumnInfo(name = "userId") val userId: Int, @ColumnInfo(name = "artistId") val artistId: Int
+    @ColumnInfo(name = "userId") val userId: Long, @ColumnInfo(name = "artistId") val artistId: Long
 )

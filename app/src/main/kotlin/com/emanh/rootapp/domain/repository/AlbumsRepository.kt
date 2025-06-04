@@ -12,11 +12,11 @@ interface AlbumsRepository {
 
     fun getSearchAlbums(value: String): Flow<List<AlbumsModel>>
 
-    fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsModel>>
+    fun getAlbumsBySearch(listId: List<Long>): Flow<List<AlbumsModel>>
 
-    fun getAlbumsById(albumId: Int): Flow<AlbumsModel>
+    fun getAlbumsById(albumId: Long): Flow<AlbumsModel>
 
-    fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsModel>>
+    fun getAlbumLikeByUser(userId: Long): Flow<List<AlbumsModel>>
 
     suspend fun insertAllAlbums(albums: List<AlbumsModel>)
 }

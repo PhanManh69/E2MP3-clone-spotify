@@ -6,25 +6,29 @@ import kotlinx.coroutines.flow.Flow
 interface SongsRepository {
     fun getAllSongs(): Flow<List<SongsModel>>
 
-    fun getRecommendedSongs(userId: Int): Flow<List<SongsModel>>
+    fun getRecommendedSongs(userId: Long): Flow<List<SongsModel>>
 
-    fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>>
+    fun getRecentlyListenedSongs(userId: Long): Flow<List<SongsModel>>
 
     fun getTrendingSongs(): Flow<List<SongsModel>>
 
     fun getSimilarSongs(): Flow<List<SongsModel>>
 
-    fun getMoreByArtists(songId: Int): Flow<List<SongsModel>>
+    fun getMoreByArtists(songId: Long): Flow<List<SongsModel>>
 
-    fun getSongsByArtist(userId: Int): Flow<List<SongsModel>>
+    fun getSongsByArtist(userId: Long): Flow<List<SongsModel>>
 
-    fun getSongsById(songId: Int): Flow<SongsModel>
+    fun getSongsById(songId: Long): Flow<SongsModel>
 
     fun getSearchSong(value: String): Flow<List<SongsModel>>
 
-    fun getSongsBySearch(listId: List<Int>): Flow<List<SongsModel>>
+    fun getSongsBySearch(listId: List<Long>): Flow<List<SongsModel>>
 
-    fun getLikedSongsByUser(userId: Int): Flow<List<SongsModel>>
+    fun getLikedSongsByUser(userId: Long): Flow<List<SongsModel>>
+
+    fun getSongsRecommend(albumId: Long): Flow<List<SongsModel>>
+
+    fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel>
 
     suspend fun insertAllSongs(songs: List<SongsModel>)
 }

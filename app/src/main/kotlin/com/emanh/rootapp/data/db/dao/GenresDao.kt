@@ -15,10 +15,10 @@ interface GenresDao {
     fun getAllGenres(): Flow<List<GenresEntity>>
 
     @Query(QUERY_GENRE_BY_ID)
-    fun getGenreById(genreId: Int): Flow<GenresEntity>
+    fun getGenreById(genreId: Long): Flow<GenresEntity>
 
     @Query(QUERY_GENRE_NAME_BY_ARTIST)
-    fun getGenreNameByArtist(userId: Int): Flow<List<Int>>
+    fun getGenreNameByArtist(userId: Long): Flow<List<Int>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllGenres(genres: List<GenresEntity>)

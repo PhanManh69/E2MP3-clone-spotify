@@ -39,7 +39,7 @@ import com.emanh.rootapp.presentation.theme.SurfaceAlphaTabbar
 import com.emanh.rootapp.presentation.theme.TextBackgroundPrimary
 
 @Composable
-fun ArtistAbout(modifier: Modifier = Modifier, avatarUrl: String, viewMonth: Int) {
+fun ArtistAbout(modifier: Modifier = Modifier, avatarUrl: String, viewMonth: Long) {
     var isImageLoaded by remember { mutableStateOf(false) }
     var isLoadFailed by remember { mutableStateOf(false) }
 

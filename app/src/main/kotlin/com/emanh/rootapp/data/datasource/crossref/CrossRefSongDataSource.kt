@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface CrossRefSongDataSource {
     fun getAllCrossRefSongs(): Flow<List<CrossRefSongsModel>>
 
-    fun getSongDetailsById(songId: Int): Flow<CrossRefSongsModel>
+    fun getSongDetailsById(songId: Long): Flow<CrossRefSongsModel>
 
     fun getSongLike(songLikeEntity: SongLikeEntity): Flow<SongLikeEntity?>
 

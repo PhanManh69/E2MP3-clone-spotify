@@ -98,7 +98,7 @@ private fun getItemLayoutDataFactory(type: STFItemType, size: STFItemSize): STFI
 @Composable
 fun STFItem(
     modifier: Modifier = Modifier,
-    imageUrl: String? = null,
+    imageUrl: String,
     label: String,
     title: String,
     isLiked: Boolean = false,
@@ -246,7 +246,8 @@ fun ItemMusicMediumPreview1() {
 @Composable
 fun ItemMusicMediumPreview2() {
     E2MP3Theme {
-        STFItem(title = "Nơi này có anh",
+        STFItem(imageUrl = "",
+                title = "Nơi này có anh",
                 label = "Sơn Tùng M-TP",
                 isLiked = true,
                 type = STFItemType.Music,

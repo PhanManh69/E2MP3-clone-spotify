@@ -63,10 +63,11 @@ import com.emanh.rootapp.presentation.composable.STFPlaylistAvatar
 import com.emanh.rootapp.presentation.composable.STFPlaylistHeader
 import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun PlaylistScreen(onItemClick: (Int, String) -> Unit) {
+fun PlaylistScreen(onItemClick: (Long, String) -> Unit) {
     val playlistViewModel = hiltViewModel<PlaylistViewModel>()
     val uiState by playlistViewModel.uiState.collectAsState()
 
@@ -114,14 +115,21 @@ private fun PlaylistScaffold(
     onMoreClick: () -> Unit,
     onShuffleClick: () -> Unit,
     onPausePlayClick: () -> Unit,
-    onItemClick: (Int) -> Unit,
-    onIconClick: (Int) -> Unit,
+    onItemClick: (Long) -> Unit,
+    onIconClick: (Long) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalDensity.current
     val maxImageSize = LocalConfiguration.current.screenWidthDp.dp - 96.dp
     val minImageSize = 72.dp
     val backgroundColor = faunchedEffectAvatar(playlist.avatarUrl)
+    val avatarUrl = remember(songsList) {
+        if (songsList.isNotEmpty()) {
+            songsList.random().avatarUrl ?: NOT_AVATAR
+        } else {
+            NOT_AVATAR
+        }
+    }
 
     var position by remember { mutableStateOf(Offset.Zero) }
     var positionY by remember { mutableStateOf(0.dp) }
@@ -167,7 +175,7 @@ private fun PlaylistScaffold(
                         .background(brush = Brush.verticalGradient(0f to backgroundColor, 1f to Color.Transparent)))
 
                     Column {
-                        STFPlaylistAvatar(imageUrl = playlist.avatarUrl.orEmpty(),
+                        STFPlaylistAvatar(imageUrl = playlist.avatarUrl ?: NOT_AVATAR,
                                           currentImageSize = currentImageSize,
                                           imageAlpha = imageAlpha,
                                           imageScale = imageScale)
@@ -179,7 +187,7 @@ private fun PlaylistScaffold(
                                            owner = owner,
                                            isAddPlaylist = isAddPlaylist,
                                            playlist = playlist,
-                                           avatarSongUrl = songsList.firstOrNull()?.avatarUrl.orEmpty(),
+                                           avatarSongUrl = avatarUrl,
                                            onOwnerClick = onOwnerClick,
                                            onAddClick = onAddClick,
                                            onDownloadClick = onDownloadClick,
@@ -199,7 +207,7 @@ private fun PlaylistScaffold(
             }
 
             items(songsList) { item ->
-                STFItem(imageUrl = item.avatarUrl.orEmpty(),
+                STFItem(imageUrl = item.avatarUrl ?: NOT_AVATAR,
                         title = item.title.orEmpty(),
                         label = item.subtitle.orEmpty(),
                         iconId = R.drawable.ic_24_bullet,

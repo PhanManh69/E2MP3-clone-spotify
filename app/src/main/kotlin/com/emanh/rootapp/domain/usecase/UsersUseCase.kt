@@ -8,23 +8,23 @@ import javax.inject.Inject
 class UsersUseCase @Inject constructor(
     private val usersRepository: UsersRepository
 ) {
-    fun getYourFavoriteArtists(userId: Int): Flow<UsersModel> {
+    fun getYourFavoriteArtists(userId: Long): Flow<UsersModel> {
         return usersRepository.getYourFavoriteArtists(userId)
     }
 
-    fun getSimilarArtists(userId: Int): Flow<List<UsersModel>> {
+    fun getSimilarArtists(userId: Long): Flow<List<UsersModel>> {
         return usersRepository.getSimilarArtists(userId)
     }
 
-    fun getOwnerPlaylist(userId: Int): Flow<UsersModel> {
+    fun getOwnerPlaylist(userId: Long): Flow<UsersModel> {
         return usersRepository.getOwnerPlaylist(userId)
     }
 
-    fun getOwnerAlbum(albumId: Int): Flow<List<UsersModel>> {
+    fun getOwnerAlbum(albumId: Long): Flow<List<UsersModel>> {
         return usersRepository.getOwnerAlbum(albumId)
     }
 
-    fun getArtistById(userId: Int): Flow<UsersModel> {
+    fun getArtistById(userId: Long): Flow<UsersModel> {
         return usersRepository.getArtistById(userId)
     }
 
@@ -32,11 +32,15 @@ class UsersUseCase @Inject constructor(
         return usersRepository.getSearchArtists(value)
     }
 
-    fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>> {
+    fun getArtistsBySearch(listId: List<Long>): Flow<List<UsersModel>> {
         return usersRepository.getArtistsBySearch(listId)
     }
 
-    fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersModel>> {
+    fun getFoveriteArtistsByUser(userId: Long): Flow<List<UsersModel>> {
         return usersRepository.getFoveriteArtistsByUser(userId)
+    }
+
+    fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersModel> {
+        return usersRepository.getOwnerPlaylistYour(playlistId)
     }
 }

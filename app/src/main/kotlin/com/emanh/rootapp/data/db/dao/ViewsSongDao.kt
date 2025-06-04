@@ -17,13 +17,13 @@ interface ViewsSongDao {
     fun getAllViewsSong(): Flow<List<ViewsSongEntity>>
 
     @Query(QUERY_TOTAL_LISTENER_ALBUM)
-    fun getTotalListenerAlbum(albumId: Int): Flow<Int>
+    fun getTotalListenerAlbum(albumId: Long): Flow<Long>
 
     @Query(QUERY_LISTENER_MONTH)
-    fun getListenerMonth(userId: Int): Flow<Int>
+    fun getListenerMonth(userId: Long): Flow<Long>
 
     @Query(QUERY_VIEW_RECORD)
-    suspend fun findViewRecord(userId: Int, songId: Int): ViewsSongEntity?
+    suspend fun findViewRecord(userId: Long, songId: Long): ViewsSongEntity?
     
     @Update
     suspend fun updateViewsSong(viewsSong: ViewsSongEntity)

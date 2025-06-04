@@ -6,21 +6,23 @@ import kotlinx.coroutines.flow.Flow
 interface UsersRepository {
     fun getAllUsers(): Flow<List<UsersModel>>
 
-    fun getYourFavoriteArtists(userId: Int): Flow<UsersModel>
+    fun getYourFavoriteArtists(userId: Long): Flow<UsersModel>
 
-    fun getSimilarArtists(userId: Int): Flow<List<UsersModel>>
+    fun getSimilarArtists(userId: Long): Flow<List<UsersModel>>
 
-    fun getOwnerPlaylist(userId: Int): Flow<UsersModel>
+    fun getOwnerPlaylist(userId: Long): Flow<UsersModel>
 
-    fun getOwnerAlbum(albumId: Int): Flow<List<UsersModel>>
+    fun getOwnerAlbum(albumId: Long): Flow<List<UsersModel>>
 
-    fun getArtistById(userId: Int): Flow<UsersModel>
+    fun getArtistById(userId: Long): Flow<UsersModel>
 
     fun getSearchArtists(value: String): Flow<List<UsersModel>>
 
-    fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersModel>>
+    fun getArtistsBySearch(listId: List<Long>): Flow<List<UsersModel>>
 
-    fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersModel>>
+    fun getFoveriteArtistsByUser(userId: Long): Flow<List<UsersModel>>
+
+    fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersModel>
 
     suspend fun insertAllUsers(users: List<UsersModel>)
 }

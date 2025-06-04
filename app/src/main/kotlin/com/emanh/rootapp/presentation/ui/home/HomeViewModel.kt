@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
         getSimilarContent()
     }
 
-    fun onQuickPlayClick(id: Int, type: String) {
+    fun onQuickPlayClick(id: Long, type: String) {
         if (type == ALBUM_TYPE) {
             goToAlbum(id)
         } else if (type == PLAYLIST_TYPE) {
@@ -64,7 +64,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onSimilarClick(id: Int, type: String) {
+    fun onSimilarClick(id: Long, type: String) {
         if (type == ALBUM_TYPE) {
             goToAlbum(id)
         } else if (type == SINGLE_TYPE) {
@@ -74,19 +74,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun goToPlaylist(playlistId: Int) {
+    fun goToPlaylist(playlistId: Long) {
         appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlistId))
     }
 
-    fun goToAlbum(albumId: Int) {
+    fun goToAlbum(albumId: Long) {
         appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(albumId))
     }
 
-    fun goToSingle(singleId: Int) {
+    fun goToSingle(singleId: Long) {
         appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
     }
 
-    fun goToArtist(artistId: Int) {
+    fun goToArtist(artistId: Long) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
@@ -95,10 +95,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRecommendedSongs() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        songsUseCase.getRecommendedSongs(userId).onEach { songsList ->
+        songsUseCase.getRecommendedSongs(userIdFake).onEach { songsList ->
             _uiState.update { currentState ->
                 currentState.copy(recommendedSongs = songsList, isLoading = false)
             }
@@ -109,10 +109,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRecentlyListenedSongs() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        songsUseCase.getRecentlyListenedSongs(userId).onEach { songsList ->
+        songsUseCase.getRecentlyListenedSongs(userIdFake).onEach { songsList ->
             _uiState.update { currentState ->
                 currentState.copy(recentlyListenedSongs = songsList, isLoading = false)
             }
@@ -136,10 +136,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getQuickPlaylists() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        playlistsUseCase.getQuickPlaylist(userId).zip(albumsUseCase.getQuickAlbum()) { playlistSongs, albumSongs ->
+        playlistsUseCase.getQuickPlaylist(userIdFake).zip(albumsUseCase.getQuickAlbum()) { playlistSongs, albumSongs ->
             albumSongs + playlistSongs
         }.onEach { combinedSongs ->
             _uiState.update { currentState ->
@@ -178,10 +178,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getYourFavoriteArtists() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        usersUseCase.getYourFavoriteArtists(userId).onEach { artists ->
+        usersUseCase.getYourFavoriteArtists(userIdFake).onEach { artists ->
             _uiState.update { currentState ->
                 currentState.copy(yourFavoriteArtists = artists, isLoading = false)
             }
@@ -192,10 +192,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getSimilarContent() {
-        val userId = 2
+        val userIdFake = 2L
         _uiState.update { it.copy(isLoading = true) }
 
-        usersUseCase.getSimilarArtists(userId).zip(songsUseCase.getSimilarSongs()) { artists, songs ->
+        usersUseCase.getSimilarArtists(userIdFake).zip(songsUseCase.getSimilarSongs()) { artists, songs ->
             artists to songs
         }.zip(albumsUseCase.getSimilarAlbums()) { (artists, songs), albums ->
             (artists + songs + albums).shuffled()

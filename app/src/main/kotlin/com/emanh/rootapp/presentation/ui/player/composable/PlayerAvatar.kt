@@ -19,7 +19,7 @@ import coil3.compose.SubcomposeAsyncImage
 import com.emanh.rootapp.presentation.theme.SurfaceAlphaTabbar
 
 @Composable
-fun PlayerAvatar(modifier: Modifier = Modifier, avatarUrl: String?) {
+fun PlayerAvatar(modifier: Modifier = Modifier, avatarUrl: String) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()

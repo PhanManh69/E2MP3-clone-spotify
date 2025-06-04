@@ -25,14 +25,14 @@ interface CrossRefAlbumDao {
 
     @Transaction
     @Query(QUERY_GET_ALBUM_SONGS)
-    fun getAlbumDetailsById(albumId: Int): Flow<CrossRefAlbumsModel>
+    fun getAlbumDetailsById(albumId: Long): Flow<CrossRefAlbumsModel>
 
     @Transaction
     @Query(QUERY_GET_ALBUM_LIKE)
-    fun getAlbumLike(albumId: Int, userId: Int): Flow<AlbumLikeEntity?>
+    fun getAlbumLike(albumId: Long, userId: Long): Flow<AlbumLikeEntity?>
 
     @Query(QUERY_DELETE_ALBUM_LIKE)
-    suspend fun deleteAlbumLike(albumId: Int, userId: Int)
+    suspend fun deleteAlbumLike(albumId: Long, userId: Long)
 
     @Insert()
     suspend fun insertAlbumLike(albumLikeEntity: AlbumLikeEntity)

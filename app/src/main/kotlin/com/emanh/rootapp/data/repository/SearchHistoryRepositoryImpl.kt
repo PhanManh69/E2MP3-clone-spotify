@@ -19,7 +19,7 @@ class SearchHistoryRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSearchHistory(userId: Int): Flow<List<SearchHistoryModel>> {
+    override fun getSearchHistory(userId: Long): Flow<List<SearchHistoryModel>> {
         return searchHistoryDataSource.getSearchHistory(userId).map { entities ->
             entities.map { entity ->
                 mapToModel(entity)
@@ -27,7 +27,7 @@ class SearchHistoryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteDuplicate(userId: Int, tableId: Int, type: String?) {
+    override suspend fun deleteDuplicate(userId: Long, tableId: Long, type: String?) {
         return searchHistoryDataSource.deleteDuplicate(userId, tableId, type)
     }
 

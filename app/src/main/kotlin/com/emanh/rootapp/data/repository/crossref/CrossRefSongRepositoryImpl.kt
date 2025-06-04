@@ -14,7 +14,7 @@ class CrossRefSongRepositoryImpl @Inject constructor(
         return crossRefSongDataSource.getAllCrossRefSongs()
     }
 
-    override fun getSongDetailsById(songId: Int): Flow<CrossRefSongsModel> {
+    override fun getSongDetailsById(songId: Long): Flow<CrossRefSongsModel> {
         return crossRefSongDataSource.getSongDetailsById(songId)
     }
 

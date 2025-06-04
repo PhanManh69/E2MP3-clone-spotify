@@ -38,10 +38,10 @@ class ArtistViewMode @Inject constructor(
     private val _uiState = MutableStateFlow(ArtistUiState())
     val uiState: StateFlow<ArtistUiState> = _uiState.asStateFlow()
 
-    private val artistId: Int = savedStateHandle.get<Int>("artistId") ?: -1
+    private val artistId: Long = savedStateHandle.get<Long>("artistId") ?: -1
 
     init {
-        if (artistId != -1) {
+        if (artistId != -1L) {
             Log.d(TAG, "Initializing with albumId: $artistId")
 
             getUserFollowing(artistId)
@@ -63,26 +63,26 @@ class ArtistViewMode @Inject constructor(
     }
 
     fun onFollowClick() {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
             if (_uiState.value.isFollowing) {
-                crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
                 _uiState.update { it.copy(isFollowing = false) }
                 return@launch
             } else {
-                crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
                 _uiState.update { it.copy(isFollowing = true) }
                 return@launch
             }
         }
     }
 
-    private fun getUserFollowing(artistId: Int) {
-        val userId = 2
+    private fun getUserFollowing(artistId: Long) {
+        val userIdFake = 2L
 
         viewModelScope.launch {
-            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId)).catch { error ->
+            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isFollwing = it != null
@@ -91,7 +91,7 @@ class ArtistViewMode @Inject constructor(
         }
     }
 
-    private fun loadArtistById(artistId: Int) {
+    private fun loadArtistById(artistId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
@@ -106,7 +106,7 @@ class ArtistViewMode @Inject constructor(
         }
     }
 
-    private fun loadSongsByArtist(artistId: Int) {
+    private fun loadSongsByArtist(artistId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
@@ -121,7 +121,7 @@ class ArtistViewMode @Inject constructor(
         }
     }
 
-    private fun loadGenreNameByArtist(artistId: Int) {
+    private fun loadGenreNameByArtist(artistId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
@@ -136,7 +136,7 @@ class ArtistViewMode @Inject constructor(
         }
     }
 
-    private fun loadListenerMonth(artistId: Int) {
+    private fun loadListenerMonth(artistId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {

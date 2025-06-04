@@ -52,11 +52,11 @@ import com.emanh.rootapp.presentation.theme.Title5Bold
 @Composable
 fun PlayerArtistAbout(
     modifier: Modifier = Modifier,
-    followingArtists: Set<Int>,
+    followingArtists: Set<Long>,
     artistsList: List<UsersModel>,
-    viewMonthArtists: Map<Int, Int>,
-    onFollowClick: (Int) -> Unit,
-    onArtistsClick: (Int) -> Unit,
+    viewMonthArtists: Map<Long, Long>,
+    onFollowClick: (Long) -> Unit,
+    onArtistsClick: (Long) -> Unit,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(24.dp)) {
         artistsList.forEach { artist ->

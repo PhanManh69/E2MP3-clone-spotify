@@ -41,6 +41,7 @@ import com.emanh.rootapp.presentation.theme.Title3Bold
 import com.emanh.rootapp.presentation.ui.searchinput.composable.SearchListItem
 import com.emanh.rootapp.utils.MyConstant.ALBUMS_SEARCH
 import com.emanh.rootapp.utils.MyConstant.ARTISTS_SEARCH
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.PLAYLISTS_SEARCH
 import com.emanh.rootapp.utils.MyConstant.SONGS_SEARCH
@@ -48,7 +49,7 @@ import com.emanh.rootapp.utils.MyConstant.chipSearchInputList
 import kotlinx.coroutines.delay
 
 @Composable
-fun SearchInputScreen(onItemClick: (Int, String) -> Unit) {
+fun SearchInputScreen(onItemClick: (Long, String) -> Unit) {
     val viewModel = hiltViewModel<SearchInputViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -90,9 +91,9 @@ private fun SearchInputScaffold(
     onBackClick: () -> Unit,
     onMessageChange: (String) -> Unit,
     onChipsSearchInputClick: (Int) -> Unit,
-    onCloseClick: (Int, String) -> Unit,
-    onIconClick: (Int, String) -> Unit,
-    onItemClick: (Int, String, String) -> Unit
+    onCloseClick: (Long, String) -> Unit,
+    onIconClick: (Long, String) -> Unit,
+    onItemClick: (Long, String, String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -174,7 +175,7 @@ private fun SearchInputScaffold(
                                   else -> STFItemType.Music
                               }
 
-                              STFItem(imageUrl = avatarUrl.orEmpty(),
+                              STFItem(imageUrl = avatarUrl ?: NOT_AVATAR,
                                       title = title.orEmpty(),
                                       label = label.orEmpty(),
                                       type = typeItem,

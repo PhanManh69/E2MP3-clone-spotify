@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface SearchHistoryRepository {
     fun getAllSearchHistory(): Flow<List<SearchHistoryModel>>
 
-    fun getSearchHistory(userId: Int): Flow<List<SearchHistoryModel>>
+    fun getSearchHistory(userId: Long): Flow<List<SearchHistoryModel>>
 
-    suspend fun deleteDuplicate(userId: Int, tableId: Int, type: String?)
+    suspend fun deleteDuplicate(userId: Long, tableId: Long, type: String?)
 
     suspend fun insertSearchHistory(searchHistory: SearchHistoryModel)
 }

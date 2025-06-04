@@ -39,8 +39,6 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-
-
     fun onPlayPauseClick(isPlayed: Boolean, scope: CoroutineScope) {
         if (isPlayed == _uiState.value.isPlayed) return
 
@@ -89,7 +87,7 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(progressJob = null) }
     }
 
-    fun getSongId(songId: Int) {
+    fun getSongId(songId: Long) {
         getSongById(songId)
         increaseViewsForSong(songId)
     }
@@ -112,7 +110,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getSongById(songId: Int) {
+    private fun getSongById(songId: Long) {
         viewModelScope.launch(coroutineExceptionHandler) {
             _uiState.update { it.copy(isLoading = true) }
 
@@ -165,7 +163,7 @@ class MainViewModel @Inject constructor(
                           artists = song.artistsIdList)
     }
 
-    private fun mapToUsersList(artistsIdList: List<Int>?, artistsList: List<UsersEntity>): List<UsersModel> {
+    private fun mapToUsersList(artistsIdList: List<Long>?, artistsList: List<UsersEntity>): List<UsersModel> {
         if (artistsIdList.isNullOrEmpty()) return emptyList()
 
         val artistsMap = artistsList.associateBy { it.userId }
@@ -185,13 +183,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun increaseViewsForSong(songId: Int) {
+    private fun increaseViewsForSong(songId: Long) {
         viewModelScope.launch(coroutineExceptionHandler) {
             try {
-                val userId = 2
-                val result = viewsSongUseCase.trackSongView(userId, songId)
+                val userIdFake = 2L
+                val result = viewsSongUseCase.trackSongView(userIdFake, songId)
                 val viewCount = result.numberListener ?: 0
-                Log.d(TAG, "Song $songId viewed by user $userId - view count: $viewCount, timestamp: ${result.dateTime}")
+                Log.d(TAG, "Song $songId viewed by user $userIdFake - view count: $viewCount, timestamp: ${result.dateTime}")
             } catch (e: Exception) {
                 Log.e(TAG, "Error recording song view: ${e.message}")
             }

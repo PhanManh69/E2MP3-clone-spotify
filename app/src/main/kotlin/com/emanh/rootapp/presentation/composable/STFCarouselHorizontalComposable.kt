@@ -48,7 +48,7 @@ enum class STFCarouselType {
 
 @Immutable
 data class STFCarouselThumbData(
-    val id: Int = 0, val imageUrl: String = "", val title: String = "", val subtitle: String = "", val description: String = ""
+    val id: Long = 0, val imageUrl: String = "", val title: String = "", val subtitle: String = "", val description: String = ""
 )
 
 @Immutable
@@ -80,7 +80,7 @@ fun STFCarouselHorizontal(
     thumbItem: List<STFCarouselThumbData>,
     onAvatarClick: () -> Unit = {},
     onViewAll: () -> Unit = {},
-    onThumbClick: (Int) -> Unit = {}
+    onThumbClick: (Long) -> Unit = {}
 ) {
     var toggled by remember { mutableStateOf(false) }
 

@@ -8,14 +8,13 @@ class Converters {
     private val gson = Gson()
 
     @TypeConverter
-    fun fromIntList(value: List<Int>?): String? {
-        return if (value == null) null else gson.toJson(value)
+    fun fromLongList(value: List<Long>?): String? {
+        return gson.toJson(value)
     }
 
     @TypeConverter
-    fun toIntList(value: String?): List<Int>? {
-        if (value == null) return null
-        val listType = object : TypeToken<List<Int>>() {}.type
+    fun toLongList(value: String?): List<Long>? {
+        val listType = object : TypeToken<List<Long>>() {}.type
         return gson.fromJson(value, listType)
     }
 } 

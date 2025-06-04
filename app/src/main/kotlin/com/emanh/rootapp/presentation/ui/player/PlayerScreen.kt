@@ -36,6 +36,7 @@ import com.emanh.rootapp.presentation.ui.player.composable.PlayerAvatar
 import com.emanh.rootapp.presentation.ui.player.composable.PlayerContentButton
 import com.emanh.rootapp.presentation.ui.player.composable.PlayerLyrics
 import com.emanh.rootapp.presentation.ui.player.composable.PlayerTopbar
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 import com.emanh.rootapp.utils.formatTime
 import kotlin.math.roundToLong
@@ -128,11 +129,11 @@ private fun PlayerBottomSheet(
     currentTime: String,
     remainingTime: String,
     lyrics: String?,
-    viewMonthArtists: Map<Int, Int>,
+    viewMonthArtists: Map<Long, Long>,
     valueSlider: Float,
     isPlayed: Boolean,
     isAddSong: Boolean,
-    followingArtists: Set<Int>,
+    followingArtists: Set<Long>,
     song: SongsModel,
     artistsList: List<UsersModel>,
     onDismiss: () -> Unit,
@@ -147,8 +148,8 @@ private fun PlayerBottomSheet(
     onShareClick: () -> Unit,
     onListClick: () -> Unit,
     onShowLyrics: () -> Unit,
-    onFollowClick: (Int) -> Unit,
-    onArtistsClick: (Int) -> Unit,
+    onFollowClick: (Long) -> Unit,
+    onArtistsClick: (Long) -> Unit,
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: (Float) -> Unit,
     onPlayPauseClick: (Boolean) -> Unit,
@@ -170,7 +171,7 @@ private fun PlayerBottomSheet(
             .background(SurfacePrimary)
             .verticalScroll(state)) {
             Box {
-                PlayerAvatar(avatarUrl = song.avatarUrl)
+                PlayerAvatar(avatarUrl = song.avatarUrl ?: NOT_AVATAR)
 
                 PlayerTopbar(modifier = Modifier
                     .padding(horizontal = 16.dp)

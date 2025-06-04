@@ -18,16 +18,27 @@ object MyConstant {
     const val ARTISTS_SEARCH = "artists_search"
     const val ALBUMS_SEARCH = "albums_search"
     const val PLAYLISTS_SEARCH = "playlists_search"
-    const val VIEW_ALL_HISTORY = -91829
-    const val VIEW_ALL_LIKED = -19823
+    const val VIEW_ALL_HISTORY = -91829L
+    const val VIEW_ALL_LIKED = -19823L
     const val PLAYLIST = "Danh sách phát"
     const val YOUR = "Của bạn"
     const val FOR_YOUR = "Dành cho bạn"
     const val ARTIST = "Nghệ sĩ"
+    const val MUSIC_PLAYBACK = "Music Playback"
+    const val NOTIFICATION_CHANNEL_ID = "music-channel"
+    const val NOTIFICATION_ID = 1
 
     const val IMAGE_URL =
         "https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w544-h544-l90-rj"
     const val AVATAR_URL = "https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-marquee-06.webp"
+    const val NOT_AVATAR = "https://res.cloudinary.com/decqclrhl/image/upload/v1748745347/e2mp3-spotify/img/not_avatar.png"
+
+    enum class State {
+        STATE_CREATED,
+        STATE_INITIALIZING,
+        STATE_INITIALIZED,
+        STATE_ERROR
+    }
 
     val equalizerIconList = listOf(R.drawable.ic_24_equalizer_1,
                                    R.drawable.ic_24_equalizer_2,
@@ -37,9 +48,9 @@ object MyConstant {
                                    R.drawable.ic_24_equalizer_6,
                                    R.drawable.ic_24_equalizer_7)
 
-    val sampleLibraryData = PrimaryLibraryData(primaryLibrary = listOf(SecondaryLibraryData(title = PLAYLIST,
-                                                                                            secondaryLibrary = listOf(YOUR, FOR_YOUR)),
-                                                                       SecondaryLibraryData(title = ARTIST, secondaryLibrary = emptyList())))
+    val sampleLibraryData =
+        PrimaryLibraryData(primaryLibrary = listOf(SecondaryLibraryData(title = PLAYLIST, secondaryLibrary = listOf(YOUR, FOR_YOUR)),
+                                                   SecondaryLibraryData(title = ARTIST, secondaryLibrary = emptyList())))
 
     val carouselThumbData =
         listOf(STFCarouselThumbData(imageUrl = IMAGE_URL, title = "Nơi này có anh", subtitle = "Sơn Tùng M-TP", description = "350M view"),

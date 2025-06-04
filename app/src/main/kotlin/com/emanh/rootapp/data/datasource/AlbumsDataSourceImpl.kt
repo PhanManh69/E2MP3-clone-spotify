@@ -24,15 +24,15 @@ class AlbumsDataSourceImpl @Inject constructor(
         return albumsDao.getSearchAlbums(value)
     }
 
-    override fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsEntity>> {
+    override fun getAlbumsBySearch(listId: List<Long>): Flow<List<AlbumsEntity>> {
         return albumsDao.getAlbumsBySearch(listId)
     }
 
-    override fun getAlbumsById(albumId: Int): Flow<AlbumsEntity> {
+    override fun getAlbumsById(albumId: Long): Flow<AlbumsEntity> {
         return albumsDao.getAlbumsById(albumId)
     }
 
-    override fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsEntity>> {
+    override fun getAlbumLikeByUser(userId: Long): Flow<List<AlbumsEntity>> {
         return albumsDao.getAlbumLikeByUser(userId)
     }
 

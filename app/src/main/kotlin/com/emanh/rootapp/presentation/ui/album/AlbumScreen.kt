@@ -62,12 +62,13 @@ import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.ui.album.composable.AlbumButton
 import com.emanh.rootapp.presentation.ui.album.composable.AlbumInfomation
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun AlbumScreen(onItemClick: (Int, String) -> Unit) {
+fun AlbumScreen(onItemClick: (Long, String) -> Unit) {
     val albumViewModel = hiltViewModel<AlbumViewModel>()
     val uiState by albumViewModel.uiState.collectAsState()
 
@@ -113,26 +114,33 @@ fun AlbumScreen(onItemClick: (Int, String) -> Unit) {
 private fun AlbumScaffold(
     modifier: Modifier = Modifier,
     time: String,
-    views: Int,
+    views: Long,
     isAddAlbum: Boolean,
     album: AlbumsModel,
     songsList: List<SongsModel>,
     artistList: List<UsersModel>,
-    onOwnerClick: (Int) -> Unit,
+    onOwnerClick: (Long) -> Unit,
     onAddClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onMoreClick: () -> Unit,
     onShuffleClick: () -> Unit,
     onPausePlayClick: () -> Unit,
-    onItemClick: (Int) -> Unit,
-    onIconClick: (Int) -> Unit,
-    onArtistClick: (Int) -> Unit,
+    onItemClick: (Long) -> Unit,
+    onIconClick: (Long) -> Unit,
+    onArtistClick: (Long) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalDensity.current
     val maxImageSize = LocalConfiguration.current.screenWidthDp.dp - 96.dp
     val minImageSize = 72.dp
     val backgroundColor = faunchedEffectAvatar(album.avatarUrl)
+    val avatarUrl = remember(songsList) {
+        if (songsList.isNotEmpty()) {
+            songsList.random().avatarUrl ?: NOT_AVATAR
+        } else {
+            NOT_AVATAR
+        }
+    }
 
     var position by remember { mutableStateOf(Offset.Zero) }
     var positionY by remember { mutableStateOf(0.dp) }
@@ -178,7 +186,7 @@ private fun AlbumScaffold(
                         .background(brush = Brush.verticalGradient(0f to backgroundColor, 1f to Color.Transparent)))
 
                     Column {
-                        STFPlaylistAvatar(imageUrl = album.avatarUrl.orEmpty(),
+                        STFPlaylistAvatar(imageUrl = album.avatarUrl ?: NOT_AVATAR,
                                           currentImageSize = currentImageSize,
                                           imageAlpha = imageAlpha,
                                           imageScale = imageScale)
@@ -188,7 +196,7 @@ private fun AlbumScaffold(
                         AlbumButton(modifier = Modifier.padding(horizontal = 16.dp),
                                     views = views,
                                     isAddAlbum = isAddAlbum,
-                                    avatarSongUrl = songsList.firstOrNull()?.avatarUrl.orEmpty(),
+                                    avatarSongUrl = avatarUrl,
                                     album = album,
                                     artistList = artistList,
                                     onOwnerClick = onOwnerClick,
@@ -210,7 +218,7 @@ private fun AlbumScaffold(
             }
 
             items(songsList) { item ->
-                STFItem(imageUrl = item.avatarUrl.orEmpty(),
+                STFItem(imageUrl = item.avatarUrl ?: NOT_AVATAR,
                         title = item.title.orEmpty(),
                         label = item.subtitle.orEmpty(),
                         iconId = R.drawable.ic_24_bullet,

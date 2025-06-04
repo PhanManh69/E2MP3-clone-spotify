@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,7 +45,6 @@ import com.emanh.rootapp.presentation.theme.IconPrimary
 import com.emanh.rootapp.presentation.theme.IconSecondary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
-import com.emanh.rootapp.presentation.theme.TextBackgroundDark
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextSecondary
 
@@ -54,7 +52,7 @@ import com.emanh.rootapp.presentation.theme.TextSecondary
 fun ArtistButton(
     modifier: Modifier = Modifier,
     modifierPausePlay: Modifier = Modifier,
-    viewMonth: Int,
+    viewMonth: Long,
     avatarSongUrl: String,
     isFollowing: Boolean,
     onFollowClick: () -> Unit,

@@ -8,11 +8,11 @@ import javax.inject.Inject
 class SearchHistoryUseCase @Inject constructor(
     private val searchHistoryRepository: SearchHistoryRepository
 ) {
-    fun getSearchHistory(userId: Int): Flow<List<SearchHistoryModel>> {
+    fun getSearchHistory(userId: Long): Flow<List<SearchHistoryModel>> {
         return searchHistoryRepository.getSearchHistory(userId)
     }
 
-    suspend fun deleteDuplicate(userId: Int, tableId: Int, type: String?) {
+    suspend fun deleteDuplicate(userId: Long, tableId: Long, type: String?) {
         searchHistoryRepository.deleteDuplicate(userId, tableId, type)
     }
 

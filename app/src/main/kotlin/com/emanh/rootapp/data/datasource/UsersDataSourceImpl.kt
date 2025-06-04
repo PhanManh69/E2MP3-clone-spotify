@@ -12,23 +12,23 @@ class UsersDataSourceImpl @Inject constructor(
         return usersDao.getAllUsers()
     }
 
-    override fun getYourFavoriteArtists(userId: Int): Flow<UsersEntity> {
+    override fun getYourFavoriteArtists(userId: Long): Flow<UsersEntity> {
         return usersDao.getYourFavoriteArtists(userId)
     }
 
-    override fun getSimilarArtists(userId: Int): Flow<List<UsersEntity>> {
+    override fun getSimilarArtists(userId: Long): Flow<List<UsersEntity>> {
         return usersDao.getSimilarArtists(userId)
     }
 
-    override fun getOwnerPlaylist(userId: Int): Flow<UsersEntity> {
+    override fun getOwnerPlaylist(userId: Long): Flow<UsersEntity> {
         return usersDao.getOwnerPlaylist(userId)
     }
 
-    override fun getOwnerAlbum(albumId: Int): Flow<List<UsersEntity>> {
+    override fun getOwnerAlbum(albumId: Long): Flow<List<UsersEntity>> {
         return usersDao.getOwnerAlbum(albumId)
     }
 
-    override fun getArtistById(userId: Int): Flow<UsersEntity> {
+    override fun getArtistById(userId: Long): Flow<UsersEntity> {
         return usersDao.getArtistById(userId)
     }
 
@@ -36,12 +36,16 @@ class UsersDataSourceImpl @Inject constructor(
         return usersDao.getSearchArtists(value)
     }
 
-    override fun getArtistsBySearch(listId: List<Int>): Flow<List<UsersEntity>> {
+    override fun getArtistsBySearch(listId: List<Long>): Flow<List<UsersEntity>> {
         return usersDao.getArtistsBySearch(listId)
     }
 
-    override fun getFoveriteArtistsByUser(userId: Int): Flow<List<UsersEntity>> {
+    override fun getFoveriteArtistsByUser(userId: Long): Flow<List<UsersEntity>> {
         return usersDao.getFoveriteArtistsByUser(userId)
+    }
+
+    override fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersEntity> {
+        return usersDao.getOwnerPlaylistYour(playlistId)
     }
 
     override suspend fun insertAllUsers(users: List<UsersEntity>) {

@@ -8,13 +8,14 @@ import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.presentation.composable.STFCarouselHorizontal
 import com.emanh.rootapp.presentation.composable.STFCarouselThumbData
 import com.emanh.rootapp.presentation.composable.STFCarouselType
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 
 @Composable
 fun HomeRecentlyListened(
-    modifier: Modifier = Modifier, recentlyLestenedList: List<SongsModel>, onThumbClick: (Int) -> Unit, onViewAll: () -> Unit
+    modifier: Modifier = Modifier, recentlyLestenedList: List<SongsModel>, onThumbClick: (Long) -> Unit, onViewAll: () -> Unit
 ) {
     val thumbItem = recentlyLestenedList.take(10).map { song ->
-        STFCarouselThumbData(id = song.id, imageUrl = song.avatarUrl.orEmpty(), title = song.title.orEmpty(), subtitle = song.subtitle.orEmpty())
+        STFCarouselThumbData(id = song.id, imageUrl = song.avatarUrl ?: NOT_AVATAR, title = song.title.orEmpty(), subtitle = song.subtitle.orEmpty())
     }
 
     if (thumbItem.isEmpty()) return else {

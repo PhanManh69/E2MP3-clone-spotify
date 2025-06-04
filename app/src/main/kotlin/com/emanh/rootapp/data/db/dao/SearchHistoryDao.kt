@@ -14,10 +14,10 @@ interface SearchHistoryDao {
     fun getAllSearchHistory(): Flow<List<SearchHistoryEntity>>
 
     @Query(QUERY_GET_SEARCH_HISTORY)
-    fun getSearchHistory(userId: Int): Flow<List<SearchHistoryEntity>>
+    fun getSearchHistory(userId: Long): Flow<List<SearchHistoryEntity>>
 
     @Query(QUERY_DELETE_DUPLICATE)
-    suspend fun deleteDuplicate(userId: Int, tableId: Int, type: String?)
+    suspend fun deleteDuplicate(userId: Long, tableId: Long, type: String?)
 
     @Insert()
     suspend fun insertSearchHistory(searchHistory: SearchHistoryEntity)

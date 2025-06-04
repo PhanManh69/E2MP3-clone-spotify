@@ -67,7 +67,7 @@ class SearchInputViewModel @Inject constructor(
         appRouter.getNavController()?.goBack()
     }
 
-    fun onIconClick(id: Int, type: String) {
+    fun onIconClick(id: Long, type: String) {
         when (type) {
             SONGS_SEARCH -> {
                 appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(id))
@@ -107,18 +107,18 @@ class SearchInputViewModel @Inject constructor(
         performSearch(message)
     }
 
-    fun insertSearchHistory(idTable: Int, type: String) {
+    fun insertSearchHistory(idTable: Long, type: String) {
         viewModelScope.launch {
-            val userId = 2
-            val searchHistory = SearchHistoryModel(userId = userId, tableId = idTable, type = type)
+            val userIdFake = 2L
+            val searchHistory = SearchHistoryModel(userId = userIdFake, tableId = idTable, type = type)
             searchHistoryUseCase.insertSearchHistory(searchHistory)
         }
     }
 
-    fun onRemovedSearchHistory(tableId: Int, type: String) {
-        val userId = 2
+    fun onRemovedSearchHistory(tableId: Long, type: String) {
+        val userIdFake = 2L
         viewModelScope.launch {
-            searchHistoryUseCase.deleteDuplicate(userId = userId, tableId = tableId, type = type)
+            searchHistoryUseCase.deleteDuplicate(userId = userIdFake, tableId = tableId, type = type)
         }
     }
 
@@ -159,10 +159,10 @@ class SearchInputViewModel @Inject constructor(
     }
 
     private fun getSearchHistory() {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
-            searchHistoryUseCase.getSearchHistory(userId).catch { error ->
+            searchHistoryUseCase.getSearchHistory(userIdFake).catch { error ->
                 Log.e(TAG, "Error fetching SearchHistoryList: $error")
                 emit(emptyList())
             }.collect { searchHistoryList ->

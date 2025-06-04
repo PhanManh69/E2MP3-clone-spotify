@@ -13,6 +13,7 @@ import com.emanh.rootapp.presentation.composable.STFCarouselType
 import com.emanh.rootapp.presentation.composable.STFThumbType
 import com.emanh.rootapp.utils.MyConstant.ALBUM_TYPE
 import com.emanh.rootapp.utils.MyConstant.ARTIST_TYPE
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.SINGLE_TYPE
 
 @Composable
@@ -20,8 +21,8 @@ fun HomeSimilarContent(
     modifier: Modifier = Modifier,
     yourFavoriteArtists: UsersModel,
     similarContent: List<Any>,
-    onAvatarClick: (Int) -> Unit,
-    onThumbClick: (Int, String) -> Unit
+    onAvatarClick: (Long) -> Unit,
+    onThumbClick: (Long, String) -> Unit
 ) {
     val thumbList = similarContent.map { item ->
         val id = when (item) {
@@ -58,7 +59,7 @@ fun HomeSimilarContent(
         }
 
         STFCarouselThumbData(id = id,
-                             imageUrl = imageUrl.orEmpty(),
+                             imageUrl = imageUrl ?: NOT_AVATAR,
                              title = title.orEmpty(),
                              subtitle = subtitle.orEmpty(),
                              description = description.orEmpty())
@@ -81,7 +82,7 @@ fun HomeSimilarContent(
     }
 
     STFCarouselHorizontal(modifier = modifier,
-                          avatarUrl = yourFavoriteArtists.avatarUrl,
+                          avatarUrl = yourFavoriteArtists.avatarUrl ?: NOT_AVATAR,
                           userName = yourFavoriteArtists.username.orEmpty(),
                           table = stringResource(R.string.other_similar_content),
                           title = yourFavoriteArtists.name.orEmpty(),

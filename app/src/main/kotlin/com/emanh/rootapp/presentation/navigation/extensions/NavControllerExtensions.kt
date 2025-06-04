@@ -4,8 +4,16 @@ import androidx.navigation.NavController
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 
 object NavActions {
-    fun NavController.navigateTo(route: AppNavigationRoute) {
-        this.navigate(route)
+    fun NavController.navigateTo(
+        route: AppNavigationRoute, popUpToRoute: AppNavigationRoute? = null, inclusive: Boolean = false
+    ) {
+        this.navigate(route) {
+            popUpToRoute?.let {
+                popUpTo(it) {
+                    this.inclusive = inclusive
+                }
+            }
+        }
     }
 
     fun NavController.goBack() {

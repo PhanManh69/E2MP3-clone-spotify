@@ -65,12 +65,13 @@ import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.ui.single.composable.SingleButton
 import com.emanh.rootapp.presentation.ui.single.composable.SingleInfomation
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun SingleScreen(onItemClick: (Int, String) -> Unit) {
+fun SingleScreen(onItemClick: (Long, String) -> Unit) {
     val singleViewModel = hiltViewModel<SingleViewModel>()
     val uiState by singleViewModel.uiState.collectAsState()
 
@@ -122,16 +123,16 @@ private fun SingleScafflod(
     single: SongsModel,
     artistList: List<UsersModel>,
     moreByArtists: List<SongsModel>,
-    onOwnerClick: (Int) -> Unit,
+    onOwnerClick: (Long) -> Unit,
     onAddClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onMoreClick: () -> Unit,
     onShuffleClick: () -> Unit,
     onPausePlayClick: () -> Unit,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Long) -> Unit,
     onIconClick: () -> Unit,
-    onArtistClick: (Int) -> Unit,
-    onThumbClick: (Int) -> Unit,
+    onArtistClick: (Long) -> Unit,
+    onThumbClick: (Long) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalDensity.current
@@ -152,7 +153,7 @@ private fun SingleScafflod(
 
     val thumbItem = moreByArtists.map { song ->
         STFCarouselHeroThumbData(id = song.id,
-                                 imageUrl = song.avatarUrl.orEmpty(),
+                                 imageUrl = song.avatarUrl ?: NOT_AVATAR,
                                  title = song.title.orEmpty(),
                                  subtitle = "${song.releaseDate?.takeLast(4).orEmpty()} · ${stringResource(R.string.single)}")
     }
@@ -192,7 +193,7 @@ private fun SingleScafflod(
                         .background(brush = Brush.verticalGradient(0f to backgroundColor, 1f to Color.Transparent)))
 
                     Column {
-                        STFPlaylistAvatar(imageUrl = single.avatarUrl.orEmpty(),
+                        STFPlaylistAvatar(imageUrl = single.avatarUrl ?: NOT_AVATAR,
                                           currentImageSize = currentImageSize,
                                           imageAlpha = imageAlpha,
                                           imageScale = imageScale)
@@ -220,7 +221,7 @@ private fun SingleScafflod(
             }
 
             item {
-                STFItem(imageUrl = single.avatarUrl.orEmpty(),
+                STFItem(imageUrl = single.avatarUrl ?: NOT_AVATAR,
                         title = single.title.orEmpty(),
                         label = single.subtitle.orEmpty(),
                         iconId = R.drawable.ic_24_bullet,

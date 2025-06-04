@@ -35,19 +35,19 @@ class AlbumsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAlbumsBySearch(listId: List<Int>): Flow<List<AlbumsModel>> {
+    override fun getAlbumsBySearch(listId: List<Long>): Flow<List<AlbumsModel>> {
         return albumsDataSource.getAlbumsBySearch(listId).map { entities ->
             entities.map { entity -> mapToModel(entity) }
         }
     }
 
-    override fun getAlbumsById(albumId: Int): Flow<AlbumsModel> {
+    override fun getAlbumsById(albumId: Long): Flow<AlbumsModel> {
         return albumsDataSource.getAlbumsById(albumId).map { entity ->
             mapToModel(entity)
         }
     }
 
-    override fun getAlbumLikeByUser(userId: Int): Flow<List<AlbumsModel>> {
+    override fun getAlbumLikeByUser(userId: Long): Flow<List<AlbumsModel>> {
         return albumsDataSource.getAlbumLikeByUser(userId).map { entities ->
             entities.map { entity -> mapToModel(entity) }
         }
@@ -62,6 +62,7 @@ class AlbumsRepositoryImpl @Inject constructor(
                             avatarUrl = model.avatarUrl,
                             title = model.title,
                             subtitle = model.subtitle,
+                            normalizedSearchValue = model.normalizedSearchValue,
                             albumType = model.albumType,
                             releaseDate = model.releaseDate,
                             artistsIdList = model.artist,
@@ -73,6 +74,7 @@ class AlbumsRepositoryImpl @Inject constructor(
                            avatarUrl = entity.avatarUrl,
                            title = entity.title,
                            subtitle = entity.subtitle,
+                           normalizedSearchValue = entity.normalizedSearchValue,
                            albumType = entity.albumType,
                            releaseDate = entity.releaseDate,
                            artist = entity.artistsIdList,

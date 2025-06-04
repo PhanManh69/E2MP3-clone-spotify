@@ -11,10 +11,11 @@ import com.emanh.rootapp.domain.model.AlbumsModel
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFCardSlim
 import com.emanh.rootapp.utils.MyConstant.ALBUM_TYPE
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.PLAYLIST_TYPE
 
 @Composable
-fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any>, onCardClick: (Int, String) -> Unit) {
+fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any>, onCardClick: (Long, String) -> Unit) {
     Column(modifier = modifier.padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val chunkSize = 2
         val chunkedList = quickPlaylistList.chunked(chunkSize)
@@ -46,7 +47,7 @@ fun HomeQuickPlaylist(modifier: Modifier = Modifier, quickPlaylistList: List<Any
                         else -> ""
                     }
 
-                    STFCardSlim(modifier = Modifier.weight(1f), imageUrl = imageUrl.orEmpty(), title = title.orEmpty(), onClick = { onCardClick(id, type) })
+                    STFCardSlim(modifier = Modifier.weight(1f), imageUrl = imageUrl ?: NOT_AVATAR, title = title.orEmpty(), onClick = { onCardClick(id, type) })
                 }
             }
         }

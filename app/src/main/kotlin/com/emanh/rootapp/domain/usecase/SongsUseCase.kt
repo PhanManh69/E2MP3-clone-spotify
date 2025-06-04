@@ -8,11 +8,11 @@ import javax.inject.Inject
 class SongsUseCase @Inject constructor(
     private val songsRepository: SongsRepository
 ) {
-    fun getRecommendedSongs(userId: Int): Flow<List<SongsModel>> {
+    fun getRecommendedSongs(userId: Long): Flow<List<SongsModel>> {
         return songsRepository.getRecommendedSongs(userId)
     }
 
-    fun getRecentlyListenedSongs(userId: Int): Flow<List<SongsModel>> {
+    fun getRecentlyListenedSongs(userId: Long): Flow<List<SongsModel>> {
         return songsRepository.getRecentlyListenedSongs(userId)
     }
 
@@ -24,11 +24,11 @@ class SongsUseCase @Inject constructor(
         return songsRepository.getSimilarSongs()
     }
 
-    fun getMoreByArtists(songId: Int): Flow<List<SongsModel>> {
+    fun getMoreByArtists(songId: Long): Flow<List<SongsModel>> {
         return songsRepository.getMoreByArtists(songId)
     }
 
-    fun getSongsByArtist(userId: Int): Flow<List<SongsModel>> {
+    fun getSongsByArtist(userId: Long): Flow<List<SongsModel>> {
         return songsRepository.getSongsByArtist(userId)
     }
 
@@ -36,15 +36,23 @@ class SongsUseCase @Inject constructor(
         return songsRepository.getSearchSong(value)
     }
 
-    fun getSongsBySearch(listId: List<Int>): Flow<List<SongsModel>> {
+    fun getSongsBySearch(listId: List<Long>): Flow<List<SongsModel>> {
         return songsRepository.getSongsBySearch(listId)
     }
 
-    fun getSongsById(songId: Int): Flow<SongsModel> {
+    fun getSongsById(songId: Long): Flow<SongsModel> {
         return songsRepository.getSongsById(songId)
     }
 
-    fun getLikedSongsByUser(userId: Int): Flow<List<SongsModel>> {
+    fun getLikedSongsByUser(userId: Long): Flow<List<SongsModel>> {
         return songsRepository.getLikedSongsByUser(userId)
+    }
+
+    fun getSongsRecommend(albumId: Long): Flow<List<SongsModel>> {
+        return songsRepository.getSongsRecommend(albumId)
+    }
+
+    fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel> {
+        return songsRepository.getRandomSongExcluding(excludeIds)
     }
 }

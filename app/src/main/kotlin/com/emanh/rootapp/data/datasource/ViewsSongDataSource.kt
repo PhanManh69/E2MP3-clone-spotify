@@ -4,11 +4,11 @@ import com.emanh.rootapp.data.db.entity.ViewsSongEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ViewsSongDataSource {
-    fun getTotalListenerAlbum(albumId: Int): Flow<Int>
+    fun getTotalListenerAlbum(albumId: Long): Flow<Long>
 
-    fun getListenerMonth(userId: Int): Flow<Int>
+    fun getListenerMonth(userId: Long): Flow<Long>
 
-    suspend fun findViewRecord(userId: Int, songId: Int): ViewsSongEntity?
+    suspend fun findViewRecord(userId: Long, songId: Long): ViewsSongEntity?
     
     suspend fun updateViewsSong(viewsSong: ViewsSongEntity)
     

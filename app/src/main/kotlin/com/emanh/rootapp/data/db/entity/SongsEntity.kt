@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "songs")
 data class SongsEntity(
-    @PrimaryKey(autoGenerate = true) val songId: Int = 0,
+    @PrimaryKey(autoGenerate = true) val songId: Long = 0,
     @ColumnInfo(name = "avatar_url") val avatarUrl: String? = null,
     @ColumnInfo(name = "song_url") val songUrl: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
@@ -14,7 +14,7 @@ data class SongsEntity(
     @ColumnInfo(name = "normalized_search_value") val normalizedSearchValue: String? = null,
     @ColumnInfo(name = "timeline") val timeline: String? = null,
     @ColumnInfo(name = "release_date") val releaseDate: String? = null,
-    @ColumnInfo(name = "genres") val genresIdList: List<Int>? = null,
-    @ColumnInfo(name = "likes") val likesIdList: List<Int>? = null,
-    @ColumnInfo(name = "artists") val artistsIdList: List<Int>? = null
+    @ColumnInfo(name = "genres") val genresIdList: List<Long>? = null,
+    @ColumnInfo(name = "likes") val likesIdList: List<Long>? = null,
+    @ColumnInfo(name = "artists") val artistsIdList: List<Long>? = null
 )

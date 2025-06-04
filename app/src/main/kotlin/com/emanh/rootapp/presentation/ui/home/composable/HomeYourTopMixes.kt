@@ -9,10 +9,11 @@ import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFCarouselHorizontal
 import com.emanh.rootapp.presentation.composable.STFCarouselThumbData
 import com.emanh.rootapp.presentation.composable.STFCarouselType
+import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 
 @Composable
 fun HomeYourTopMixes(
-    modifier: Modifier = Modifier, yourTopMixesList: List<CrossRefPlaylistsModel>, onThumbClick: (Int) -> Unit
+    modifier: Modifier = Modifier, yourTopMixesList: List<CrossRefPlaylistsModel>, onThumbClick: (Long) -> Unit
 ) {
     val thumbItem = yourTopMixesList.map { playlist ->
         val orderedSongsList = playlist.playlists.songsIdList.mapNotNull { songId ->
@@ -21,7 +22,7 @@ fun HomeYourTopMixes(
 
         val allSingerNames = orderedSongsList.map { it.subtitle }.distinct().joinToString(", ")
 
-        STFCarouselThumbData(id = playlist.playlists.playlistId, imageUrl = playlist.playlists.avatarUrl.orEmpty(), description = allSingerNames)
+        STFCarouselThumbData(id = playlist.playlists.playlistId, imageUrl = playlist.playlists.avatarUrl ?: NOT_AVATAR, description = allSingerNames)
     }
 
     Log.d("HomeYourTopMixes", "thumbItem: $thumbItem")

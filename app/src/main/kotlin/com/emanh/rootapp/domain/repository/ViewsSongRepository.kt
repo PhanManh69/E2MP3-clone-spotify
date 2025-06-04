@@ -4,11 +4,11 @@ import com.emanh.rootapp.domain.model.ViewsSongModel
 import kotlinx.coroutines.flow.Flow
 
 interface ViewsSongRepository {
-    fun getTotalListenerAlbum(albumId: Int): Flow<Int>
+    fun getTotalListenerAlbum(albumId: Long): Flow<Long>
 
-    fun getListenerMonth(userId: Int): Flow<Int>
+    fun getListenerMonth(userId: Long): Flow<Long>
 
-    suspend fun findViewRecord(userId: Int, songId: Int): ViewsSongModel?
+    suspend fun findViewRecord(userId: Long, songId: Long): ViewsSongModel?
     
     suspend fun updateViewsSong(viewsSong: ViewsSongModel)
     

@@ -22,7 +22,7 @@ class CrossRefPlaylistDataSourceImpl @Inject constructor(
         return crossRefPlaylistDao.getPlaylistCard()
     }
 
-    override fun getPlaylistDetailsById(playlistId: Int): Flow<CrossRefPlaylistsModel> {
+    override fun getPlaylistDetailsById(playlistId: Long): Flow<CrossRefPlaylistsModel> {
         return crossRefPlaylistDao.getPlaylistDetailsById(playlistId)
     }
 
@@ -36,6 +36,10 @@ class CrossRefPlaylistDataSourceImpl @Inject constructor(
 
     override suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity) {
         return crossRefPlaylistDao.insertPlaylistLike(playlistLikeEntity)
+    }
+
+    override suspend fun insertSongToPlaylist(playlistSongEntity: PlaylistSongEntity) {
+        return crossRefPlaylistDao.insertSongToPlaylist(playlistSongEntity)
     }
 
     override suspend fun insertAllCrossRefPlaylistSong(playlistSongEntity: List<PlaylistSongEntity>) {

@@ -63,36 +63,36 @@ class PlayerViewModel @Inject constructor(
         hideLyrics()
     }
 
-    fun onAddClick(songId: Int) {
-        val userId = 2
+    fun onAddClick(songId: Long) {
+        val userIdFake = 2L
 
         viewModelScope.launch {
             if (_uiState.value.isAddSong) {
-                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
                 _uiState.update { it.copy(isAddSong = false) }
                 return@launch
             } else {
-                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId))
+                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
                 _uiState.update { it.copy(isAddSong = true) }
                 return@launch
             }
         }
     }
 
-    fun onFollowClick(artistId: Int) {
-        val userId = 2
+    fun onFollowClick(artistId: Long) {
+        val userIdFake = 2L
         val isCurrentlyFollowing = _uiState.value.followingArtists.contains(artistId)
 
         viewModelScope.launch {
             try {
                 if (isCurrentlyFollowing) {
-                    crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                    crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
                     _uiState.update { currentState ->
                         currentState.copy(followingArtists = currentState.followingArtists - artistId)
                     }
                     Log.d(TAG, "Unfollowed artist: $artistId")
                 } else {
-                    crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artistId))
+                    crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
                     _uiState.update { currentState ->
                         currentState.copy(followingArtists = currentState.followingArtists + artistId)
                     }
@@ -104,15 +104,15 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    fun goToArtist(artistId: Int) {
+    fun goToArtist(artistId: Long) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
-    fun getSongLike(songId: Int) {
-        val userId = 2
+    fun getSongLike(songId: Long) {
+        val userIdFake = 2L
 
         viewModelScope.launch {
-            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userId)).catch { error ->
+            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isAdded = it != null
@@ -122,7 +122,7 @@ class PlayerViewModel @Inject constructor(
     }
 
     fun getUserFollowing(artistsList: List<UsersModel>) {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
             try {
@@ -131,7 +131,7 @@ class PlayerViewModel @Inject constructor(
                 val followingResults = artistsList.map { artist ->
                     async {
                         try {
-                            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userId, artistId = artist.id))
+                            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artist.id))
                                 .firstOrNull()
                         } catch (e: Exception) {
                             Log.e(TAG, "Error fetching following status for artist ${artist.id}: $e")
@@ -176,7 +176,7 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    fun loadListenerMonth(artistId: Int) {
+    fun loadListenerMonth(artistId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {

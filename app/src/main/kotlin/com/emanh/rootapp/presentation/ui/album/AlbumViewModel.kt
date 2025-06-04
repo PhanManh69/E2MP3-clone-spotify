@@ -38,10 +38,10 @@ class AlbumViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AlbumUiState())
     val uiState: StateFlow<AlbumUiState> = _uiState.asStateFlow()
 
-    private val albumId: Int = savedStateHandle.get<Int>("albumId") ?: -1
+    private val albumId: Long = savedStateHandle.get<Long>("albumId") ?: -1
 
     init {
-        if (albumId != -1) {
+        if (albumId != -1L) {
             Log.d(TAG, "Initializing with albumId: $albumId")
 
             getPlaylistLike(albumId)
@@ -54,7 +54,7 @@ class AlbumViewModel @Inject constructor(
         appRouter.getNavController()?.goBack()
     }
 
-    fun goToArtist(artistId: Int) {
+    fun goToArtist(artistId: Long) {
         appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
@@ -79,26 +79,26 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun onAddClick() {
-        val userId = 2
+        val userIdFake = 2L
 
         viewModelScope.launch {
             if (_uiState.value.isAddAlbum) {
-                crossRefAlbumUseCase.deleteAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userId))
+                crossRefAlbumUseCase.deleteAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userIdFake))
                 _uiState.update { it.copy(isAddAlbum = false) }
                 return@launch
             } else {
-                crossRefAlbumUseCase.insertAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userId))
+                crossRefAlbumUseCase.insertAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userIdFake))
                 _uiState.update { it.copy(isAddAlbum = true) }
                 return@launch
             }
         }
     }
 
-    private fun getPlaylistLike(albumId: Int) {
-        val userId = 2
+    private fun getPlaylistLike(albumId: Long) {
+        val userIdFake = 2L
 
         viewModelScope.launch {
-            crossRefAlbumUseCase.getAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userId)).catch { error ->
+            crossRefAlbumUseCase.getAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userIdFake)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isAdded = it != null
@@ -107,7 +107,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    private fun loadAlbumDetails(albumId: Int) {
+    private fun loadAlbumDetails(albumId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
@@ -148,7 +148,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    private fun loadAlbumData(albumId: Int) {
+    private fun loadAlbumData(albumId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {

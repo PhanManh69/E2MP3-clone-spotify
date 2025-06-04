@@ -22,14 +22,14 @@ interface CrossRefSongDao {
 
     @Transaction
     @Query(QUERY_SONG_BY_ID)
-    fun getSongDetailsById(songId: Int): Flow<CrossRefSongsModel>
+    fun getSongDetailsById(songId: Long): Flow<CrossRefSongsModel>
 
     @Transaction
     @Query(QUERY_GET_SONG_LIKE)
-    fun getSongLike(songId: Int, userId: Int): Flow<SongLikeEntity?>
+    fun getSongLike(songId: Long, userId: Long): Flow<SongLikeEntity?>
 
     @Query(QUERY_DELETE_SONG_LIKE)
-    suspend fun deleteSongLike(songId: Int, userId: Int)
+    suspend fun deleteSongLike(songId: Long, userId: Long)
 
     @Insert()
     suspend fun insertSongLike(songLikeEntity: SongLikeEntity)

@@ -4,8 +4,8 @@ data class PlayerUiState(
     val lyrics: String? = null,
     val isLoading: Boolean = false,
     val isAddSong: Boolean = false,
-    val followingArtists: Set<Int> = setOf(),
+    val followingArtists: Set<Long> = setOf(),
     val showPlayerSheet: Boolean = false,
     val showLyricsSheet: Boolean = false,
-    val viewMonthArtists: Map<Int, Int> = emptyMap(),
+    val viewMonthArtists: Map<Long, Long> = emptyMap(),
 )

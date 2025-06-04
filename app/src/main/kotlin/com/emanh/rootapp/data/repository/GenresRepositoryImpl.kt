@@ -19,13 +19,13 @@ class GenresRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getGenreById(genreId: Int): Flow<GenresModel> {
+    override fun getGenreById(genreId: Long): Flow<GenresModel> {
         return genresDataSource.getGenreById(genreId).map { entity ->
             GenresModel(id = entity.genreId, nameId = entity.nameId)
         }
     }
 
-    override fun getGenreNameByArtist(userId: Int): Flow<List<Int>> {
+    override fun getGenreNameByArtist(userId: Long): Flow<List<Int>> {
         return genresDataSource.getGenreNameByArtist(userId)
     }
 

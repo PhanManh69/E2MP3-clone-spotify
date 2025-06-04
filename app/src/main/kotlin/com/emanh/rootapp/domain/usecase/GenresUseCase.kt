@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GenresUseCase @Inject constructor(
     private val genresRepository: GenresRepository
 ) {
-    fun getGenreNameByArtist(userId: Int): Flow<List<Int>> {
+    fun getGenreNameByArtist(userId: Long): Flow<List<Int>> {
         return genresRepository.getGenreNameByArtist(userId)
     }
 }

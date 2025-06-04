@@ -1,5 +1,6 @@
 package com.emanh.rootapp.presentation.ui.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -122,15 +123,15 @@ private fun HomeScaffold(
     onViewAll: () -> Unit,
     onPlayRecommendedAll: () -> Unit,
     onPlayTrendingAll: () -> Unit,
-    onQuickPlayClick: (Int, String) -> Unit,
-    onTopMixesClick: (Int) -> Unit,
-    onRecentylClick: (Int) -> Unit,
-    onRecommendedlClick: (Int) -> Unit,
-    onTrendingClick: (Int) -> Unit,
-    onAvatarClick: (Int) -> Unit,
-    onSimilarClick: (Int, String) -> Unit,
-    onRadioClick: (Int) -> Unit,
-    onCardPlaylistClick: (Int) -> Unit
+    onQuickPlayClick: (Long, String) -> Unit,
+    onTopMixesClick: (Long) -> Unit,
+    onRecentylClick: (Long) -> Unit,
+    onRecommendedlClick: (Long) -> Unit,
+    onTrendingClick: (Long) -> Unit,
+    onAvatarClick: (Long) -> Unit,
+    onSimilarClick: (Long, String) -> Unit,
+    onRadioClick: (Long) -> Unit,
+    onCardPlaylistClick: (Long) -> Unit
 ) {
     var selectedChip by remember { mutableIntStateOf(0) }
     var visibleItemCount by remember { mutableIntStateOf(0) }
