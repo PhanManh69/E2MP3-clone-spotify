@@ -116,7 +116,7 @@ private fun LyricsBottomSheet(
             .fillMaxSize()
             .background(color = backgroundColor)
             .padding(top = statusBarHeight + 16.dp, bottom = 32.dp),
-               verticalArrangement = Arrangement.spacedBy(32.dp)) {
+               verticalArrangement = Arrangement.spacedBy(16.dp)) {
             LyricsTopbar(gradientEdgeColor = backgroundColor, song = song, onDownClick = {
                 scope.launch {
                     sheetState.hide()
@@ -136,7 +136,7 @@ private fun LyricsBottomSheet(
                                      .padding(horizontal = 32.dp)
                                      .padding(top = 48.dp))
                         } else {
-                            Text(text = lyrics, color = TextBackgroundPrimary, style = Title6Bold, modifier = Modifier.padding(horizontal = 16.dp))
+                            Text(text = lyrics, color = TextBackgroundPrimary, style = Title6Bold, modifier = Modifier.padding(horizontal = 32.dp))
                         }
                     }
                 }
