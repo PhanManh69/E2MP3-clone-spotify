@@ -22,7 +22,6 @@ import com.emanh.rootapp.presentation.composable.navbar.STFTabbar
 import com.emanh.rootapp.presentation.navigation.albumScreenGraph
 import com.emanh.rootapp.presentation.navigation.artistScreenGraph
 import com.emanh.rootapp.presentation.navigation.homeScreenGraph
-import com.emanh.rootapp.presentation.navigation.loginScreenGraph
 import com.emanh.rootapp.presentation.navigation.playlistScreenGraph
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
@@ -68,7 +67,6 @@ fun MainScreen(
             fadeOut(animationSpec = tween(100))
         }) {
             testComposableScreenGraph()
-            loginScreenGraph()
             homeScreenGraph()
             searchScreenGraph()
             searchInputScreenGraph(onItemClick = { id, title ->

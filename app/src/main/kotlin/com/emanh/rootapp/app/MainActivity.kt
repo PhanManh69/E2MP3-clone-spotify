@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.content.edit
+import com.emanh.rootapp.app.login.LoginScreen
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         databaseInitialized()
         setContent {
             E2MP3Theme {
-                MainScreen(appRouter = appRouter)
+                LoginScreen()
+//                MainScreen(appRouter = appRouter)
             }
         }
     }

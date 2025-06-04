@@ -276,9 +276,30 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(progressJob = job) }
     }
 
+    private fun stopMusicService() {
+        try {
+            mediaController?.stop()
+
+            val intent = Intent(context, MusicService::class.java)
+            context.stopService(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error stopping MusicService: ${e.message}")
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
-        MediaController.releaseFuture(controllerFuture)
+
+        stopProgressTracking()
+
+        try {
+            mediaController?.stop()
+            MediaController.releaseFuture(controllerFuture)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error releasing MediaController: ${e.message}")
+        }
+
+        stopMusicService()
         mediaController = null
     }
 
