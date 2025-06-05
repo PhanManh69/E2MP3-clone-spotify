@@ -16,7 +16,7 @@ import com.emanh.rootapp.data.db.entity.AlbumsEntity
 import com.emanh.rootapp.data.db.entity.PlaylistsEntity
 import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.data.db.entity.UsersEntity
-import com.emanh.rootapp.presentation.theme.SurfaceProductSuperDark
+import com.emanh.rootapp.presentation.theme.SurfaceSecondary
 import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable.isActive
@@ -75,7 +75,7 @@ fun formatTime(seconds: Long): String {
 
 @Composable
 fun faunchedEffectAvatar(avatarUrl: String?): Color {
-    var backgroundColor by remember { mutableStateOf(SurfaceProductSuperDark) }
+    var backgroundColor by remember { mutableStateOf(SurfaceSecondary) }
     var palette by remember { mutableStateOf<Palette?>(null) }
     val avatarUrlValue = avatarUrl ?: NOT_AVATAR
 

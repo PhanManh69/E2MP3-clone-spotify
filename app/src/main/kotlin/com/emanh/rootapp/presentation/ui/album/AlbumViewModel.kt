@@ -51,11 +51,11 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun onBackClick() {
-        appRouter.getNavController()?.goBack()
+        appRouter.getMainNavController()?.goBack()
     }
 
     fun goToArtist(artistId: Long) {
-        appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+        appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
     fun totalTime(songsList: List<SongsModel>): String {

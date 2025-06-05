@@ -4,9 +4,13 @@ import androidx.annotation.OptIn
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -35,13 +39,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.util.UnstableApi
 import com.emanh.rootapp.presentation.composable.STFPlayerStickyEmpty
 import com.emanh.rootapp.presentation.composable.STFPlayerStickyLoading
+import com.emanh.rootapp.presentation.navigation.createPlaylistScreenGraph
+import com.emanh.rootapp.presentation.navigation.playlistYourScreenGraph
+import com.emanh.rootapp.presentation.theme.SurfacePrimary
+import com.emanh.rootapp.presentation.theme.SurfaceProduct
+import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.ui.player.PlayerScreen
 import com.emanh.rootapp.presentation.ui.player.PlayerViewModel
 
 @OptIn(UnstableApi::class)
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier, appRouter: AppRouter, navController: NavHostController = rememberNavController()
+    modifier: Modifier = Modifier,
+    appRouter: AppRouter,
+    navController: NavHostController = rememberNavController(),
+    onLogout: () -> Unit,
 ) {
     val mainViewModel: MainViewModel = hiltViewModel()
     val mainUiState by mainViewModel.uiState.collectAsState()
@@ -50,46 +62,65 @@ fun MainScreen(
     val scope = rememberCoroutineScope()
 
     DisposableEffect(navController) {
-        appRouter.bind(navController)
+        appRouter.bindMain(navController)
         onDispose {
-            appRouter.unbind()
+            appRouter.unbindMain()
         }
     }
 
     Box(modifier = modifier) {
-        NavHost(modifier = Modifier, navController = navController, startDestination = AppNavigationRoute.Home, enterTransition = {
-            fadeIn(animationSpec = tween(100))
-        }, exitTransition = {
-            fadeOut(animationSpec = tween(100))
-        }, popEnterTransition = {
-            fadeIn(animationSpec = tween(100))
-        }, popExitTransition = {
-            fadeOut(animationSpec = tween(100))
-        }) {
-            testComposableScreenGraph()
-            homeScreenGraph()
-            searchScreenGraph()
-            searchInputScreenGraph(onItemClick = { id, title ->
-                mainViewModel.getSongId(songId = id)
-                mainViewModel.getTitleFromItem("Bài hát", title)
-            })
-            yourLibraryScreenGraph()
-            playlistScreenGraph(onItemClick = { id, title ->
-                mainViewModel.getSongId(songId = id)
-                mainViewModel.getTitleFromItem("Playlist", title)
-            })
-            albumScreenGraph(onItemClick = { id, title ->
-                mainViewModel.getSongId(songId = id)
-                mainViewModel.getTitleFromItem("Album", title)
-            })
-            singleScreenGraph(onItemClick = { id, title ->
-                mainViewModel.getSongId(songId = id)
-                mainViewModel.getTitleFromItem("Bài hát", title)
-            })
-            artistScreenGraph(onItemClick = { id, title ->
-                mainViewModel.getSongId(songId = id)
-                mainViewModel.getTitleFromItem("Nghệ sĩ", title)
-            })
+        if (mainUiState.currentUser == null) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(SurfacePrimary)) {
+                CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .align(Alignment.Center),
+                        color = SurfaceProduct,
+                        trackColor = SurfaceSecondaryInvert,
+                )
+            }
+        } else {
+            NavHost(modifier = Modifier, navController = navController, startDestination = AppNavigationRoute.Home, enterTransition = {
+                fadeIn(animationSpec = tween(100))
+            }, exitTransition = {
+                fadeOut(animationSpec = tween(100))
+            }, popEnterTransition = {
+                fadeIn(animationSpec = tween(100))
+            }, popExitTransition = {
+                fadeOut(animationSpec = tween(100))
+            }) {
+                testComposableScreenGraph()
+                homeScreenGraph(currentUser = mainUiState.currentUser!!, onLogoutClick = onLogout)
+                searchScreenGraph(currentUser = mainUiState.currentUser!!)
+                yourLibraryScreenGraph(currentUser = mainUiState.currentUser!!)
+                createPlaylistScreenGraph()
+                searchInputScreenGraph(onItemClick = { id, title ->
+                    mainViewModel.getSongId(songId = id)
+                    mainViewModel.getTitleFromItem("Bài hát", title)
+                })
+                playlistScreenGraph(onItemClick = { id, title ->
+                    mainViewModel.getSongId(songId = id)
+                    mainViewModel.getTitleFromItem("Playlist", title)
+                })
+                playlistYourScreenGraph(onItemClick = { id, title ->
+                    mainViewModel.getSongId(songId = id)
+                    mainViewModel.getTitleFromItem("Playlist", title)
+                })
+                albumScreenGraph(onItemClick = { id, title ->
+                    mainViewModel.getSongId(songId = id)
+                    mainViewModel.getTitleFromItem("Album", title)
+                })
+                singleScreenGraph(onItemClick = { id, title ->
+                    mainViewModel.getSongId(songId = id)
+                    mainViewModel.getTitleFromItem("Bài hát", title)
+                })
+                artistScreenGraph(onItemClick = { id, title ->
+                    mainViewModel.getSongId(songId = id)
+                    mainViewModel.getTitleFromItem("Nghệ sĩ", title)
+                })
+            }
         }
 
         Column(modifier = Modifier.align(Alignment.BottomCenter), verticalArrangement = Arrangement.spacedBy(8.dp)) {

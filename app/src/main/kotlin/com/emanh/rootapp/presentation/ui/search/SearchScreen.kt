@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.presentation.composable.STFHeader
 import com.emanh.rootapp.presentation.composable.STFHeaderType
 import com.emanh.rootapp.presentation.ui.search.composable.SearchCardGenres
@@ -25,16 +26,20 @@ import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import kotlinx.coroutines.delay
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(currentUser: UserInfo) {
     val viewModel = hiltViewModel<SearchViewModel>()
 
-    SearchScaffold(onSearchClick = {
-        viewModel.goToSearchInput()
-    }, onGenreClick = {})
+    SearchScaffold(
+            currentUser = currentUser,
+            onSearchClick = {
+                viewModel.goToSearchInput()
+            },
+            onGenreClick = {},
+    )
 }
 
 @Composable
-private fun SearchScaffold(modifier: Modifier = Modifier, onSearchClick: () -> Unit, onGenreClick: (Int) -> Unit) {
+private fun SearchScaffold(modifier: Modifier = Modifier, currentUser: UserInfo, onSearchClick: () -> Unit, onGenreClick: (Int) -> Unit) {
     var visibleItemCount by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
 
@@ -49,15 +54,20 @@ private fun SearchScaffold(modifier: Modifier = Modifier, onSearchClick: () -> U
         }
     }
 
-    STFHeader(modifier = modifier, userName = "emanh", type = STFHeaderType.HeaderSearch, onSearchClick = onSearchClick, content = {
-        Column(modifier = it.verticalScroll(scrollState)) {
-            repeat(minOf(visibleItemCount, displayItems.size)) { index ->
-                AnimatedVisibility(visible = true, enter = fadeIn(animationSpec = tween(durationMillis = 300))) {
-                    displayItems[index].invoke()
-                }
-            }
+    STFHeader(modifier = modifier,
+              avatarUrl = currentUser.avatarUrl,
+              userName = currentUser.username,
+              type = STFHeaderType.HeaderSearch,
+              onSearchClick = onSearchClick,
+              content = {
+                  Column(modifier = it.verticalScroll(scrollState)) {
+                      repeat(minOf(visibleItemCount, displayItems.size)) { index ->
+                          AnimatedVisibility(visible = true, enter = fadeIn(animationSpec = tween(durationMillis = 300))) {
+                              displayItems[index].invoke()
+                          }
+                      }
 
-            Spacer(modifier = Modifier.height(PADDING_BOTTOM_BAR.dp))
-        }
-    })
+                      Spacer(modifier = Modifier.height(PADDING_BOTTOM_BAR.dp))
+                  }
+              })
 }

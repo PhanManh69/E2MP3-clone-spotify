@@ -51,7 +51,7 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     fun goToSearchInput() {
-        appRouter.getNavController()?.navigateTo(SearchInputScreenNavigation.getRoute())
+        appRouter.getMainNavController()?.navigateTo(SearchInputScreenNavigation.getRoute())
     }
 
     fun onCloseClick() {
@@ -59,11 +59,11 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     fun onLikedSongsClick() {
-        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_LIKED))
+        appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_LIKED))
     }
 
     fun onCreatePlaylist() {
-        appRouter.getNavController()?.navigateTo(CreatePlaylistScreenNavigation.getRoute())
+        appRouter.getMainNavController()?.navigateTo(CreatePlaylistScreenNavigation.getRoute())
     }
 
     fun onPrimaryChipsClick(item: SecondaryLibraryData, type: STFMenuLibraryType) {
@@ -87,19 +87,19 @@ class YourLibraryViewModel @Inject constructor(
     }
 
     fun onPlaylistYourClick(playlist: PlaylistsModel) {
-        appRouter.getNavController()?.navigateTo(PlaylistYourScreenNavigation.getRoute(playlist.id))
+        appRouter.getMainNavController()?.navigateTo(PlaylistYourScreenNavigation.getRoute(playlist.id))
     }
 
     fun onPlaylistForYouClick(playlist: PlaylistsModel) {
-        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlist.id))
+        appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlist.id))
     }
 
     fun onFavoriteArtistClick(artist: UsersModel) {
-        appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artist.id))
+        appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artist.id))
     }
 
     fun onLikedAlbumClick(album: AlbumsModel) {
-        appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(album.id))
+        appRouter.getMainNavController()?.navigateTo(AlbumScreenNavigation.getRoute(album.id))
     }
 
     private fun getUserById() {

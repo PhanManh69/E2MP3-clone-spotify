@@ -79,6 +79,12 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getGetUserLogin(account: String, password: String): UsersModel? {
+        return usersDataSource.getGetUserLogin(account, password)?.let { entity ->
+            mapToModel(entity)
+        }
+    }
+
     override suspend fun insertAllUsers(users: List<UsersModel>) {
         usersDataSource.insertAllUsers(users.map { mapToEntity(it) })
     }

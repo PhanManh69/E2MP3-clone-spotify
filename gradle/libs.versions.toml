@@ -43,6 +43,7 @@ media = "1.7.0"
 media3 = "1.2.1"
 lottie = "6.6.2"
 palette = "1.0.0"
+datastore = "1.1.7"
 
 
 [libraries]
@@ -142,6 +143,9 @@ androidx-media3-exoplayer-dash = { group = "androidx.media3", name = "media3-exo
 androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
 androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3" }
 androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3" }
+
+#data store
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

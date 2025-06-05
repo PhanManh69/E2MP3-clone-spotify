@@ -465,8 +465,8 @@ object MyQuery {
         WHERE sg.genreId = 1
             AND s.songId NOT IN (
                 SELECT songId
-                FROM cross_ref_album_song
-                WHERE albumId = :albumId
+                FROM cross_ref_playlist_song
+                WHERE playlistId = :albumId
             )
         ORDER BY RANDOM()
         LIMIT 5
@@ -478,5 +478,15 @@ object MyQuery {
         WHERE songId NOT IN (:excludeIds)
         ORDER BY RANDOM()
         LIMIT 1
+    """
+
+    const val QUERY_GET_USER_LOGIN = """
+        SELECT * FROM users 
+        WHERE 
+            (
+                LOWER(username) = LOWER(:account)
+                OR email = :account
+            )
+            AND password = :password
     """
 }

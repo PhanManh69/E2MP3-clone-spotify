@@ -49,11 +49,11 @@ class SingleViewModel @Inject constructor(
     }
 
     fun onBackClick() {
-        appRouter.getNavController()?.goBack()
+        appRouter.getMainNavController()?.goBack()
     }
 
     fun goToArtist(artistId: Long) {
-        appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+        appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
     fun onAddClick() {
@@ -73,7 +73,7 @@ class SingleViewModel @Inject constructor(
     }
 
     fun goToSingle(singleId: Long) {
-        appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
+        appRouter.getMainNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
     }
 
     fun totalTime(song: SongsModel): String {

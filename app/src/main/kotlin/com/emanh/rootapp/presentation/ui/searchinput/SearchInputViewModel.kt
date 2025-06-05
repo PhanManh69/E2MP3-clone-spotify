@@ -64,25 +64,25 @@ class SearchInputViewModel @Inject constructor(
     }
 
     fun goToBack() {
-        appRouter.getNavController()?.goBack()
+        appRouter.getMainNavController()?.goBack()
     }
 
     fun onIconClick(id: Long, type: String) {
         when (type) {
             SONGS_SEARCH -> {
-                appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(id))
+                appRouter.getMainNavController()?.navigateTo(SingleScreenNavigation.getRoute(id))
             }
 
             ARTISTS_SEARCH -> {
-                appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(id))
+                appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(id))
             }
 
             ALBUMS_SEARCH -> {
-                appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(id))
+                appRouter.getMainNavController()?.navigateTo(AlbumScreenNavigation.getRoute(id))
             }
 
             PLAYLISTS_SEARCH -> {
-                appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(id))
+                appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(id))
             }
         }
     }

@@ -12,7 +12,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
-import com.emanh.rootapp.app.main.MainScreen
 import com.emanh.rootapp.data.db.initializer.DatabaseInitializer
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
@@ -20,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.content.edit
-import com.emanh.rootapp.app.login.LoginScreen
+import com.emanh.rootapp.app.dashboard.DashboardScreen
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -46,8 +45,7 @@ class MainActivity : AppCompatActivity() {
         databaseInitialized()
         setContent {
             E2MP3Theme {
-                LoginScreen()
-//                MainScreen(appRouter = appRouter)
+                DashboardScreen(appRouter = appRouter)
             }
         }
     }

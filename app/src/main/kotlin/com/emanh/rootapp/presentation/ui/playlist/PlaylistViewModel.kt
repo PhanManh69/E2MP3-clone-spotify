@@ -58,7 +58,7 @@ class PlaylistViewModel @Inject constructor(
     }
 
     fun onBackClick() {
-        appRouter.getNavController()?.goBack()
+        appRouter.getMainNavController()?.goBack()
     }
 
     fun totalTime(songsList: List<SongsModel>): String {

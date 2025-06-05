@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.AlbumsModel
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.model.SongsModel
@@ -38,7 +39,7 @@ import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.sampleLibraryData
 
 @Composable
-fun YourLibraryScreen() {
+fun YourLibraryScreen(currentUser: UserInfo) {
     val viewModel = hiltViewModel<YourLibraryViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -55,7 +56,8 @@ fun YourLibraryScreen() {
             )
         }
     } else {
-        YourLibraryScaffold(user = uiState.user!!,
+        YourLibraryScaffold(currentUser = currentUser,
+                            user = uiState.user!!,
                             primaryChips = uiState.primaryChips,
                             secondaryChips = uiState.secondaryChips,
                             currentType = uiState.currentType,
@@ -95,6 +97,7 @@ fun YourLibraryScaffold(
     primaryChips: SecondaryLibraryData?,
     secondaryChips: String,
     currentType: STFMenuLibraryType,
+    currentUser: UserInfo,
     user: UsersModel,
     listLikedSongs: List<SongsModel>?,
     listPlaylistYour: List<PlaylistsModel>?,
@@ -189,8 +192,8 @@ fun YourLibraryScaffold(
     }
 
     STFHeader(modifier = modifier,
-              userName = user.name.orEmpty(),
-              avatarUrl = user.avatarUrl,
+              userName = currentUser.username,
+              avatarUrl = currentUser.avatarUrl,
               secondaryChips = secondaryChips,
               primaryChips = primaryChips,
               currentType = currentType,

@@ -24,5 +24,7 @@ interface UsersDataSource {
 
     fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersEntity>
 
+    suspend fun getGetUserLogin(account: String, password: String): UsersEntity?
+
     suspend fun insertAllUsers(users: List<UsersEntity>)
 }

@@ -35,12 +35,15 @@ import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import androidx.core.net.toUri
+import com.emanh.rootapp.data.db.entity.UserInfo
+import com.emanh.rootapp.domain.usecase.UserSessionUseCase
 
 @UnstableApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val viewsSongUseCase: ViewsSongUseCase,
     private val crossRefSongUseCase: CrossRefSongUseCase,
+    private val userSessionUseCase: UserSessionUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MainUiState())
@@ -61,6 +64,12 @@ class MainViewModel @Inject constructor(
 
     init {
         initializeMediaController()
+
+        viewModelScope.launch {
+            userSessionUseCase.getCurrentUser().collect { userInfo ->
+                _uiState.update { it.copy(currentUser = userInfo) }
+            }
+        }
     }
 
     private fun initializeMediaController() {

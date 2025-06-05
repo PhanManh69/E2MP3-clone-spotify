@@ -1,6 +1,5 @@
 package com.emanh.rootapp.presentation.ui.home
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -9,9 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -25,14 +27,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFHeader
 import com.emanh.rootapp.presentation.composable.STFHeaderType
+import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
@@ -51,7 +57,7 @@ import kotlinx.coroutines.delay
 import kotlin.Any
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(currentUser: UserInfo, onLogoutClick: () -> Unit) {
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val uiState by homeViewModel.uiState.collectAsState()
     val isLiked = uiState.isLiked
@@ -78,6 +84,7 @@ fun HomeScreen() {
     } else {
         HomeScaffold(isLikedImage = isLiked,
                      isLikedPodcast = isLiked,
+                     currentUser = currentUser,
                      quickPlaylistList = uiState.quickPlaylistsList,
                      yourTopMixesList = uiState.yourTopMixesPlaylist,
                      recentlyListenedSongs = uiState.recentlyListenedSongs,
@@ -87,6 +94,7 @@ fun HomeScreen() {
                      yourFavoriteArtists = uiState.yourFavoriteArtists!!,
                      similarContent = uiState.similarContent,
                      playlistCard = uiState.playlistCard,
+                     onLogoutClick = onLogoutClick,
                      onViewAll = homeViewModel::onViewAllHistory,
                      onPlayRecommendedAll = {},
                      onPlayTrendingAll = {},
@@ -111,6 +119,7 @@ private fun HomeScaffold(
     modifier: Modifier = Modifier,
     isLikedImage: Boolean = false,
     isLikedPodcast: Boolean = false,
+    currentUser: UserInfo,
     quickPlaylistList: List<Any>,
     yourTopMixesList: List<CrossRefPlaylistsModel>,
     recentlyListenedSongs: List<SongsModel>,
@@ -120,6 +129,7 @@ private fun HomeScaffold(
     yourFavoriteArtists: UsersModel,
     similarContent: List<Any>,
     playlistCard: List<CrossRefPlaylistsModel>,
+    onLogoutClick: () -> Unit,
     onViewAll: () -> Unit,
     onPlayRecommendedAll: () -> Unit,
     onPlayTrendingAll: () -> Unit,
@@ -221,14 +231,28 @@ private fun HomeScaffold(
         }
     }
 
-    STFHeader(modifier = modifier, userName = "emanh", type = STFHeaderType.HeaderHome, onChipsHomeClick = { selectedChip = it }, content = {
-        Column(modifier = it.verticalScroll(scrollState)) {
-            repeat(minOf(visibleItemCount, displayItems.size)) { index ->
-                AnimatedVisibility(visible = true, enter = fadeIn(animationSpec = tween(durationMillis = 300))) {
-                    displayItems[index].invoke()
-                }
-            }
-            Spacer(modifier = Modifier.height(PADDING_BOTTOM_BAR.dp))
-        }
-    })
+    STFHeader(modifier = modifier,
+              avatarUrl = currentUser.avatarUrl,
+              userName = currentUser.username,
+              type = STFHeaderType.HeaderHome,
+              onChipsHomeClick = { selectedChip = it },
+              content = {
+                  Column(modifier = it.verticalScroll(scrollState)) {
+                      repeat(minOf(visibleItemCount, displayItems.size)) { index ->
+                          AnimatedVisibility(visible = true, enter = fadeIn(animationSpec = tween(durationMillis = 300))) {
+                              displayItems[index].invoke()
+                          }
+                      }
+
+                      Box(modifier = Modifier
+                          .fillMaxWidth()
+                          .height(48.dp)
+                          .padding(horizontal = 16.dp)
+                          .clip(CircleShape)
+                          .background(color = Color.Green, shape = CircleShape)
+                          .debounceClickable(onClick = onLogoutClick))
+
+                      Spacer(modifier = Modifier.height(PADDING_BOTTOM_BAR.dp))
+                  }
+              })
 }

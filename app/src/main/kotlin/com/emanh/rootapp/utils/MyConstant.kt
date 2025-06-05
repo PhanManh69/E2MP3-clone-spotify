@@ -33,13 +33,6 @@ object MyConstant {
     const val AVATAR_URL = "https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-marquee-06.webp"
     const val NOT_AVATAR = "https://res.cloudinary.com/decqclrhl/image/upload/v1748745347/e2mp3-spotify/img/not_avatar.png"
 
-    enum class State {
-        STATE_CREATED,
-        STATE_INITIALIZING,
-        STATE_INITIALIZED,
-        STATE_ERROR
-    }
-
     val equalizerIconList = listOf(R.drawable.ic_24_equalizer_1,
                                    R.drawable.ic_24_equalizer_2,
                                    R.drawable.ic_24_equalizer_3,

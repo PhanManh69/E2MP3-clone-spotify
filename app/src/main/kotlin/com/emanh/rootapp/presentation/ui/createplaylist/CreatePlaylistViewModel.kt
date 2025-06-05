@@ -24,7 +24,7 @@ class CreatePlaylistViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun onCancelClick() {
-        appRouter.getNavController()?.goBack()
+        appRouter.getMainNavController()?.goBack()
     }
 
     fun onCreateClick(playlistName: String) {
@@ -38,7 +38,7 @@ class CreatePlaylistViewModel @Inject constructor(
 
         viewModelScope.launch {
             val playlistId = playlistsUseCase.insertPlaylistYour(playlist)
-            appRouter.getNavController()
+            appRouter.getMainNavController()
                 ?.navigateTo(route = PlaylistYourScreenNavigation.getRoute(playlistId),
                              popUpToRoute = CreatePlaylistScreenNavigation.getRoute(),
                              inclusive = true)

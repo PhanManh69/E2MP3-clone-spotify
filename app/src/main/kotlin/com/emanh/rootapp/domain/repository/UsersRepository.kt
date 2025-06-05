@@ -24,5 +24,7 @@ interface UsersRepository {
 
     fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersModel>
 
+    suspend fun getGetUserLogin(account: String, password: String): UsersModel?
+
     suspend fun insertAllUsers(users: List<UsersModel>)
 }

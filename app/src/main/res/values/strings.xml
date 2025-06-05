@@ -97,5 +97,15 @@
     <string name="song_recomment">Bài hát Gợi ý</string>
     <string name="refresh">Làm mới</string>
     <string name="based_songs_in_this_playlist">Dựa trên các bài hát trong playlist này</string>
+    <string name="sign_up_free">Đăng ký miễn phí</string>
     <string name="continue_with">Tiếp tục với</string>
+    <string name="login">Đăng nhập</string>
+    <string name="millions_songs_free_spotify">Hàng triệu bài hát.\nMiễn phí trên Spotify.</string>
+    <string name="email_or_username">Email hoặc tên người dùng</string>
+    <string name="password">Mật khẩu</string>
+    <string name="enter_email_or_username">Nhập email hoặc tên người dùng của bạn</string>
+    <string name="enter_password">Nhập mật khẩu của bạn</string>
+    <string name="login_not_password">Đăng nhập không cần mật khẩu</string>
+    <string name="serd_passcode_to_mail">Chúng tôi sẽ gửi đến email của bạn mã để đăng nhập</string>
+    <string name="get_code">Lấy mã</string>
 </resources>

@@ -105,7 +105,7 @@ class PlayerViewModel @Inject constructor(
     }
 
     fun goToArtist(artistId: Long) {
-        appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+        appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
     fun getSongLike(songId: Long) {

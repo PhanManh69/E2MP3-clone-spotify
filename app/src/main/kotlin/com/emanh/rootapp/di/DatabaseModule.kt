@@ -18,6 +18,8 @@ import com.emanh.rootapp.data.datasource.SearchHistoryDataSource
 import com.emanh.rootapp.data.datasource.SearchHistoryDataSourceImpl
 import com.emanh.rootapp.data.datasource.SongsDataSource
 import com.emanh.rootapp.data.datasource.SongsDataSourceImpl
+import com.emanh.rootapp.data.datasource.UserDataStore
+import com.emanh.rootapp.data.datasource.UserDataStoreImpl
 import com.emanh.rootapp.data.datasource.UsersDataSource
 import com.emanh.rootapp.data.datasource.UsersDataSourceImpl
 import com.emanh.rootapp.data.datasource.ViewsSongDataSource
@@ -52,6 +54,7 @@ import com.emanh.rootapp.data.repository.PlaylistsRepositoryImpl
 import com.emanh.rootapp.data.repository.SearchHistoryRepositoryImpl
 import com.emanh.rootapp.data.repository.SearchRepositoryImpl
 import com.emanh.rootapp.data.repository.SongsRepositoryImpl
+import com.emanh.rootapp.data.repository.UserSessionRepositoryImpl
 import com.emanh.rootapp.data.repository.UsersRepositoryImpl
 import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
 import com.emanh.rootapp.data.repository.crossref.CrossRefAlbumRepositoryImpl
@@ -65,6 +68,7 @@ import com.emanh.rootapp.domain.repository.PlaylistsRepository
 import com.emanh.rootapp.domain.repository.SearchHistoryRepository
 import com.emanh.rootapp.domain.repository.SearchRepository
 import com.emanh.rootapp.domain.repository.SongsRepository
+import com.emanh.rootapp.domain.repository.UserSessionRepository
 import com.emanh.rootapp.domain.repository.UsersRepository
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
 import com.emanh.rootapp.domain.repository.crossref.CrossRefAlbumRepository
@@ -282,6 +286,18 @@ object DatabaseModule {
     @Singleton
     fun provideSearchHistoryRepository(searchHistoryDataSource: SearchHistoryDataSource): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(searchHistoryDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDataSource(@ApplicationContext context: Context): UserDataStore {
+        return UserDataStoreImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserSessionRepository(userDataStore: UserDataStore): UserSessionRepository {
+        return UserSessionRepositoryImpl(userDataStore)
     }
 
     @Provides

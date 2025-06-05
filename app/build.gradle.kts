@@ -124,6 +124,7 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.palette.ktx)
     implementation(libs.coil.kt.coil.compose)
+    implementation(libs.androidx.datastore)
     implementation(libs.bundles.exo.player)
     implementation(platform(libs.androidx.compose.bom))
     implementation(platform(libs.okhttp.bom))

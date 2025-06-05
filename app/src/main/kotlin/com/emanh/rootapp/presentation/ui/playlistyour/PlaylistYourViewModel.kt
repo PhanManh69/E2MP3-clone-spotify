@@ -63,12 +63,19 @@ class PlaylistYourViewModel @Inject constructor(
             }
 
             val currentRecommendations = uiState.value.songsRecommendList
-            val filteredRecommendations = currentRecommendations.filterNot { it.id == songId }
-            val excludedIds = (updatedPlaylist?.songsIdList ?: emptyList()) + currentRecommendations.map { it.id }
-            val newRandomSong = songsUseCase.getRandomSongExcluding(excludedIds).first()
+            val indexToReplace = currentRecommendations.indexOfFirst { it.id == songId }
 
-            _uiState.update {
-                it.copy(songsRecommendList = filteredRecommendations + listOf(newRandomSong), playlist = updatedPlaylist)
+            if (indexToReplace != -1) {
+                val excludedIds = (updatedPlaylist?.songsIdList ?: emptyList()) + currentRecommendations.map { it.id }
+                val newRandomSong = songsUseCase.getRandomSongExcluding(excludedIds).first()
+
+                val newRecommendations = currentRecommendations.toMutableList().apply {
+                    this[indexToReplace] = newRandomSong
+                }
+
+                _uiState.update {
+                    it.copy(songsRecommendList = newRecommendations, playlist = updatedPlaylist)
+                }
             }
         }
     }

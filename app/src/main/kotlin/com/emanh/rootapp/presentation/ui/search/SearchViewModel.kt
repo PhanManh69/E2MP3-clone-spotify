@@ -13,6 +13,6 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun goToSearchInput() {
-        appRouter.getNavController()?.navigateTo(SearchInputScreenNavigation.getRoute())
+        appRouter.getMainNavController()?.navigateTo(SearchInputScreenNavigation.getRoute())
     }
 }

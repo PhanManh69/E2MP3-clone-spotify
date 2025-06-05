@@ -48,6 +48,10 @@ class UsersDataSourceImpl @Inject constructor(
         return usersDao.getOwnerPlaylistYour(playlistId)
     }
 
+    override suspend fun getGetUserLogin(account: String, password: String): UsersEntity? {
+        return usersDao.getGetUserLogin(account, password)
+    }
+
     override suspend fun insertAllUsers(users: List<UsersEntity>) {
         return usersDao.insertAllUsers(users)
     }

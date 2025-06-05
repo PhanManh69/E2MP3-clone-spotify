@@ -4,15 +4,28 @@ import androidx.navigation.NavController
 
 class AppRouterImpl : AppRouter {
 
-    private var navController: NavController? = null
+    private var authNavController: NavController? = null
+    private var mainNavController: NavController? = null
 
-    override fun bind(navController: NavController) {
-        this.navController = navController
+    // Auth navigation binding
+    override fun bindAuth(navController: NavController) {
+        this.authNavController = navController
     }
 
-    override fun unbind() {
-        this.navController = null
+    override fun unbindAuth() {
+        this.authNavController = null
     }
 
-    override fun getNavController(): NavController? = navController
+    override fun getAuthNavController(): NavController? = authNavController
+
+    // Main navigation binding
+    override fun bindMain(navController: NavController) {
+        this.mainNavController = navController
+    }
+
+    override fun unbindMain() {
+        this.mainNavController = null
+    }
+
+    override fun getMainNavController(): NavController? = mainNavController
 }

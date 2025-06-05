@@ -53,7 +53,7 @@ class ArtistViewMode @Inject constructor(
     }
 
     fun onBackClick() {
-        appRouter.getNavController()?.goBack()
+        appRouter.getMainNavController()?.goBack()
     }
 
     @Composable

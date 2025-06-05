@@ -4,8 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class AppNavigationRoute {
-    @Serializable
-    data object Login : AppNavigationRoute()
 
     @Serializable
     data object Home : AppNavigationRoute()
@@ -21,6 +19,15 @@ sealed class AppNavigationRoute {
 
     @Serializable
     data object CreatePlaylist : AppNavigationRoute()
+
+    @Serializable
+    data object LoginControl : AppNavigationRoute()
+
+    @Serializable
+    data object Login : AppNavigationRoute()
+
+    @Serializable
+    data object LoginNotPassword : AppNavigationRoute()
 
     @Serializable
     data class Playlist(val playlistId: Long = 0) : AppNavigationRoute()

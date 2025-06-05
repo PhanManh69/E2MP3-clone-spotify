@@ -75,23 +75,23 @@ class HomeViewModel @Inject constructor(
     }
 
     fun goToPlaylist(playlistId: Long) {
-        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlistId))
+        appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(playlistId))
     }
 
     fun goToAlbum(albumId: Long) {
-        appRouter.getNavController()?.navigateTo(AlbumScreenNavigation.getRoute(albumId))
+        appRouter.getMainNavController()?.navigateTo(AlbumScreenNavigation.getRoute(albumId))
     }
 
     fun goToSingle(singleId: Long) {
-        appRouter.getNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
+        appRouter.getMainNavController()?.navigateTo(SingleScreenNavigation.getRoute(singleId))
     }
 
     fun goToArtist(artistId: Long) {
-        appRouter.getNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
+        appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
     fun onViewAllHistory() {
-        appRouter.getNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_HISTORY))
+        appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_HISTORY))
     }
 
     private fun getRecommendedSongs() {
