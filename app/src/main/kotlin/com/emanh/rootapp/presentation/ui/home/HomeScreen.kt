@@ -8,12 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -27,8 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.rootapp.data.db.entity.UserInfo
@@ -38,7 +33,6 @@ import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.presentation.composable.STFHeader
 import com.emanh.rootapp.presentation.composable.STFHeaderType
-import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
@@ -57,7 +51,7 @@ import kotlinx.coroutines.delay
 import kotlin.Any
 
 @Composable
-fun HomeScreen(currentUser: UserInfo, onLogoutClick: () -> Unit) {
+fun HomeScreen(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit) {
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val uiState by homeViewModel.uiState.collectAsState()
     val isLiked = uiState.isLiked
@@ -67,6 +61,10 @@ fun HomeScreen(currentUser: UserInfo, onLogoutClick: () -> Unit) {
 
     if (initialRecommendedSongs.value.isEmpty() && uiState.recommendedSongs.isNotEmpty()) {
         initialRecommendedSongs.value = uiState.recommendedSongs
+    }
+
+    LaunchedEffect(currentUser) {
+        homeViewModel.setCurrentUserId(currentUser.id)
     }
 
     if (uiState.isLoading || uiState.yourFavoriteArtists == null) {
@@ -94,7 +92,7 @@ fun HomeScreen(currentUser: UserInfo, onLogoutClick: () -> Unit) {
                      yourFavoriteArtists = uiState.yourFavoriteArtists!!,
                      similarContent = uiState.similarContent,
                      playlistCard = uiState.playlistCard,
-                     onLogoutClick = onLogoutClick,
+                     onNavigationDrawerClick = onNavigationDrawerClick,
                      onViewAll = homeViewModel::onViewAllHistory,
                      onPlayRecommendedAll = {},
                      onPlayTrendingAll = {},
@@ -129,7 +127,7 @@ private fun HomeScaffold(
     yourFavoriteArtists: UsersModel,
     similarContent: List<Any>,
     playlistCard: List<CrossRefPlaylistsModel>,
-    onLogoutClick: () -> Unit,
+    onNavigationDrawerClick: () -> Unit,
     onViewAll: () -> Unit,
     onPlayRecommendedAll: () -> Unit,
     onPlayTrendingAll: () -> Unit,
@@ -236,6 +234,7 @@ private fun HomeScaffold(
               userName = currentUser.username,
               type = STFHeaderType.HeaderHome,
               onChipsHomeClick = { selectedChip = it },
+              onAvatarClick = onNavigationDrawerClick,
               content = {
                   Column(modifier = it.verticalScroll(scrollState)) {
                       repeat(minOf(visibleItemCount, displayItems.size)) { index ->
@@ -243,14 +242,6 @@ private fun HomeScaffold(
                               displayItems[index].invoke()
                           }
                       }
-
-                      Box(modifier = Modifier
-                          .fillMaxWidth()
-                          .height(48.dp)
-                          .padding(horizontal = 16.dp)
-                          .clip(CircleShape)
-                          .background(color = Color.Green, shape = CircleShape)
-                          .debounceClickable(onClick = onLogoutClick))
 
                       Spacer(modifier = Modifier.height(PADDING_BOTTOM_BAR.dp))
                   }

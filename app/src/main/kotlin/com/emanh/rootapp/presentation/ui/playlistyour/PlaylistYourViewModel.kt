@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,30 +51,19 @@ class PlaylistYourViewModel @Inject constructor(
 
     fun onIconClick(songId: Long) {
         viewModelScope.launch {
-            crossRefPlaylistUseCase.insertSongToPlaylist(PlaylistSongEntity(playlistId, songId))
-            val updatedPlaylist = uiState.value.playlist?.songsIdList?.let { oldList ->
-                val newList = oldList + songId
-                uiState.value.playlist?.copy(songsIdList = newList)
-            }
+            try {
+                crossRefPlaylistUseCase.insertSongToPlaylist(PlaylistSongEntity(playlistId, songId))
 
-            updatedPlaylist?.let {
-                playlistsUseCase.updatePlaylist(it)
-            }
-
-            val currentRecommendations = uiState.value.songsRecommendList
-            val indexToReplace = currentRecommendations.indexOfFirst { it.id == songId }
-
-            if (indexToReplace != -1) {
-                val excludedIds = (updatedPlaylist?.songsIdList ?: emptyList()) + currentRecommendations.map { it.id }
-                val newRandomSong = songsUseCase.getRandomSongExcluding(excludedIds).first()
-
-                val newRecommendations = currentRecommendations.toMutableList().apply {
-                    this[indexToReplace] = newRandomSong
+                val updatedPlaylist = uiState.value.playlist?.let { currentPlaylist ->
+                    val newSongsIdList = currentPlaylist.songsIdList + songId
+                    currentPlaylist.copy(songsIdList = newSongsIdList)
                 }
 
-                _uiState.update {
-                    it.copy(songsRecommendList = newRecommendations, playlist = updatedPlaylist)
+                updatedPlaylist?.let {
+                    playlistsUseCase.updatePlaylist(it)
                 }
+            } catch (e: Exception) {
+                Log.e("PlaylistViewModel", "Error in onIconClick", e)
             }
         }
     }

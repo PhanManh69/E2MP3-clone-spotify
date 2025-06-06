@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "genres")
 data class GenresEntity(
-    @PrimaryKey val genreId: Long = 0, @ColumnInfo(name = "name_id") val nameId: Int? = null
+    @PrimaryKey val genreId: Long = 0, @ColumnInfo(name = "name_id") val nameId: Int = 0
 )

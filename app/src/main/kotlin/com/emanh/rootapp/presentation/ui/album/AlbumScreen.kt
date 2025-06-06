@@ -19,12 +19,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +47,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.AlbumsModel
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
@@ -68,9 +72,13 @@ import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun AlbumScreen(onItemClick: (Long, String) -> Unit) {
+fun AlbumScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     val albumViewModel = hiltViewModel<AlbumViewModel>()
     val uiState by albumViewModel.uiState.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        albumViewModel.setCurrentUserId(currentUser.id)
+    }
 
     if (uiState.isLoading || uiState.album == null) {
         Box(modifier = Modifier
@@ -94,7 +102,9 @@ fun AlbumScreen(onItemClick: (Long, String) -> Unit) {
                       onOwnerClick = {
                           albumViewModel.goToArtist(it)
                       },
-                      onAddClick = albumViewModel::onAddClick,
+                      onAddClick = {
+                          albumViewModel.onAddClick(currentUser.id)
+                      },
                       onDownloadClick = {},
                       onMoreClick = {},
                       onShuffleClick = {},

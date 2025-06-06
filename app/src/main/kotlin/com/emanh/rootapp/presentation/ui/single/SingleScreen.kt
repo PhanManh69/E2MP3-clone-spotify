@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.composable.STFCarouselHero
@@ -71,9 +73,13 @@ import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun SingleScreen(onItemClick: (Long, String) -> Unit) {
+fun SingleScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     val singleViewModel = hiltViewModel<SingleViewModel>()
     val uiState by singleViewModel.uiState.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        singleViewModel.setCurrentUserId(currentUser.id)
+    }
 
     if (uiState.isLoading || uiState.single == null) {
         Box(modifier = Modifier
@@ -96,7 +102,9 @@ fun SingleScreen(onItemClick: (Long, String) -> Unit) {
                        onOwnerClick = {
                            singleViewModel.goToArtist(it)
                        },
-                       onAddClick = singleViewModel::onAddClick,
+                       onAddClick = {
+                           singleViewModel.onAddClick(currentUser.id)
+                       },
                        onDownloadClick = {},
                        onMoreClick = {},
                        onShuffleClick = {},

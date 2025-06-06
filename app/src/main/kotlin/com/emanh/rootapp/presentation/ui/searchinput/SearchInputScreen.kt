@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.AlbumsModel
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.model.SongsModel
@@ -49,9 +50,13 @@ import com.emanh.rootapp.utils.MyConstant.chipSearchInputList
 import kotlinx.coroutines.delay
 
 @Composable
-fun SearchInputScreen(onItemClick: (Long, String) -> Unit) {
+fun SearchInputScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     val viewModel = hiltViewModel<SearchInputViewModel>()
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        viewModel.setCurrentUserId(currentUser.id)
+    }
 
     SearchInputScaffold(currentMessage = uiState.currentMessage,
                         searchList = uiState.searchList,
@@ -59,7 +64,7 @@ fun SearchInputScreen(onItemClick: (Long, String) -> Unit) {
                         onBackClick = viewModel::goToBack,
                         onMessageChange = { viewModel.updateMessage(it) },
                         onCloseClick = { id, type ->
-                            viewModel.onRemovedSearchHistory(id, type)
+                            viewModel.onRemovedSearchHistory(id, type, currentUser.id)
                         },
                         onItemClick = { id, type, title ->
                             when (type) {
@@ -72,7 +77,7 @@ fun SearchInputScreen(onItemClick: (Long, String) -> Unit) {
                                 }
                             }
 
-                            viewModel.insertSearchHistory(id, type)
+                            viewModel.insertSearchHistory(id, type, currentUser.id)
                         },
                         onIconClick = { id, type ->
                             viewModel.onIconClick(id, type)

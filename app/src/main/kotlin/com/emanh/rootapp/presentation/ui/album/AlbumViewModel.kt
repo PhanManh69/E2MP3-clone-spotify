@@ -40,13 +40,22 @@ class AlbumViewModel @Inject constructor(
 
     private val albumId: Long = savedStateHandle.get<Long>("albumId") ?: -1
 
+    private var currentUserId: Long = -1
+
     init {
         if (albumId != -1L) {
             Log.d(TAG, "Initializing with albumId: $albumId")
 
-            getPlaylistLike(albumId)
             loadAlbumDetails(albumId)
             loadAlbumData(albumId)
+        }
+    }
+
+    fun setCurrentUserId(userId: Long) {
+        currentUserId = userId
+
+        if (albumId != -1L && currentUserId != -1L) {
+            getPlaylistLike(albumId, currentUserId)
         }
     }
 
@@ -78,27 +87,23 @@ class AlbumViewModel @Inject constructor(
         return "${totalHours}h${totalMinutes}min"
     }
 
-    fun onAddClick() {
-        val userIdFake = 2L
-
+    fun onAddClick(currentUserId: Long) {
         viewModelScope.launch {
             if (_uiState.value.isAddAlbum) {
-                crossRefAlbumUseCase.deleteAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userIdFake))
+                crossRefAlbumUseCase.deleteAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = currentUserId))
                 _uiState.update { it.copy(isAddAlbum = false) }
                 return@launch
             } else {
-                crossRefAlbumUseCase.insertAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userIdFake))
+                crossRefAlbumUseCase.insertAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = currentUserId))
                 _uiState.update { it.copy(isAddAlbum = true) }
                 return@launch
             }
         }
     }
 
-    private fun getPlaylistLike(albumId: Long) {
-        val userIdFake = 2L
-
+    private fun getPlaylistLike(albumId: Long, currentUserId: Long) {
         viewModelScope.launch {
-            crossRefAlbumUseCase.getAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = userIdFake)).catch { error ->
+            crossRefAlbumUseCase.getAlbumLike(albumLikeEntity = AlbumLikeEntity(albumId = albumId, userId = currentUserId)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isAdded = it != null

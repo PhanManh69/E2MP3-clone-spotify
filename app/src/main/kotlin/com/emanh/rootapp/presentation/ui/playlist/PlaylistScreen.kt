@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -57,6 +58,7 @@ import com.emanh.rootapp.presentation.ui.playlist.composable.PlaylistInfoButton
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.composable.STFPlaylistAvatar
@@ -67,9 +69,13 @@ import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun PlaylistScreen(onItemClick: (Long, String) -> Unit) {
+fun PlaylistScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     val playlistViewModel = hiltViewModel<PlaylistViewModel>()
     val uiState by playlistViewModel.uiState.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        playlistViewModel.setCurrentUserId(currentUser.id)
+    }
 
     if (uiState.isLoading || uiState.owner == null || uiState.playlist == null) {
         Box(modifier = Modifier
@@ -90,7 +96,9 @@ fun PlaylistScreen(onItemClick: (Long, String) -> Unit) {
                          playlist = uiState.playlist!!,
                          songsList = uiState.songList,
                          onOwnerClick = {},
-                         onAddClick = playlistViewModel::onAddClick,
+                         onAddClick = {
+                             playlistViewModel.onAddClick(currentUser.id)
+                         },
                          onDownloadClick = {},
                          onMoreClick = {},
                          onShuffleClick = {},

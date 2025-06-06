@@ -6,8 +6,8 @@ import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.ui.yourlibrary.YourLibraryScreen
 
-fun NavGraphBuilder.yourLibraryScreenGraph(currentUser: UserInfo) {
+fun NavGraphBuilder.yourLibraryScreenGraph(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit) {
     composable<AppNavigationRoute.YourLibrary> {
-        YourLibraryScreen(currentUser)
+        YourLibraryScreen(currentUser = currentUser, onNavigationDrawerClick = onNavigationDrawerClick)
     }
 }

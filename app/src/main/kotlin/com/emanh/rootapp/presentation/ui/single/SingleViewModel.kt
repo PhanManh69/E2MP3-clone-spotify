@@ -38,13 +38,22 @@ class SingleViewModel @Inject constructor(
 
     private val songId: Long = savedStateHandle.get<Long>("singleId") ?: -1
 
+    private var currentUserId: Long = -1
+
     init {
         if (songId != -1L) {
             Log.d(TAG, "Initializing with singleId: $songId")
 
-            getSongLike(songId)
             loadSingleDetails(songId)
             loadMoreSongsByArtists(songId)
+        }
+    }
+
+    fun setCurrentUserId(userId: Long) {
+        currentUserId = userId
+
+        if (songId != -1L && currentUserId != -1L) {
+            getSongLike(songId, currentUserId)
         }
     }
 
@@ -56,16 +65,14 @@ class SingleViewModel @Inject constructor(
         appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
-    fun onAddClick() {
-        val userIdFake = 2L
-
+    fun onAddClick(currentUserId: Long) {
         viewModelScope.launch {
             if (_uiState.value.isAddSong) {
-                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
+                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = currentUserId))
                 _uiState.update { it.copy(isAddSong = false) }
                 return@launch
             } else {
-                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
+                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = currentUserId))
                 _uiState.update { it.copy(isAddSong = true) }
                 return@launch
             }
@@ -142,11 +149,9 @@ class SingleViewModel @Inject constructor(
         }
     }
 
-    private fun getSongLike(songId: Long) {
-        val userIdFake = 2L
-
+    private fun getSongLike(songId: Long, currentUserId: Long) {
         viewModelScope.launch {
-            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake)).catch { error ->
+            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = currentUserId)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isAdded = it != null

@@ -2,6 +2,7 @@ package com.emanh.rootapp.presentation.ui.createplaylist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.usecase.PlaylistsUseCase
 import com.emanh.rootapp.presentation.navigation.CreatePlaylistScreenNavigation
@@ -27,12 +28,11 @@ class CreatePlaylistViewModel @Inject constructor(
         appRouter.getMainNavController()?.goBack()
     }
 
-    fun onCreateClick(playlistName: String) {
-        val userIdFake = 2L
+    fun onCreateClick(playlistName: String, currentUserId: Long) {
         val playlist = PlaylistsModel(title = playlistName,
                                       subtitle = playlistName,
                                       normalizedSearchValue = playlistName.removeAccents(),
-                                      ownerId = userIdFake,
+                                      ownerId = currentUserId,
                                       releaseDate = getCurrentDate(),
                                       songsIdList = emptyList())
 

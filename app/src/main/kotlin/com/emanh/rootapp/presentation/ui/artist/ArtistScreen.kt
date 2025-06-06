@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.composable.STFItem
@@ -63,9 +65,13 @@ import com.emanh.rootapp.utils.MyConstant.fakeSongs
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
-fun ArtistScreen(onItemClick: (Long, String) -> Unit) {
+fun ArtistScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     val artistViewModel = hiltViewModel<ArtistViewMode>()
     val uiState by artistViewModel.uiState.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        artistViewModel.setCurrentUserId(currentUser.id)
+    }
 
     if (uiState.isLoading || uiState.artist == null) {
         Box(modifier = Modifier
@@ -86,7 +92,9 @@ fun ArtistScreen(onItemClick: (Long, String) -> Unit) {
                 isFollowing = uiState.isFollowing,
                 artist = uiState.artist!!,
                 songsList = uiState.songsList,
-                onFollowClick = artistViewModel::onFollowClick,
+                onFollowClick = {
+                    artistViewModel.onFollowClick(currentUser.id)
+                },
                 onMoreClick = {},
                 onShuffleClick = {},
                 onPausePlayClick = {},

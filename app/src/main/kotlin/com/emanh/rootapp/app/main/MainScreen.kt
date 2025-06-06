@@ -5,12 +5,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -21,8 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.emanh.rootapp.presentation.composable.STFPlayerSticky
-import com.emanh.rootapp.presentation.composable.navbar.STFTabbar
 import com.emanh.rootapp.presentation.navigation.albumScreenGraph
 import com.emanh.rootapp.presentation.navigation.artistScreenGraph
 import com.emanh.rootapp.presentation.navigation.homeScreenGraph
@@ -37,15 +38,17 @@ import com.emanh.rootapp.presentation.navigation.yourLibraryScreenGraph
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.util.UnstableApi
-import com.emanh.rootapp.presentation.composable.STFPlayerStickyEmpty
-import com.emanh.rootapp.presentation.composable.STFPlayerStickyLoading
+import com.emanh.rootapp.app.main.composable.MainBottomButton
+import com.emanh.rootapp.app.main.composable.MainDrawerSheet
 import com.emanh.rootapp.presentation.navigation.createPlaylistScreenGraph
 import com.emanh.rootapp.presentation.navigation.playlistYourScreenGraph
+import com.emanh.rootapp.presentation.navigation.uploadScreenGraph
 import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
-import com.emanh.rootapp.presentation.ui.player.PlayerScreen
+import com.emanh.rootapp.presentation.theme.SurfaceTertiary
 import com.emanh.rootapp.presentation.ui.player.PlayerViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -68,95 +71,114 @@ fun MainScreen(
         }
     }
 
-    Box(modifier = modifier) {
-        if (mainUiState.currentUser == null) {
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(SurfacePrimary)) {
-                CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(64.dp)
-                            .align(Alignment.Center),
-                        color = SurfaceProduct,
-                        trackColor = SurfaceSecondaryInvert,
-                )
-            }
-        } else {
-            NavHost(modifier = Modifier, navController = navController, startDestination = AppNavigationRoute.Home, enterTransition = {
-                fadeIn(animationSpec = tween(100))
-            }, exitTransition = {
-                fadeOut(animationSpec = tween(100))
-            }, popEnterTransition = {
-                fadeIn(animationSpec = tween(100))
-            }, popExitTransition = {
-                fadeOut(animationSpec = tween(100))
-            }) {
-                testComposableScreenGraph()
-                homeScreenGraph(currentUser = mainUiState.currentUser!!, onLogoutClick = onLogout)
-                searchScreenGraph(currentUser = mainUiState.currentUser!!)
-                yourLibraryScreenGraph(currentUser = mainUiState.currentUser!!)
-                createPlaylistScreenGraph()
-                searchInputScreenGraph(onItemClick = { id, title ->
-                    mainViewModel.getSongId(songId = id)
-                    mainViewModel.getTitleFromItem("Bài hát", title)
-                })
-                playlistScreenGraph(onItemClick = { id, title ->
-                    mainViewModel.getSongId(songId = id)
-                    mainViewModel.getTitleFromItem("Playlist", title)
-                })
-                playlistYourScreenGraph(onItemClick = { id, title ->
-                    mainViewModel.getSongId(songId = id)
-                    mainViewModel.getTitleFromItem("Playlist", title)
-                })
-                albumScreenGraph(onItemClick = { id, title ->
-                    mainViewModel.getSongId(songId = id)
-                    mainViewModel.getTitleFromItem("Album", title)
-                })
-                singleScreenGraph(onItemClick = { id, title ->
-                    mainViewModel.getSongId(songId = id)
-                    mainViewModel.getTitleFromItem("Bài hát", title)
-                })
-                artistScreenGraph(onItemClick = { id, title ->
-                    mainViewModel.getSongId(songId = id)
-                    mainViewModel.getTitleFromItem("Nghệ sĩ", title)
-                })
-            }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    if (mainUiState.currentUser == null) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(SurfacePrimary)) {
+            CircularProgressIndicator(
+                    modifier = Modifier
+                        .width(64.dp)
+                        .align(Alignment.Center),
+                    color = SurfaceProduct,
+                    trackColor = SurfaceSecondaryInvert,
+            )
         }
-
-        Column(modifier = Modifier.align(Alignment.BottomCenter), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (mainUiState.single != null) {
-                if (mainUiState.isLoading) {
-                    STFPlayerStickyLoading()
-                } else {
-                    STFPlayerSticky(song = mainUiState.single!!,
-                                    isPlayed = mainUiState.isPlayed,
-                                    currentProgress = mainUiState.currentProgress,
-                                    onMusicalClick = {},
-                                    onPlayerStickyClick = playerViewModel::showPlayer,
-                                    onPlayPauseClick = {
-                                        mainViewModel.onPlayPauseClick(isPlayed = it, scope = scope)
-                                    })
+    } else {
+        ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    ModalDrawerSheet(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(end = 48.dp), drawerContainerColor = SurfaceTertiary) {
+                        MainDrawerSheet(currentUser = mainUiState.currentUser!!, onUploadClick = {
+                            mainViewModel.onUploadClick()
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
+                            }
+                        }, onLogoutClick = onLogout)
+                    }
+                },
+        ) {
+            Box(modifier = modifier) {
+                NavHost(modifier = Modifier, navController = navController, startDestination = AppNavigationRoute.Home, enterTransition = {
+                    fadeIn(animationSpec = tween(100))
+                }, exitTransition = {
+                    fadeOut(animationSpec = tween(100))
+                }, popEnterTransition = {
+                    fadeIn(animationSpec = tween(100))
+                }, popExitTransition = {
+                    fadeOut(animationSpec = tween(100))
+                }) {
+                    testComposableScreenGraph()
+                    homeScreenGraph(currentUser = mainUiState.currentUser!!, onNavigationDrawerClick = {
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    })
+                    searchScreenGraph(currentUser = mainUiState.currentUser!!, onNavigationDrawerClick = {
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    })
+                    yourLibraryScreenGraph(currentUser = mainUiState.currentUser!!, onNavigationDrawerClick = {
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    })
+                    createPlaylistScreenGraph(currentUser = mainUiState.currentUser!!)
+                    searchInputScreenGraph(currentUser = mainUiState.currentUser!!, onItemClick = { id, title ->
+                        mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
+                        mainViewModel.getTitleFromItem("Bài hát", title)
+                    })
+                    playlistScreenGraph(currentUser = mainUiState.currentUser!!, onItemClick = { id, title ->
+                        mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
+                        mainViewModel.getTitleFromItem("Playlist", title)
+                    })
+                    playlistYourScreenGraph(onItemClick = { id, title ->
+                        mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
+                        mainViewModel.getTitleFromItem("Playlist", title)
+                    })
+                    albumScreenGraph(currentUser = mainUiState.currentUser!!, onItemClick = { id, title ->
+                        mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
+                        mainViewModel.getTitleFromItem("Album", title)
+                    })
+                    singleScreenGraph(currentUser = mainUiState.currentUser!!, onItemClick = { id, title ->
+                        mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
+                        mainViewModel.getTitleFromItem("Bài hát", title)
+                    })
+                    artistScreenGraph(currentUser = mainUiState.currentUser!!, onItemClick = { id, title ->
+                        mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
+                        mainViewModel.getTitleFromItem("Nghệ sĩ", title)
+                    })
+                    uploadScreenGraph()
                 }
 
-                if (playerUiState.showPlayerSheet) {
-                    PlayerScreen(headerTitle = mainUiState.headerTitle,
-                                 headerSubtitle = mainUiState.headerSubtitle,
-                                 totalDuration = mainUiState.timeline,
+                MainBottomButton(modifier = Modifier.align(Alignment.BottomCenter),
                                  currentProgress = mainUiState.currentProgress,
+                                 timeline = mainUiState.timeline,
+                                 headerTitle = mainUiState.headerTitle,
+                                 headerSubtitle = mainUiState.headerSubtitle,
+                                 isLoading = mainUiState.isLoading,
                                  isPlayed = mainUiState.isPlayed,
-                                 song = mainUiState.single!!,
+                                 showPlayerSheet = playerUiState.showPlayerSheet,
+                                 currentUser = mainUiState.currentUser!!,
+                                 single = mainUiState.single,
+                                 navController = navController,
                                  artistsList = mainUiState.artistsList,
-                                 onPlayPauseClick = {
-                                     mainViewModel.onPlayPauseClick(isPlayed = it, scope = scope)
-                                 },
-                                 onValueChange = { mainViewModel.onValueTimeLineChange(it) },
-                                 onValueChangeFinished = { mainViewModel.onSliderPositionChangeFinished(it, scope) })
-                }
-            } else {
-                STFPlayerStickyEmpty()
+                                 onPlayerStickyClick = playerViewModel::showPlayer,
+                                 onValueTimeLineChange = { mainViewModel.onValueTimeLineChange(it) },
+                                 onSliderPositionChangeFinished = { mainViewModel.onSliderPositionChangeFinished(it, scope) },
+                                 onPlayPauseClick = { mainViewModel.onPlayPauseClick(isPlayed = it, scope = scope) })
             }
-
-            STFTabbar(navController = navController)
         }
     }
 }

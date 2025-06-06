@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,9 +40,13 @@ import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.MyConstant.sampleLibraryData
 
 @Composable
-fun YourLibraryScreen(currentUser: UserInfo) {
+fun YourLibraryScreen(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit) {
     val viewModel = hiltViewModel<YourLibraryViewModel>()
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        viewModel.setCurrentUserId(currentUser.id)
+    }
 
     if (uiState.isLoading || uiState.user == null) {
         Box(modifier = Modifier
@@ -66,6 +71,7 @@ fun YourLibraryScreen(currentUser: UserInfo) {
                             listPlaylistForYou = uiState.listPlaylistForYou,
                             listFavoriteArtist = uiState.listFavoriteArtist,
                             listLikedAlbum = uiState.listLikedAlbum,
+                            onNavigationDrawerClick = onNavigationDrawerClick,
                             goToSearchInput = viewModel::goToSearchInput,
                             onCloseClick = viewModel::onCloseClick,
                             onLikedSongsClick = viewModel::onLikedSongsClick,
@@ -104,6 +110,7 @@ fun YourLibraryScaffold(
     listPlaylistForYou: List<PlaylistsModel>?,
     listFavoriteArtist: List<UsersModel>?,
     listLikedAlbum: List<AlbumsModel>?,
+    onNavigationDrawerClick: () -> Unit,
     goToSearchInput: () -> Unit,
     onLikedSongsClick: () -> Unit,
     onCloseClick: () -> Unit,
@@ -199,6 +206,7 @@ fun YourLibraryScaffold(
               currentType = currentType,
               type = STFHeaderType.HeaderLibrary,
               libraryList = sampleLibraryData,
+              onAvatarClick = onNavigationDrawerClick,
               onSearchClick = goToSearchInput,
               onPlusClick = onCreatePlaylist,
               onCloseClick = onCloseClick,

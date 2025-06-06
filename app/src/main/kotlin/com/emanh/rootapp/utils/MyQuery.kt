@@ -462,7 +462,7 @@ object MyQuery {
         SELECT *
         FROM songs s
         JOIN cross_ref_song_genre sg ON s.songId = sg.songId
-        WHERE sg.genreId = 1
+        WHERE sg.genreId = 1 OR sg.genreId = 12
             AND s.songId NOT IN (
                 SELECT songId
                 FROM cross_ref_playlist_song

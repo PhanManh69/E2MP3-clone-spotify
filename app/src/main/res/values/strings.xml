@@ -108,4 +108,26 @@
     <string name="login_not_password">Đăng nhập không cần mật khẩu</string>
     <string name="serd_passcode_to_mail">Chúng tôi sẽ gửi đến email của bạn mã để đăng nhập</string>
     <string name="get_code">Lấy mã</string>
+    <string name="view_profile">Xem hồ hơ</string>
+    <string name="new_release">Bản phát hành mới</string>
+    <string name="recently">Gần đây</string>
+    <string name="settings_and_privacy">Cài đặt và quyền riêng tư</string>
+    <string name="add_song">Thêm bài hát</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="title_song">Tiêu đề bài hát của bạn</string>
+    <string name="subtitle_song">Phụ đề bài hát của bạn</string>
+    <string name="avatar_song">Ảnh đại diện của bạn</string>
+    <string name="song_link">Bài hát của bạn</string>
+    <string name="genre_song">Thể loại bài hát của bạn</string>
+    <string name="select_avatar_song">Chọn ảnh đại diện của bạn</string>
+    <string name="select_song_link">Chọn bài hát của bạn</string>
+    <string name="select_genre_song">Chọn thể loại bài hát của bạn</string>
+    <string name="enter_title_song">Nhập tiêu đề cho bài hát của bạn</string>
+    <string name="enter_subtitle_song">Nhập phụ đề cho bài hát của bạn</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="confirm_exit">Xác nhận thoát</string>
+    <string name="confirm_logout">Xác nhận đăng xuất</string>
+    <string name="are_you_sure_you_want_to_exit">Bạn có chắc chắn muốn thoát? Tất cả dữ liệu đã nhập sẽ bị mất.</string>
+    <string name="are_you_sure_you_want_to_logout">Bạn có chắc chắn muốn đăng xuất tài khoản khỏi ứng dụng?</string>
+    <string name="exit">Thoát</string>
 </resources>

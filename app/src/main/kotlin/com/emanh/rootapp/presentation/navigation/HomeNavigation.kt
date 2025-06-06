@@ -6,8 +6,8 @@ import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.ui.home.HomeScreen
 
-fun NavGraphBuilder.homeScreenGraph(currentUser: UserInfo, onLogoutClick: () -> Unit) {
+fun NavGraphBuilder.homeScreenGraph(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit) {
     composable<AppNavigationRoute.Home> {
-        HomeScreen(currentUser, onLogoutClick)
+        HomeScreen(currentUser = currentUser, onNavigationDrawerClick = onNavigationDrawerClick)
     }
 }

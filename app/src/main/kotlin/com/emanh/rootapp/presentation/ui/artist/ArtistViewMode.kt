@@ -40,15 +40,24 @@ class ArtistViewMode @Inject constructor(
 
     private val artistId: Long = savedStateHandle.get<Long>("artistId") ?: -1
 
+    private var currentUserId: Long = -1
+
     init {
         if (artistId != -1L) {
             Log.d(TAG, "Initializing with albumId: $artistId")
 
-            getUserFollowing(artistId)
             loadArtistById(artistId)
             loadSongsByArtist(artistId)
             loadGenreNameByArtist(artistId)
             loadListenerMonth(artistId)
+        }
+    }
+
+    fun setCurrentUserId(userId: Long) {
+        currentUserId = userId
+
+        if (artistId != -1L && currentUserId != -1L) {
+            getUserFollowing(artistId, currentUserId)
         }
     }
 
@@ -62,32 +71,30 @@ class ArtistViewMode @Inject constructor(
         return names.joinToString(" • ")
     }
 
-    fun onFollowClick() {
-        val userIdFake = 2L
-
+    fun onFollowClick(currentUserId: Long) {
         viewModelScope.launch {
             if (_uiState.value.isFollowing) {
-                crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
+                crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = currentUserId, artistId = artistId))
                 _uiState.update { it.copy(isFollowing = false) }
                 return@launch
             } else {
-                crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
+                crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = currentUserId, artistId = artistId))
                 _uiState.update { it.copy(isFollowing = true) }
                 return@launch
             }
         }
     }
 
-    private fun getUserFollowing(artistId: Long) {
-        val userIdFake = 2L
-
+    private fun getUserFollowing(artistId: Long, currentUserId: Long) {
         viewModelScope.launch {
-            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId)).catch { error ->
-                Log.e(TAG, "Error fetching ArtistById: $error")
-            }.collect {
-                val isFollwing = it != null
-                _uiState.update { it.copy(isFollowing = isFollwing) }
-            }
+            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = currentUserId, artistId = artistId))
+                .catch { error ->
+                    Log.e(TAG, "Error fetching ArtistById: $error")
+                }
+                .collect {
+                    val isFollwing = it != null
+                    _uiState.update { it.copy(isFollowing = isFollwing) }
+                }
         }
     }
 

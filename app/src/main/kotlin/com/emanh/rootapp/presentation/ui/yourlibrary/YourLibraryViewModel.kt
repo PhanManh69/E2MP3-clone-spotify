@@ -45,9 +45,15 @@ class YourLibraryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(YourLibraryUiState())
     val uiState: StateFlow<YourLibraryUiState> = _uiState.asStateFlow()
 
-    init {
-        getUserById()
-        loadUserLibraryData()
+    private var currentUserId: Long = -1
+
+    fun setCurrentUserId(userId: Long) {
+        currentUserId = userId
+
+        if (currentUserId != -1L) {
+            getUserById(currentUserId)
+            loadUserLibraryData(currentUserId)
+        }
     }
 
     fun goToSearchInput() {
@@ -102,13 +108,11 @@ class YourLibraryViewModel @Inject constructor(
         appRouter.getMainNavController()?.navigateTo(AlbumScreenNavigation.getRoute(album.id))
     }
 
-    private fun getUserById() {
-        val userIdFake = 2L
-
+    private fun getUserById(currentUserId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                usersUseCase.getArtistById(userIdFake).catch { error ->
+                usersUseCase.getArtistById(currentUserId).catch { error ->
                     Log.e(TAG, "Error fetching Users: $error")
                 }.collect { user ->
                     _uiState.update { it.copy(user = user, isLoading = false) }
@@ -119,15 +123,15 @@ class YourLibraryViewModel @Inject constructor(
         }
     }
 
-    private fun loadUserLibraryData() {
+    private fun loadUserLibraryData(currentUserId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                val deferredLikedSongs = async { getLikedSongByUser() }
-                val deferredYourPlaylists = async { getPlaylistsYourByUser() }
-                val deferredForYouPlaylists = async { getPlaylistsForYouByUser() }
-                val deferredFavoriteArtists = async { getFavoriteArtistsByUser() }
-                val deferredLikedAlbum = async { getLikedAlbumByUser() }
+                val deferredLikedSongs = async { getLikedSongByUser(currentUserId) }
+                val deferredYourPlaylists = async { getPlaylistsYourByUser(currentUserId) }
+                val deferredForYouPlaylists = async { getPlaylistsForYouByUser(currentUserId) }
+                val deferredFavoriteArtists = async { getFavoriteArtistsByUser(currentUserId) }
+                val deferredLikedAlbum = async { getLikedAlbumByUser(currentUserId) }
 
                 deferredLikedSongs.await()
                 deferredYourPlaylists.await()
@@ -143,11 +147,9 @@ class YourLibraryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getLikedSongByUser() {
-        val userIdFake = 2L
-
+    private suspend fun getLikedSongByUser(currentUserId: Long) {
         try {
-            songsUseCase.getLikedSongsByUser(userIdFake).catch { error ->
+            songsUseCase.getLikedSongsByUser(currentUserId).catch { error ->
                 Log.e(TAG, "Error fetching LikedSongsByUser: $error")
             }.collect { listSongs ->
                 _uiState.update { it.copy(listLikedSongs = listSongs) }
@@ -157,11 +159,9 @@ class YourLibraryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPlaylistsYourByUser() {
-        val userIdFake = 2L
-
+    private suspend fun getPlaylistsYourByUser(currentUserId: Long) {
         try {
-            playlistUseCase.getPlaylistsYourByUser(userIdFake).catch { error ->
+            playlistUseCase.getPlaylistsYourByUser(currentUserId).catch { error ->
                 Log.e(TAG, "Error fetching PlaylistsYourByUser: $error")
             }.collect { listPlaylists ->
                 _uiState.update { it.copy(listPlaylistYour = listPlaylists) }
@@ -171,11 +171,9 @@ class YourLibraryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPlaylistsForYouByUser() {
-        val userIdFake = 2L
-
+    private suspend fun getPlaylistsForYouByUser(currentUserId: Long) {
         try {
-            playlistUseCase.getPlaylistsForYouByUser(userIdFake).catch { error ->
+            playlistUseCase.getPlaylistsForYouByUser(currentUserId).catch { error ->
                 Log.e(TAG, "Error fetching PlaylistsForYouByUser: $error")
             }.collect { listPlaylists ->
                 _uiState.update { it.copy(listPlaylistForYou = listPlaylists) }
@@ -185,11 +183,9 @@ class YourLibraryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getFavoriteArtistsByUser() {
-        val userIdFake = 2L
-
+    private suspend fun getFavoriteArtistsByUser(currentUserId: Long) {
         try {
-            usersUseCase.getFoveriteArtistsByUser(userIdFake).catch { error ->
+            usersUseCase.getFoveriteArtistsByUser(currentUserId).catch { error ->
                 Log.e(TAG, "Error fetching FavoriteArtistsByUser: $error")
             }.collect { listArtists ->
                 _uiState.update { it.copy(listFavoriteArtist = listArtists) }
@@ -199,11 +195,9 @@ class YourLibraryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getLikedAlbumByUser() {
-        val userIdFake = 2L
-
+    private suspend fun getLikedAlbumByUser(currentUserId: Long) {
         try {
-            albumUseCase.getAlbumLikeByUser(userIdFake).catch { error ->
+            albumUseCase.getAlbumLikeByUser(currentUserId).catch { error ->
                 Log.e(TAG, "Error fetching LikedAlbumByUser: $error")
             }.collect { listAlbum ->
                 _uiState.update { it.copy(listLikedAlbum = listAlbum) }

@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
@@ -48,6 +49,7 @@ fun PlayerScreen(
     headerSubtitle: String,
     totalDuration: Long,
     currentProgress: Float,
+    currentUser: UserInfo,
     song: SongsModel,
     artistsList: List<UsersModel>,
     onValueChange: (Float) -> Unit,
@@ -62,8 +64,8 @@ fun PlayerScreen(
     val remainingTimeFormatted = "-" + formatTime(remainingTime)
 
     LaunchedEffect(song) {
-        playerViewModel.getSongLike(songId = song.id)
-        playerViewModel.getUserFollowing(artistsList = artistsList)
+        playerViewModel.getSongLike(songId = song.id, currentUserId = currentUser.id)
+        playerViewModel.getUserFollowing(artistsList = artistsList, currentUserId = currentUser.id)
         playerViewModel.getLyrics(trackName = song.title.orEmpty(), artistName = song.subtitle.orEmpty())
 
         artistsList.forEach { artist ->
@@ -87,7 +89,7 @@ fun PlayerScreen(
                       onDownClick = playerViewModel::onDownPlayerClick,
                       onMoreClick = {},
                       onAddClick = {
-                          playerViewModel.onAddClick(song.id)
+                          playerViewModel.onAddClick(song.id, currentUser.id)
                       },
                       onShuffleClick = {},
                       onBackClick = {},
@@ -99,7 +101,7 @@ fun PlayerScreen(
                       onListClick = {},
                       onShowLyrics = playerViewModel::showLyrics,
                       onFollowClick = {
-                          playerViewModel.onFollowClick(it)
+                          playerViewModel.onFollowClick(it, currentUser.id)
                       },
                       onArtistsClick = {
                           playerViewModel.hidePlayer()

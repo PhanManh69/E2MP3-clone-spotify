@@ -35,12 +35,15 @@ import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import androidx.core.net.toUri
-import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.usecase.UserSessionUseCase
+import com.emanh.rootapp.presentation.navigation.UploadScreenNavigation
+import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
+import com.emanh.rootapp.presentation.navigation.router.AppRouter
 
 @UnstableApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val appRouter: AppRouter,
     private val viewsSongUseCase: ViewsSongUseCase,
     private val crossRefSongUseCase: CrossRefSongUseCase,
     private val userSessionUseCase: UserSessionUseCase,
@@ -70,6 +73,10 @@ class MainViewModel @Inject constructor(
                 _uiState.update { it.copy(currentUser = userInfo) }
             }
         }
+    }
+
+    fun onUploadClick() {
+        appRouter.getMainNavController()?.navigateTo(UploadScreenNavigation.getRoute())
     }
 
     private fun initializeMediaController() {
@@ -144,9 +151,9 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(progressJob = null) }
     }
 
-    fun getSongId(songId: Long) {
+    fun getSongId(songId: Long, currentUserId: Long) {
         getSongById(songId)
-        increaseViewsForSong(songId)
+        increaseViewsForSong(songId, currentUserId)
     }
 
     fun getTitleFromItem(title: String, subtitle: String) {
@@ -248,13 +255,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun increaseViewsForSong(songId: Long) {
+    private fun increaseViewsForSong(songId: Long, currentUserId: Long) {
         viewModelScope.launch(coroutineExceptionHandler) {
             try {
-                val userIdFake = 2L
-                val result = viewsSongUseCase.trackSongView(userIdFake, songId)
+                val result = viewsSongUseCase.trackSongView(currentUserId, songId)
                 val viewCount = result.numberListener ?: 0
-                Log.d(TAG, "Song $songId viewed by user $userIdFake - view count: $viewCount, timestamp: ${result.dateTime}")
+                Log.d(TAG, "Song $songId viewed by user $currentUserId - view count: $viewCount, timestamp: ${result.dateTime}")
             } catch (e: Exception) {
                 Log.e(TAG, "Error recording song view: ${e.message}")
             }

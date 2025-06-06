@@ -63,36 +63,33 @@ class PlayerViewModel @Inject constructor(
         hideLyrics()
     }
 
-    fun onAddClick(songId: Long) {
-        val userIdFake = 2L
-
+    fun onAddClick(songId: Long, currentUserId: Long) {
         viewModelScope.launch {
             if (_uiState.value.isAddSong) {
-                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
+                crossRefSongUseCase.deleteSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = currentUserId))
                 _uiState.update { it.copy(isAddSong = false) }
                 return@launch
             } else {
-                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake))
+                crossRefSongUseCase.insertSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = currentUserId))
                 _uiState.update { it.copy(isAddSong = true) }
                 return@launch
             }
         }
     }
 
-    fun onFollowClick(artistId: Long) {
-        val userIdFake = 2L
+    fun onFollowClick(artistId: Long, currentUserId: Long) {
         val isCurrentlyFollowing = _uiState.value.followingArtists.contains(artistId)
 
         viewModelScope.launch {
             try {
                 if (isCurrentlyFollowing) {
-                    crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
+                    crossRefUserUseCase.deleteUserFollwing(userFollowingEntity = UserFollowingEntity(userId = currentUserId, artistId = artistId))
                     _uiState.update { currentState ->
                         currentState.copy(followingArtists = currentState.followingArtists - artistId)
                     }
                     Log.d(TAG, "Unfollowed artist: $artistId")
                 } else {
-                    crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artistId))
+                    crossRefUserUseCase.insertUserFollwing(userFollowingEntity = UserFollowingEntity(userId = currentUserId, artistId = artistId))
                     _uiState.update { currentState ->
                         currentState.copy(followingArtists = currentState.followingArtists + artistId)
                     }
@@ -108,11 +105,9 @@ class PlayerViewModel @Inject constructor(
         appRouter.getMainNavController()?.navigateTo(ArtistScreenNavigation.getRoute(artistId))
     }
 
-    fun getSongLike(songId: Long) {
-        val userIdFake = 2L
-
+    fun getSongLike(songId: Long, currentUserId: Long) {
         viewModelScope.launch {
-            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = userIdFake)).catch { error ->
+            crossRefSongUseCase.getSongLike(songLikeEntity = SongLikeEntity(songId = songId, userId = currentUserId)).catch { error ->
                 Log.e(TAG, "Error fetching ArtistById: $error")
             }.collect {
                 val isAdded = it != null
@@ -121,9 +116,7 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    fun getUserFollowing(artistsList: List<UsersModel>) {
-        val userIdFake = 2L
-
+    fun getUserFollowing(artistsList: List<UsersModel>, currentUserId: Long) {
         viewModelScope.launch {
             try {
                 _uiState.update { it.copy(followingArtists = setOf()) }
@@ -131,7 +124,7 @@ class PlayerViewModel @Inject constructor(
                 val followingResults = artistsList.map { artist ->
                     async {
                         try {
-                            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = userIdFake, artistId = artist.id))
+                            crossRefUserUseCase.getUserFollwing(userFollowingEntity = UserFollowingEntity(userId = currentUserId, artistId = artist.id))
                                 .firstOrNull()
                         } catch (e: Exception) {
                             Log.e(TAG, "Error fetching following status for artist ${artist.id}: $e")

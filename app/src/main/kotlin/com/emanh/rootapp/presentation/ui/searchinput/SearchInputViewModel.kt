@@ -59,8 +59,14 @@ class SearchInputViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchInputUiState())
     val uiState: StateFlow<SearchInputUiState> = _uiState.asStateFlow()
 
-    init {
-        getSearchHistory()
+    private var currentUserId: Long = -1
+
+    fun setCurrentUserId(userId: Long) {
+        currentUserId = userId
+
+        if (currentUserId != -1L) {
+            getSearchHistory(currentUserId)
+        }
     }
 
     fun goToBack() {
@@ -107,18 +113,16 @@ class SearchInputViewModel @Inject constructor(
         performSearch(message)
     }
 
-    fun insertSearchHistory(idTable: Long, type: String) {
+    fun insertSearchHistory(idTable: Long, type: String, currentUserId: Long) {
         viewModelScope.launch {
-            val userIdFake = 2L
-            val searchHistory = SearchHistoryModel(userId = userIdFake, tableId = idTable, type = type)
+            val searchHistory = SearchHistoryModel(userId = currentUserId, tableId = idTable, type = type)
             searchHistoryUseCase.insertSearchHistory(searchHistory)
         }
     }
 
-    fun onRemovedSearchHistory(tableId: Long, type: String) {
-        val userIdFake = 2L
+    fun onRemovedSearchHistory(tableId: Long, type: String, currentUserId: Long) {
         viewModelScope.launch {
-            searchHistoryUseCase.deleteDuplicate(userId = userIdFake, tableId = tableId, type = type)
+            searchHistoryUseCase.deleteDuplicate(userId = currentUserId, tableId = tableId, type = type)
         }
     }
 
@@ -158,11 +162,9 @@ class SearchInputViewModel @Inject constructor(
         }
     }
 
-    private fun getSearchHistory() {
-        val userIdFake = 2L
-
+    private fun getSearchHistory(currentUserId: Long) {
         viewModelScope.launch {
-            searchHistoryUseCase.getSearchHistory(userIdFake).catch { error ->
+            searchHistoryUseCase.getSearchHistory(currentUserId).catch { error ->
                 Log.e(TAG, "Error fetching SearchHistoryList: $error")
                 emit(emptyList())
             }.collect { searchHistoryList ->

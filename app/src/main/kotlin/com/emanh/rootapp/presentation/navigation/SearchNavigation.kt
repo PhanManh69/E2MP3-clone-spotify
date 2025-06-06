@@ -6,8 +6,8 @@ import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.ui.search.SearchScreen
 
-fun NavGraphBuilder.searchScreenGraph(currentUser: UserInfo) {
+fun NavGraphBuilder.searchScreenGraph(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit) {
     composable<AppNavigationRoute.Search> {
-        SearchScreen(currentUser)
+        SearchScreen(currentUser = currentUser, onNavigationDrawerClick = onNavigationDrawerClick)
     }
 }

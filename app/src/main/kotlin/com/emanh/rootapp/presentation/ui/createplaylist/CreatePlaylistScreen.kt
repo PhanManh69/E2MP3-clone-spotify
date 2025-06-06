@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.presentation.composable.STFChips
 import com.emanh.rootapp.presentation.composable.STFChipsSize
 import com.emanh.rootapp.presentation.composable.STFChipsType
@@ -45,12 +46,12 @@ import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import kotlinx.coroutines.delay
 
 @Composable
-fun CreatePlaylistScreen() {
+fun CreatePlaylistScreen(currentUser: UserInfo) {
     val viewModel = hiltViewModel<CreatePlaylistViewModel>()
     var inputText by remember { mutableStateOf("") }
 
     CreatePlaylistScaffold(inputText = inputText, onCancelClick = viewModel::onCancelClick, onCreateClick = {
-        viewModel.onCreateClick(inputText)
+        viewModel.onCreateClick(inputText, currentUser.id)
     }, onInputTextChange = {
         inputText = it
     })
