@@ -125,6 +125,8 @@ dependencies {
     implementation(libs.palette.ktx)
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.androidx.datastore)
+    implementation(libs.com.cloudinary.android)
+    implementation(libs.com.cloudinary.core)
     implementation(libs.bundles.exo.player)
     implementation(platform(libs.androidx.compose.bom))
     implementation(platform(libs.okhttp.bom))

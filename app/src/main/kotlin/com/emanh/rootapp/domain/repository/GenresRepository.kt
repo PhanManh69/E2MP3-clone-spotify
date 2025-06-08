@@ -8,7 +8,7 @@ interface GenresRepository {
 
     fun getGenreById(genreId: Long): Flow<GenresModel>
 
-    fun getGenreNameByArtist(userId: Long): Flow<List<Int>>
+    fun getGenreNameByArtist(userId: Long): Flow<List<String>>
 
     suspend fun insertAllGenres(genres: List<GenresModel>)
 }

@@ -9,6 +9,6 @@ data class ArtistUiState(
     val viewsMonth: Long? = null,
     val isFollowing: Boolean = true,
     val artist: UsersModel? = null,
-    val genreNameList: List<Int> = emptyList(),
+    val genreNameList: List<String> = emptyList(),
     val songsList: List<SongsModel> = emptyList()
 )

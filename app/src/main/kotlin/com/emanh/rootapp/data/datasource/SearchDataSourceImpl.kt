@@ -16,6 +16,10 @@ class SearchDataSourceImpl @Inject constructor(
         return searchDao.getAllSearch(value)
     }
 
+    override suspend fun insertSearch(search: SearchEntity): Long {
+        return searchDao.insertSearch(search)
+    }
+
     override suspend fun insertAllSearch(searchList: List<SearchEntity>) {
         return searchDao.insertAllSearch(searchList)
     }

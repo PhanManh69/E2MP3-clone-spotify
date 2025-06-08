@@ -130,4 +130,7 @@
     <string name="are_you_sure_you_want_to_exit">Bạn có chắc chắn muốn thoát? Tất cả dữ liệu đã nhập sẽ bị mất.</string>
     <string name="are_you_sure_you_want_to_logout">Bạn có chắc chắn muốn đăng xuất tài khoản khỏi ứng dụng?</string>
     <string name="exit">Thoát</string>
+    <string name="please_fill_in_all_required_fields">Vui lòng điền vào tất cả các trường bắt buộc</string>
+    <string name="song_uploaded_successfully">Bài hát đã được tải lên thành công!</string>
+    <string name="upload_failed">Lỗi tải lên không thành công</string>
 </resources>

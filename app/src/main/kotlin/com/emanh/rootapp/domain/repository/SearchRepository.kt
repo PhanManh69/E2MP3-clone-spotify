@@ -8,5 +8,7 @@ interface SearchRepository {
 
     fun getAllSearch(value: String): Flow<List<SearchModel>>
 
+    suspend fun insertSearch(search: SearchModel): Long
+
     suspend fun insertAllSearch(searchList: List<SearchModel>)
 }

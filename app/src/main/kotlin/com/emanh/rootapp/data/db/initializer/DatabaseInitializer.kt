@@ -1,5 +1,6 @@
 package com.emanh.rootapp.data.db.initializer
 
+import android.content.Context
 import android.util.Log
 import com.emanh.rootapp.data.db.dao.AlbumsDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefSongDao
@@ -25,6 +26,7 @@ import com.emanh.rootapp.utils.withNormalizedAlbums
 import com.emanh.rootapp.utils.withNormalizedPlaylists
 import com.emanh.rootapp.utils.withNormalizedSongs
 import com.emanh.rootapp.utils.withNormalizedUsers
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +43,7 @@ private const val TAG = "DatabaseInitializer"
 
 @Singleton
 class DatabaseInitializer @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val genresDao: GenresDao,
     private val songsDao: SongsDao,
     private val usersDao: UsersDao,
@@ -96,9 +99,9 @@ class DatabaseInitializer @Inject constructor(
                 }
 
                 if (genresList.isEmpty()) {
-                    Log.d(TAG, "Inserting genres data: ${fakeGenresData().size} items")
+                    Log.d(TAG, "Inserting genres data: ${fakeGenresData(context).size} items")
                     try {
-                        genresDao.insertAllGenres(fakeGenresData())
+                        genresDao.insertAllGenres(fakeGenresData(context))
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to insert genres data: $e")
                         _isDatabaseInitialized.value = false

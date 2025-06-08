@@ -1,5 +1,6 @@
 package com.emanh.rootapp.domain.usecase.crossref
 
+import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefSongsModel
 import com.emanh.rootapp.domain.repository.crossref.CrossRefSongRepository
@@ -23,5 +24,9 @@ class CrossRefSongUseCase @Inject constructor(
 
     suspend fun insertSongLike(songLikeEntity: SongLikeEntity) {
         return crossRefSongRepository.insertSongLike(songLikeEntity)
+    }
+
+    suspend fun insertSongArtist(songArtistEntity: SongArtistEntity) {
+        return crossRefSongRepository.insertSongArtist(songArtistEntity)
     }
 }

@@ -8,6 +8,10 @@ import javax.inject.Inject
 class SongsUseCase @Inject constructor(
     private val songsRepository: SongsRepository
 ) {
+    fun getAllSongs(): Flow<List<SongsModel>> {
+        return songsRepository.getAllSongs()
+    }
+
     fun getRecommendedSongs(userId: Long): Flow<List<SongsModel>> {
         return songsRepository.getRecommendedSongs(userId)
     }
@@ -54,5 +58,9 @@ class SongsUseCase @Inject constructor(
 
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel> {
         return songsRepository.getRandomSongExcluding(excludeIds)
+    }
+
+    suspend fun insertSong(song: SongsModel): Long {
+        return songsRepository.insertSong(song)
     }
 }

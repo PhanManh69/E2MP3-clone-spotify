@@ -17,6 +17,8 @@ interface CrossRefSongDataSource {
 
     suspend fun insertSongLike(songLikeEntity: SongLikeEntity)
 
+    suspend fun insertSongArtist(songArtistEntity: SongArtistEntity)
+
     suspend fun insertAllCrossRefSongGenre(songGenreEntity: List<SongGenreEntity>)
 
     suspend fun insertAllCrossRefSongArtist(songArtistEntity: List<SongArtistEntity>)

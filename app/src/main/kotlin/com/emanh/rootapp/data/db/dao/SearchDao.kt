@@ -16,6 +16,9 @@ interface SearchDao {
     @Query(QERRY_SEARCH)
     fun getAllSearch(value: String): Flow<List<SearchEntity>>
 
+    @Insert
+    suspend fun insertSearch(search: SearchEntity): Long
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllSearch(searchList: List<SearchEntity>)
 }

@@ -1,6 +1,7 @@
 package com.emanh.rootapp.data.repository.crossref
 
 import com.emanh.rootapp.data.datasource.crossref.CrossRefSongDataSource
+import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefSongsModel
 import com.emanh.rootapp.domain.repository.crossref.CrossRefSongRepository
@@ -28,5 +29,9 @@ class CrossRefSongRepositoryImpl @Inject constructor(
 
     override suspend fun insertSongLike(songLikeEntity: SongLikeEntity) {
         return crossRefSongDataSource.insertSongLike(songLikeEntity)
+    }
+
+    override suspend fun insertSongArtist(songArtistEntity: SongArtistEntity) {
+        return crossRefSongDataSource.insertSongArtist(songArtistEntity)
     }
 }

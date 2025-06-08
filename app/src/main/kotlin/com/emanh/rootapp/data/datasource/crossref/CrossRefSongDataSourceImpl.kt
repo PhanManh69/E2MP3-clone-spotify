@@ -31,6 +31,10 @@ class CrossRefSongDataSourceImpl @Inject constructor(
         return crossRefSongDao.insertSongLike(songLikeEntity)
     }
 
+    override suspend fun insertSongArtist(songArtistEntity: SongArtistEntity) {
+        return crossRefSongDao.insertSongArtist(songArtistEntity)
+    }
+
     override suspend fun insertAllCrossRefSongGenre(songGenreEntity: List<SongGenreEntity>) {
         crossRefSongDao.insertAllCrossRefSongGenre(songGenreEntity)
     }

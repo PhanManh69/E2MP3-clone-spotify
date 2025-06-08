@@ -159,7 +159,7 @@ fun MainScreen(
                         mainViewModel.getSongId(songId = id, currentUserId = mainUiState.currentUser!!.id)
                         mainViewModel.getTitleFromItem("Nghệ sĩ", title)
                     })
-                    uploadScreenGraph()
+                    uploadScreenGraph(currentUser = mainUiState.currentUser!!)
                 }
 
                 MainBottomButton(modifier = Modifier.align(Alignment.BottomCenter),

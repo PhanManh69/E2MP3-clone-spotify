@@ -1,5 +1,6 @@
 package com.emanh.rootapp.domain.repository.crossref
 
+import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefSongsModel
 import kotlinx.coroutines.flow.Flow
@@ -14,4 +15,6 @@ interface CrossRefSongRepository {
     suspend fun deleteSongLike(songLikeEntity: SongLikeEntity)
 
     suspend fun insertSongLike(songLikeEntity: SongLikeEntity)
+
+    suspend fun insertSongArtist(songArtistEntity: SongArtistEntity)
 }

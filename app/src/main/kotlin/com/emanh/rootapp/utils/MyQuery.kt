@@ -247,7 +247,7 @@ object MyQuery {
     """
 
     const val QUERY_GENRE_NAME_BY_ARTIST = """
-        SELECT DISTINCT g.name_id
+        SELECT DISTINCT g.name
         FROM genres g
         JOIN cross_ref_song_genre sg ON g.genreId = sg.genreId
         JOIN songs s ON sg.songId = s.songId

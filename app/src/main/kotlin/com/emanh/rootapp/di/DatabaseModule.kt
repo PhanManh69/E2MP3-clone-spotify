@@ -171,6 +171,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabaseInitializer(
+        @ApplicationContext context: Context,
         genresDao: GenresDao,
         songsDao: SongsDao,
         usersDao: UsersDao,
@@ -181,7 +182,8 @@ object DatabaseModule {
         crossRefPlaylistDao: CrossRefPlaylistDao,
         crossRefAlbumDao: CrossRefAlbumDao
     ): DatabaseInitializer {
-        return DatabaseInitializer(genresDao,
+        return DatabaseInitializer(context,
+                                   genresDao,
                                    songsDao,
                                    usersDao,
                                    albumsDao,

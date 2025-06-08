@@ -30,5 +30,7 @@ interface SongsDataSource {
 
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity>
 
+    suspend fun insertSong(song: SongsEntity): Long
+
     suspend fun insertAllSongs(songs: List<SongsEntity>)
 }

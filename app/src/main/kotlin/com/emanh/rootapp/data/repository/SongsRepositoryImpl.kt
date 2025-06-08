@@ -111,8 +111,8 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertAllSongs(songs: List<SongsModel>) {
-        songsDataSource.insertAllSongs(songs.map { mapToEntity(it) })
+    override suspend fun insertSong(song: SongsModel): Long {
+        return songsDataSource.insertSong(mapToEntity(song))
     }
 
     private fun mapToModel(entity: SongsEntity): SongsModel {

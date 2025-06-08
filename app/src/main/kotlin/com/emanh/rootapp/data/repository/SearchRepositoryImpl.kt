@@ -27,6 +27,10 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun insertSearch(search: SearchModel): Long {
+        return searchDataSource.insertSearch(mapToEntity(search))
+    }
+
     override suspend fun insertAllSearch(searchList: List<SearchModel>) {
         searchDataSource.insertAllSearch(searchList.map { mapToEntity(it) })
     }

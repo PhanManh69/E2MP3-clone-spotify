@@ -34,6 +34,9 @@ interface CrossRefSongDao {
     @Insert()
     suspend fun insertSongLike(songLikeEntity: SongLikeEntity)
 
+    @Insert()
+    suspend fun insertSongArtist(songArtistEntity: SongArtistEntity)
+
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAllCrossRefSongGenre(songGenreEntity: List<SongGenreEntity>)
 

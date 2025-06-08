@@ -27,6 +27,7 @@ object MyConstant {
     const val MUSIC_PLAYBACK = "Music Playback"
     const val NOTIFICATION_CHANNEL_ID = "music-channel"
     const val NOTIFICATION_ID = 1
+    const val CLOUNDINARY_URL = "cloudinary://546947219998971:jOd3xf4S5NUj90xEtHp-y9IFV2o@decqclrhl"
 
     const val IMAGE_URL =
         "https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w544-h544-l90-rj"
@@ -40,6 +41,23 @@ object MyConstant {
                                    R.drawable.ic_24_equalizer_5,
                                    R.drawable.ic_24_equalizer_6,
                                    R.drawable.ic_24_equalizer_7)
+
+    val genresList = listOf(R.string.genre_chill,
+                            R.string.genre_hip_hop,
+                            R.string.genre_energizing,
+                            R.string.genre_sol,
+                            R.string.genre_romantic,
+                            R.string.genre_party,
+                            R.string.genre_concentrate,
+                            R.string.genre_blues,
+                            R.string.genre_indie,
+                            R.string.genre_jazz,
+                            R.string.genre_lating,
+                            R.string.genre_edm,
+                            R.string.genre_v_pop,
+                            R.string.genre_pop,
+                            R.string.genre_r_and_b,
+                            R.string.genre_rook)
 
     val sampleLibraryData =
         PrimaryLibraryData(primaryLibrary = listOf(SecondaryLibraryData(title = PLAYLIST, secondaryLibrary = listOf(YOUR, FOR_YOUR)),

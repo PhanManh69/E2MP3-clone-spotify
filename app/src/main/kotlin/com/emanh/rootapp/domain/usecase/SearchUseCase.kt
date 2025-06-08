@@ -11,4 +11,8 @@ class SearchUseCase @Inject constructor(
     fun getAllSearch(value: String): Flow<List<SearchModel>> {
         return searchRepository.getAllSearch(value)
     }
+
+    suspend fun insertSearch(search: SearchModel): Long {
+        return searchRepository.insertSearch(search)
+    }
 }

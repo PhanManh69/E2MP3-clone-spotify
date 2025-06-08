@@ -12,7 +12,7 @@ class GenresUseCase @Inject constructor(
         return genresRepository.getAllGenres()
     }
 
-    fun getGenreNameByArtist(userId: Long): Flow<List<Int>> {
+    fun getGenreNameByArtist(userId: Long): Flow<List<String>> {
         return genresRepository.getGenreNameByArtist(userId)
     }
 }

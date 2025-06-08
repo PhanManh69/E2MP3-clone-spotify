@@ -60,6 +60,9 @@ interface SongsDao {
     @Query(QUERY_GET_RANDOM_SONG_EXCLUDING)
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity>
 
+    @Insert()
+    suspend fun insertSong(song: SongsEntity): Long
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllSongs(songs: List<SongsEntity>)
 }

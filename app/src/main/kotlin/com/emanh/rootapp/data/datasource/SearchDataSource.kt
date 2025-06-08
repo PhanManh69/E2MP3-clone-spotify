@@ -8,5 +8,7 @@ interface SearchDataSource {
 
     fun getAllSearch(value: String): Flow<List<SearchEntity>>
 
+    suspend fun insertSearch(search: SearchEntity): Long
+
     suspend fun insertAllSearch(searchList: List<SearchEntity>)
 }

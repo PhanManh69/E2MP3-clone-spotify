@@ -1,8 +1,6 @@
 package com.emanh.rootapp.presentation.ui.artist
 
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -65,9 +63,8 @@ class ArtistViewMode @Inject constructor(
         appRouter.getMainNavController()?.goBack()
     }
 
-    @Composable
-    fun getGenreName(genreNameList: List<Int>): String {
-        val names = genreNameList.map { id -> stringResource(id) }
+    fun getGenreName(genreNameList: List<String>): String {
+        val names = genreNameList.map { id -> id }
         return names.joinToString(" • ")
     }
 

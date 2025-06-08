@@ -33,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,14 +42,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.theme.Body1Bold
-import com.emanh.rootapp.presentation.theme.Body3Regular
 import com.emanh.rootapp.presentation.theme.Body4Black
 import com.emanh.rootapp.presentation.theme.Body4Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconPrimary
+import com.emanh.rootapp.presentation.theme.SurfaceAlphaSticky
 import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceTertiary
 import com.emanh.rootapp.presentation.theme.TextPrimary
@@ -59,7 +66,7 @@ import com.emanh.rootapp.presentation.ui.upload.composable.UploadTextField
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 
 @Composable
-fun UploadScreen() {
+fun UploadScreen(currentUser: UserInfo) {
     val viewModel = hiltViewModel<UploadViewModel>()
     val uiState by viewModel.uiState.collectAsState()
     val imagePickerLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -84,26 +91,38 @@ fun UploadScreen() {
                     imageLink = uiState.imageLink,
                     songLink = uiState.songLink,
                     genresSong = uiState.genresSong,
+                    successMessage = uiState.errorMessage,
+                    isUploading = uiState.isUploading,
                     goBack = {
                         if (hasData) {
                             showExitDialog = true
                         } else {
                             viewModel.goBack()
+                            viewModel.clearError()
                         }
                     },
-                    onUploadClick = {},
+                    onUploadClick = {
+                        viewModel.onUploadClick(listOf(currentUser.id))
+                    },
                     onSelectAvatarClick = {
                         imagePickerLauncher.launch("image/*")
+                        viewModel.clearError()
                     },
                     onSelectSongClick = {
                         audioPickerLauncher.launch("audio/*")
+                        viewModel.clearError()
                     },
-                    onSelectGenresClick = viewModel::onSelectGenresClick,
+                    onSelectGenresClick = {
+                        viewModel.onSelectGenresClick()
+                        viewModel.clearError()
+                    },
                     onInputTitleChange = {
                         viewModel.onInputTitleChange(it)
+                        viewModel.clearError()
                     },
                     onInputSubtitleChange = {
                         viewModel.onInputSubtitleChange(it)
+                        viewModel.clearError()
                     })
 
     if (uiState.showGenresDialog) {
@@ -152,6 +171,8 @@ private fun UpdloadScaffold(
     imageLink: String,
     songLink: String,
     genresSong: String,
+    successMessage: String?,
+    isUploading: Boolean,
     goBack: () -> Unit,
     onUploadClick: () -> Unit,
     onSelectAvatarClick: () -> Unit,
@@ -161,109 +182,131 @@ private fun UpdloadScaffold(
     onInputSubtitleChange: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val lottieComposition by rememberLottieComposition(LottieCompositionSpec.Asset("uploading.lottie"))
 
-    Column(modifier = Modifier
-        .statusBarsPadding()
-        .background(SurfacePrimary)
-        .debounceClickable(indication = null, onClick = {
-            focusManager.clearFocus()
-        })) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            IconButton(onClick = goBack) {
-                Icon(painter = painterResource(R.drawable.ic_24_musical_chevron_lt), contentDescription = null, tint = IconPrimary)
+    Box(modifier = modifier) {
+        Column(modifier = Modifier
+            .statusBarsPadding()
+            .background(SurfacePrimary)
+            .debounceClickable(indication = null, onClick = {
+                focusManager.clearFocus()
+            })) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                IconButton(onClick = goBack) {
+                    Icon(painter = painterResource(R.drawable.ic_24_musical_chevron_lt), contentDescription = null, tint = IconPrimary)
+                }
+
+                IconButton(onClick = onUploadClick) {
+                    Icon(painter = painterResource(R.drawable.ic_32_upload),
+                         contentDescription = null,
+                         tint = IconPrimary,
+                         modifier = Modifier.size(24.dp))
+                }
             }
 
-            IconButton(onClick = onUploadClick) {
-                Icon(painter = painterResource(R.drawable.ic_32_upload),
-                     contentDescription = null,
-                     tint = IconPrimary,
-                     modifier = Modifier.size(24.dp))
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+                .padding(horizontal = 16.dp),
+                       contentPadding = PaddingValues(top = 16.dp, bottom = PADDING_BOTTOM_BAR.dp),
+                       verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                item {
+                    Text(text = stringResource(R.string.title_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
+
+                    Spacer(Modifier.height(8.dp))
+
+                    UploadTextField(inputText = inputTitle, placeholderId = R.string.enter_title_song, onInputTextChange = onInputTitleChange)
+                }
+
+                item {
+                    Text(text = stringResource(R.string.subtitle_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
+
+                    Spacer(Modifier.height(8.dp))
+
+                    UploadTextField(inputText = inputSubtitle, placeholderId = R.string.enter_title_song, onInputTextChange = onInputSubtitleChange)
+                }
+
+                item {
+                    Text(text = stringResource(R.string.avatar_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(color = SurfaceTertiary, shape = RoundedCornerShape(8.dp))
+                        .debounceClickable(onClick = onSelectAvatarClick), contentAlignment = Alignment.Center) {
+                        Text(text = if (imageLink.isEmpty()) stringResource(R.string.select_avatar_song) else imageLink,
+                             color = if (imageLink.isEmpty()) TextSecondary else TextPrimary,
+                             style = Body4Regular,
+                             maxLines = 1,
+                             overflow = TextOverflow.Ellipsis,
+                             modifier = Modifier
+                                 .fillMaxWidth()
+                                 .padding(horizontal = 16.dp))
+                    }
+                }
+
+                item {
+                    Text(text = stringResource(R.string.song_link), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(color = SurfaceTertiary, shape = RoundedCornerShape(8.dp))
+                        .debounceClickable(onClick = onSelectSongClick), contentAlignment = Alignment.Center) {
+                        Text(text = if (songLink.isEmpty()) stringResource(R.string.select_song_link) else songLink,
+                             color = if (songLink.isEmpty()) TextSecondary else TextPrimary,
+                             style = Body4Regular,
+                             maxLines = 1,
+                             overflow = TextOverflow.Ellipsis,
+                             modifier = Modifier
+                                 .fillMaxWidth()
+                                 .padding(horizontal = 16.dp))
+                    }
+                }
+
+                item {
+                    Text(text = stringResource(R.string.genre_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(color = SurfaceTertiary, shape = RoundedCornerShape(8.dp))
+                        .debounceClickable(onClick = onSelectGenresClick), contentAlignment = Alignment.Center) {
+                        Text(text = if (genresSong.isEmpty()) stringResource(R.string.select_genre_song) else genresSong,
+                             color = if (genresSong.isEmpty()) TextSecondary else TextPrimary,
+                             style = Body4Regular,
+                             maxLines = 1,
+                             overflow = TextOverflow.Ellipsis,
+                             modifier = Modifier
+                                 .fillMaxWidth()
+                                 .padding(horizontal = 16.dp))
+                    }
+                }
+
+                successMessage?.let {
+                    item {
+                        Text(text = it, color = Color.Red, style = Body4Regular)
+                    }
+                }
             }
         }
 
-        LazyColumn(modifier = modifier
-            .fillMaxSize()
-            .imePadding()
-            .padding(horizontal = 16.dp),
-                   contentPadding = PaddingValues(top = 16.dp, bottom = PADDING_BOTTOM_BAR.dp),
-                   verticalArrangement = Arrangement.spacedBy(24.dp)) {
-            item {
-                Text(text = stringResource(R.string.title_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
-
-                Spacer(Modifier.height(8.dp))
-
-                UploadTextField(inputText = inputTitle, placeholderId = R.string.enter_title_song, onInputTextChange = onInputTitleChange)
-            }
-
-            item {
-                Text(text = stringResource(R.string.subtitle_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
-
-                Spacer(Modifier.height(8.dp))
-
-                UploadTextField(inputText = inputSubtitle, placeholderId = R.string.enter_title_song, onInputTextChange = onInputSubtitleChange)
-            }
-
-            item {
-                Text(text = stringResource(R.string.avatar_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
-
-                Spacer(Modifier.height(8.dp))
-
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(color = SurfaceTertiary, shape = RoundedCornerShape(8.dp))
-                    .debounceClickable(onClick = onSelectAvatarClick), contentAlignment = Alignment.Center) {
-                    Text(text = if (imageLink.isEmpty()) stringResource(R.string.select_avatar_song) else imageLink,
-                         color = if (imageLink.isEmpty()) TextSecondary else TextPrimary,
-                         style = Body4Regular,
-                         maxLines = 1,
-                         overflow = TextOverflow.Ellipsis,
-                         modifier = Modifier
-                             .fillMaxWidth()
-                             .padding(horizontal = 16.dp))
-                }
-            }
-
-            item {
-                Text(text = stringResource(R.string.song_link), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
-
-                Spacer(Modifier.height(8.dp))
-
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(color = SurfaceTertiary, shape = RoundedCornerShape(8.dp))
-                    .debounceClickable(onClick = onSelectSongClick), contentAlignment = Alignment.Center) {
-                    Text(text = if (songLink.isEmpty()) stringResource(R.string.select_song_link) else songLink,
-                         color = if (songLink.isEmpty()) TextSecondary else TextPrimary,
-                         style = Body4Regular,
-                         maxLines = 1,
-                         overflow = TextOverflow.Ellipsis,
-                         modifier = Modifier
-                             .fillMaxWidth()
-                             .padding(horizontal = 16.dp))
-                }
-            }
-
-            item {
-                Text(text = stringResource(R.string.genre_song), color = TextPrimary, style = Body1Bold, modifier = Modifier.fillMaxWidth())
-
-                Spacer(Modifier.height(8.dp))
-
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(color = SurfaceTertiary, shape = RoundedCornerShape(8.dp))
-                    .debounceClickable(onClick = onSelectGenresClick), contentAlignment = Alignment.Center) {
-                    Text(text = if (genresSong.isEmpty()) stringResource(R.string.select_genre_song) else genresSong,
-                         color = if (genresSong.isEmpty()) TextSecondary else TextPrimary,
-                         style = Body4Regular,
-                         maxLines = 1,
-                         overflow = TextOverflow.Ellipsis,
-                         modifier = Modifier
-                             .fillMaxWidth()
-                             .padding(horizontal = 16.dp))
-                }
+        if (isUploading) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(SurfaceAlphaSticky)
+                .debounceClickable(indication = null, onClick = {}),
+                contentAlignment = Alignment.Center) {
+                LottieAnimation(composition = lottieComposition,
+                                modifier = Modifier.size(96.dp),
+                                contentScale = ContentScale.Crop,
+                                iterations = LottieConstants.IterateForever)
             }
         }
     }
@@ -278,6 +321,8 @@ private fun UploadScreenPreview() {
                         imageLink = "music.png",
                         songLink = "music.mp3",
                         genresSong = "",
+                        successMessage = null,
+                        isUploading = true,
                         goBack = {},
                         onUploadClick = {},
                         onSelectAvatarClick = {},
