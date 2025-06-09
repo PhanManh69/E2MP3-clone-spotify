@@ -8,7 +8,9 @@ import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.utils.MyQuery.QERRY_SEARCH_ARTISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_ARTIST_BY_ID
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ARTISTS_BY_SEARCH
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_EMAIL
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_OWNER_ALBUM
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_USERNAME
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_USER_LOGIN
 import com.emanh.rootapp.utils.MyQuery.QUERY_OWNER_ALBUM
 import com.emanh.rootapp.utils.MyQuery.QUERY_SIMILAR_ARTISTS
@@ -49,8 +51,17 @@ interface UsersDao {
     @Query(QUERY_GET_OWNER_ALBUM)
     fun getOwnerPlaylistYour(playlistId: Long): Flow<UsersEntity>
 
+    @Query(QUERY_GET_USERNAME)
+    fun getUsername(username: String): Flow<UsersEntity?>
+
+    @Query(QUERY_GET_EMAIL)
+    fun getEmail(email: String): Flow<UsersEntity?>
+
     @Query(QUERY_GET_USER_LOGIN)
     suspend fun getGetUserLogin(account: String, password: String): UsersEntity?
+
+    @Insert
+    suspend fun insertUser(user: UsersEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllUsers(users: List<UsersEntity>)

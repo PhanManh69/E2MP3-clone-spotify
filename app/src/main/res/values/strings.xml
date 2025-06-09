@@ -98,6 +98,7 @@
     <string name="refresh">Làm mới</string>
     <string name="based_songs_in_this_playlist">Dựa trên các bài hát trong playlist này</string>
     <string name="sign_up_free">Đăng ký miễn phí</string>
+    <string name="sign_up">Đăng ký</string>
     <string name="continue_with">Tiếp tục với</string>
     <string name="login">Đăng nhập</string>
     <string name="millions_songs_free_spotify">Hàng triệu bài hát.\nMiễn phí trên Spotify.</string>
@@ -133,4 +134,18 @@
     <string name="please_fill_in_all_required_fields">Vui lòng điền vào tất cả các trường bắt buộc</string>
     <string name="song_uploaded_successfully">Bài hát đã được tải lên thành công!</string>
     <string name="upload_failed">Lỗi tải lên không thành công</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="enter_username_your">Nhập tên đăng nhập của bạn</string>
+    <string name="email">Email</string>
+    <string name="enter_email_your">Nhập email của bạn</string>
+    <string name="fullname">Tên người dùng</string>
+    <string name="enter_fullname_your">Nhập tên người dùng của bạn</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="enter_confirm_password">Nhập lại mật khẩu của bạn</string>
+    <string name="username_already_exists">Tên người dùng đã tồn tại</string>
+    <string name="email_already_exists">Email đã tồn tại</string>
+    <string name="invalid_email_format">Định dạng email không hợp lệ</string>
+    <string name="password_too_short">Mật khẩu của bạn quá ngắn</string>
+    <string name="signup_failed">Đăng ký không thành công</string>
+    <string name="passwords_do_not_match">Mật khẩu của bạn không khớp</string>
 </resources>

@@ -44,7 +44,19 @@ class UsersUseCase @Inject constructor(
         return usersRepository.getOwnerPlaylistYour(playlistId)
     }
 
+    fun getUsername(username: String): Flow<UsersModel?> {
+        return usersRepository.getUsername(username)
+    }
+
+    fun getEmail(email: String): Flow<UsersModel?> {
+        return usersRepository.getEmail(email)
+    }
+
     suspend fun getGetUserLogin(account: String, password: String): UsersModel? {
         return usersRepository.getGetUserLogin(account = account, password = password)
+    }
+
+    suspend fun insertUser(user: UsersModel): Long {
+        return usersRepository.insertUser(user)
     }
 }

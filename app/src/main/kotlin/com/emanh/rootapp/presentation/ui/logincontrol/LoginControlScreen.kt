@@ -42,7 +42,7 @@ fun LoginControlScreen() {
     val viewModel = hiltViewModel<LoginControlViewModel>()
 
     LoginControlScaffold(
-            onSignUpClick = {},
+            onSignUpClick = viewModel::onSignUpClick,
             onWithGoogleClick = {},
             onWithFacebookClick = {},
             onWithAppleClick = {},

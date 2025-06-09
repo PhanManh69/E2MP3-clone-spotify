@@ -14,6 +14,7 @@ import com.emanh.rootapp.presentation.navigation.loginNotPasswordScreenGraph
 import com.emanh.rootapp.presentation.navigation.loginScreenGraph
 import com.emanh.rootapp.presentation.navigation.route.AppNavigationRoute
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
+import com.emanh.rootapp.presentation.navigation.signUpScreenGraph
 
 @Composable
 fun AuthScreen(
@@ -41,5 +42,6 @@ fun AuthScreen(
         loginControlScreenGraph()
         loginScreenGraph(onLoginSuccess = onLoginSuccess)
         loginNotPasswordScreenGraph()
+        signUpScreenGraph()
     }
 }

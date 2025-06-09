@@ -79,10 +79,26 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getUsername(username: String): Flow<UsersModel?> {
+        return usersDataSource.getUsername(username).map { entity ->
+            entity?.let { mapToModel(it) }
+        }
+    }
+
+    override fun getEmail(email: String): Flow<UsersModel?> {
+        return usersDataSource.getEmail(email).map { entity ->
+            entity?.let { mapToModel(it) }
+        }
+    }
+
     override suspend fun getGetUserLogin(account: String, password: String): UsersModel? {
         return usersDataSource.getGetUserLogin(account, password)?.let { entity ->
             mapToModel(entity)
         }
+    }
+
+    override suspend fun insertUser(user: UsersModel): Long {
+        return usersDataSource.insertUser(mapToEntity(user))
     }
 
     override suspend fun insertAllUsers(users: List<UsersModel>) {

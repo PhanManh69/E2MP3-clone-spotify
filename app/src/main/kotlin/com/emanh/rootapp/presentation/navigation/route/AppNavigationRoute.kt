@@ -30,6 +30,9 @@ sealed class AppNavigationRoute {
     data object LoginNotPassword : AppNavigationRoute()
 
     @Serializable
+    data object SignUp : AppNavigationRoute()
+
+    @Serializable
     data object Upload : AppNavigationRoute()
 
     @Serializable

@@ -489,4 +489,16 @@ object MyQuery {
             )
             AND password = :password
     """
+
+    const val QUERY_GET_USERNAME = """
+        SELECT *
+        FROM users
+        WHERE LOWER(username) = LOWER(:username)
+    """
+
+    const val QUERY_GET_EMAIL = """
+        SELECT *
+        FROM users
+        WHERE LOWER(email) = LOWER(:email)
+    """
 }

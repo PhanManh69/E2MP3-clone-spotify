@@ -48,8 +48,20 @@ class UsersDataSourceImpl @Inject constructor(
         return usersDao.getOwnerPlaylistYour(playlistId)
     }
 
+    override fun getUsername(username: String): Flow<UsersEntity?> {
+        return usersDao.getUsername(username)
+    }
+
+    override fun getEmail(email: String): Flow<UsersEntity?> {
+        return usersDao.getEmail(email)
+    }
+
     override suspend fun getGetUserLogin(account: String, password: String): UsersEntity? {
         return usersDao.getGetUserLogin(account, password)
+    }
+
+    override suspend fun insertUser(user: UsersEntity): Long {
+        return usersDao.insertUser(user)
     }
 
     override suspend fun insertAllUsers(users: List<UsersEntity>) {
