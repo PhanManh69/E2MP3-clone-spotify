@@ -21,6 +21,7 @@ import com.emanh.rootapp.presentation.navigation.SearchInputScreenNavigation
 import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
 import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_LIKED
+import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_YOUR_SONG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,6 +67,10 @@ class YourLibraryViewModel @Inject constructor(
 
     fun onLikedSongsClick() {
         appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_LIKED))
+    }
+
+    fun onYourSongsClick() {
+        appRouter.getMainNavController()?.navigateTo(PlaylistScreenNavigation.getRoute(VIEW_ALL_YOUR_SONG))
     }
 
     fun onCreatePlaylist() {
@@ -128,12 +133,16 @@ class YourLibraryViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             try {
                 val deferredLikedSongs = async { getLikedSongByUser(currentUserId) }
+                val deferredYourSongs = async { getYourSongByUser(currentUserId) }
+                val deferredAlbumYour = async { getAlbumYourByUser(currentUserId) }
                 val deferredYourPlaylists = async { getPlaylistsYourByUser(currentUserId) }
                 val deferredForYouPlaylists = async { getPlaylistsForYouByUser(currentUserId) }
                 val deferredFavoriteArtists = async { getFavoriteArtistsByUser(currentUserId) }
                 val deferredLikedAlbum = async { getLikedAlbumByUser(currentUserId) }
 
                 deferredLikedSongs.await()
+                deferredYourSongs.await()
+                deferredAlbumYour.await()
                 deferredYourPlaylists.await()
                 deferredForYouPlaylists.await()
                 deferredFavoriteArtists.await()
@@ -156,6 +165,30 @@ class YourLibraryViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e(TAG, "Exception in getLikedSongByUser: $e")
+        }
+    }
+
+    private suspend fun getYourSongByUser(currentUserId: Long) {
+        try {
+            songsUseCase.getSongsByArtist(currentUserId).catch { error ->
+                Log.e(TAG, "Error fetching LikedSongsByUser: $error")
+            }.collect { listSongs ->
+                _uiState.update { it.copy(listYourSongs = listSongs) }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception in getLikedSongByUser: $e")
+        }
+    }
+
+    private suspend fun getAlbumYourByUser(currentUserId: Long) {
+        try {
+            albumUseCase.getAlbumByArtist(currentUserId).catch { error ->
+                Log.e(TAG, "Error fetching LikedAlbumByUser: $error")
+            }.collect { listAlbum ->
+                _uiState.update { it.copy(listAlbumsYour = listAlbum) }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception in getLikedAlbumByUser: $e")
         }
     }
 

@@ -119,7 +119,7 @@ class ArtistViewMode @Inject constructor(
                 _uiState.update { it.copy(isLoading = false) }
             }.collect {
                 _uiState.update { currentState ->
-                    currentState.copy(songsList = it, isLoading = false)
+                    currentState.copy(songsList = it.take(10), isLoading = false)
                 }
             }
         }

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.emanh.rootapp.data.db.entity.AlbumsEntity
 import com.emanh.rootapp.utils.MyQuery.QERRY_SEARCH_ALBUMS
+import com.emanh.rootapp.utils.MyQuery.QUERY_ALBUMS_BY_ARTIST
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUMS_BY_SEARCH
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_ALBUMS_BY_ID
 import com.emanh.rootapp.utils.MyQuery.QUERY_QUICK_ALBUM
@@ -35,6 +36,9 @@ interface AlbumsDao {
 
     @Query(QUETY_GET_ALBUM_LIKE_BY_USER)
     fun getAlbumLikeByUser(userId: Long): Flow<List<AlbumsEntity>>
+
+    @Query(QUERY_ALBUMS_BY_ARTIST)
+    fun getAlbumByArtist(userId: Long): Flow<List<AlbumsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllAlbums(albums: List<AlbumsEntity>)

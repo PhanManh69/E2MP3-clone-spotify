@@ -243,7 +243,14 @@ object MyQuery {
         JOIN cross_ref_song_artist sa ON s.songId = sa.songId
         WHERE sa.userId = :userId
         ORDER BY RANDOM()
-        LIMIT 10
+    """
+
+    const val QUERY_ALBUMS_BY_ARTIST = """
+        SELECT a.*
+        FROM albums a
+        JOIN cross_ref_album_artist aa ON a.albumId = aa.albumId
+        WHERE aa.userId = :userId
+        ORDER BY RANDOM()
     """
 
     const val QUERY_GENRE_NAME_BY_ARTIST = """

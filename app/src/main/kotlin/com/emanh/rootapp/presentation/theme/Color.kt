@@ -132,3 +132,6 @@ val CreatePlaylist = Brush.verticalGradient(0f to Color(0xFFB3B3B3), 1f to Color
 val LikedSongs = Brush.linearGradient(colors = listOf(Color(0xFF4331F4), Color(0xFFC1EDD9)),
                                       start = Offset(0f, 0f),
                                       end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))
+val YourSongs = Brush.linearGradient(colors = listOf(Color(0xFFFE6843), Color(0xFFC5B1AA)),
+                                      start = Offset(0f, 0f),
+                                      end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))

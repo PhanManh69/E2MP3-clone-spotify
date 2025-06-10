@@ -21,6 +21,7 @@ import com.emanh.rootapp.presentation.navigation.extensions.NavActions.goBack
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
 import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_HISTORY
 import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_LIKED
+import com.emanh.rootapp.utils.MyConstant.VIEW_ALL_YOUR_SONG
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -53,6 +54,8 @@ class PlaylistViewModel @Inject constructor(
                 getHisyorySongs(currentUserId)
             } else if (playlistId == VIEW_ALL_LIKED) {
                 getLikedSongs(currentUserId)
+            } else if (playlistId == VIEW_ALL_YOUR_SONG) {
+                getYourSongs(currentUserId)
             } else {
                 loadPlaylistDetails(playlistId)
             }
@@ -192,6 +195,30 @@ class PlaylistViewModel @Inject constructor(
                 currentState.copy(playlist = PlaylistsModel(avatarUrl = songsList.first().avatarUrl,
                                                             title = "Bài hát yêu thích",
                                                             subtitle = "Các bài hát được được yêu thích của bạn của bạn"),
+                                  songList = songsList,
+                                  isLoading = false)
+            }
+
+            try {
+                val owner = usersUseCase.getArtistById(currentUserId).first()
+                _uiState.update { it.copy(owner = owner) }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading Owner: ${e.message}")
+            }
+        }.catch { error ->
+            Log.e(TAG, "Error fetching getLikedSongByUser: $error")
+            _uiState.update { it.copy(isLoading = false) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getYourSongs(currentUserId: Long) {
+        _uiState.update { it.copy(isLoading = true) }
+
+        songsUseCase.getSongsByArtist(currentUserId).onEach { songsList ->
+            _uiState.update { currentState ->
+                currentState.copy(playlist = PlaylistsModel(avatarUrl = songsList.first().avatarUrl,
+                                                            title = "Bài hát của bạn",
+                                                            subtitle = "Danh sách các bài hát của bạn của bạn"),
                                   songList = songsList,
                                   isLoading = false)
             }

@@ -36,6 +36,10 @@ class AlbumsDataSourceImpl @Inject constructor(
         return albumsDao.getAlbumLikeByUser(userId)
     }
 
+    override fun getAlbumByArtist(userId: Long): Flow<List<AlbumsEntity>> {
+        return albumsDao.getAlbumByArtist(userId)
+    }
+
     override suspend fun insertAlbums(albums: List<AlbumsEntity>) {
         albumsDao.insertAllAlbums(albums)
     }

@@ -17,6 +17,18 @@ sealed class LibraryItem {
         override val sortKey: String = title
     }
 
+    data class YourSongs(
+        val songs: List<SongsModel>, override val title: String = "Bài hát của bạn"
+    ) : LibraryItem() {
+        override val sortKey: String = title
+    }
+
+    data class YourAlbums(
+        val album: AlbumsModel, override val title: String = album.title.orEmpty()
+    ) : LibraryItem() {
+        override val sortKey: String = title
+    }
+
     data class YourPlaylist(
         val playlist: PlaylistsModel, override val title: String = playlist.title.orEmpty()
     ) : LibraryItem() {
@@ -49,6 +61,8 @@ data class YourLibraryUiState(
     val currentType: STFMenuLibraryType = STFMenuLibraryType.Default,
     val user: UsersModel? = null,
     val listLikedSongs: List<SongsModel>? = null,
+    val listYourSongs: List<SongsModel>? = null,
+    val listAlbumsYour: List<AlbumsModel>? = null,
     val listPlaylistYour: List<PlaylistsModel>? = null,
     val listPlaylistForYou: List<PlaylistsModel>? = null,
     val listFavoriteArtist: List<UsersModel>? = null,

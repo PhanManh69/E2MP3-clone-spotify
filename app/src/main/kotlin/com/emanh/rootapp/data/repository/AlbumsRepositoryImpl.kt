@@ -53,6 +53,12 @@ class AlbumsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAlbumByArtist(userId: Long): Flow<List<AlbumsModel>> {
+        return albumsDataSource.getAlbumByArtist(userId).map { entities ->
+            entities.map { entity -> mapToModel(entity) }
+        }
+    }
+
     override suspend fun insertAllAlbums(albums: List<AlbumsModel>) {
         albumsDataSource.insertAlbums(albums.map { mapToEntity(it) })
     }

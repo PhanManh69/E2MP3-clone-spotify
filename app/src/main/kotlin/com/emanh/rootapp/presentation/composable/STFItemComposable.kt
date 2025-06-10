@@ -48,6 +48,7 @@ import com.emanh.rootapp.presentation.theme.IconSecondary
 import com.emanh.rootapp.presentation.theme.LikedSongs
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextSecondary
+import com.emanh.rootapp.presentation.theme.YourSongs
 import com.emanh.rootapp.utils.MyConstant.IMAGE_URL
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -103,6 +104,7 @@ fun STFItem(
     title: String,
     isLiked: Boolean = false,
     labelChips: String = "",
+    yourIconId: Int? = null,
     iconId: Int = R.drawable.ic_24_close,
     type: STFItemType,
     size: STFItemSize,
@@ -146,12 +148,13 @@ fun STFItem(
             Box(modifier = Modifier
                 .size(itemSize)
                 .padding(animatedPadding)
-                .background(brush = LikedSongs, shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
-                .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)) {
-                Icon(painter = painterResource(R.drawable.ic_48_heart_fill),
+                .background(brush = if (yourIconId == null) LikedSongs else YourSongs,
+                            shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape)
+                .clip(shape = if (type == STFItemType.Music) RoundedCornerShape(8.dp) else CircleShape), contentAlignment = Alignment.Center) {
+                Icon(painter = painterResource(if (yourIconId == null) R.drawable.ic_48_heart_fill else R.drawable.ic_24_artist),
                      contentDescription = null,
                      tint = IconPrimary,
-                     modifier = Modifier.padding(18.dp))
+                     modifier = Modifier.size(32.dp))
             }
         } else {
             if (!isLoadFailed) {
@@ -250,6 +253,22 @@ fun ItemMusicMediumPreview2() {
                 title = "Nơi này có anh",
                 label = "Sơn Tùng M-TP",
                 isLiked = true,
+                type = STFItemType.Music,
+                size = STFItemSize.Medium,
+                onItemClick = {},
+                onIconClick = {})
+    }
+}
+
+@Preview
+@Composable
+fun ItemMusicMediumPreview3() {
+    E2MP3Theme {
+        STFItem(imageUrl = "",
+                title = "Nơi này có anh",
+                label = "Sơn Tùng M-TP",
+                isLiked = true,
+                yourIconId = R.drawable.ic_24_artist,
                 type = STFItemType.Music,
                 size = STFItemSize.Medium,
                 onItemClick = {},

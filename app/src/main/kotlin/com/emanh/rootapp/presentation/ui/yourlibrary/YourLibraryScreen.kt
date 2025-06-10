@@ -67,6 +67,8 @@ fun YourLibraryScreen(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit
                             secondaryChips = uiState.secondaryChips,
                             currentType = uiState.currentType,
                             listLikedSongs = uiState.listLikedSongs,
+                            listYourSongs = uiState.listYourSongs,
+                            listAlbumYour = uiState.listAlbumsYour,
                             listPlaylistYour = uiState.listPlaylistYour,
                             listPlaylistForYou = uiState.listPlaylistForYou,
                             listFavoriteArtist = uiState.listFavoriteArtist,
@@ -75,6 +77,7 @@ fun YourLibraryScreen(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit
                             goToSearchInput = viewModel::goToSearchInput,
                             onCloseClick = viewModel::onCloseClick,
                             onLikedSongsClick = viewModel::onLikedSongsClick,
+                            onYourSongsClick = viewModel::onYourSongsClick,
                             onCreatePlaylist = viewModel::onCreatePlaylist,
                             onPrimaryChipsClick = { item, type ->
                                 viewModel.onPrimaryChipsClick(item, type)
@@ -106,6 +109,8 @@ fun YourLibraryScaffold(
     currentUser: UserInfo,
     user: UsersModel,
     listLikedSongs: List<SongsModel>?,
+    listYourSongs: List<SongsModel>?,
+    listAlbumYour: List<AlbumsModel>?,
     listPlaylistYour: List<PlaylistsModel>?,
     listPlaylistForYou: List<PlaylistsModel>?,
     listFavoriteArtist: List<UsersModel>?,
@@ -113,6 +118,7 @@ fun YourLibraryScaffold(
     onNavigationDrawerClick: () -> Unit,
     goToSearchInput: () -> Unit,
     onLikedSongsClick: () -> Unit,
+    onYourSongsClick: () -> Unit,
     onCloseClick: () -> Unit,
     onCreatePlaylist: () -> Unit,
     onPrimaryChipsClick: (SecondaryLibraryData, STFMenuLibraryType) -> Unit = { _, _ -> },
@@ -122,7 +128,14 @@ fun YourLibraryScaffold(
     onFavoriteArtistClick: (UsersModel) -> Unit,
     onLikedAlbumClick: (AlbumsModel) -> Unit,
 ) {
-    val mergedLibraryItems = remember(primaryChips, secondaryChips, listLikedSongs, listPlaylistYour, listPlaylistForYou, listFavoriteArtist) {
+    val mergedLibraryItems = remember(primaryChips,
+                                      secondaryChips,
+                                      listLikedSongs,
+                                      listYourSongs,
+                                      listAlbumYour,
+                                      listPlaylistYour,
+                                      listPlaylistForYou,
+                                      listFavoriteArtist) {
         buildList<LibraryItem> {
             when (primaryChips) {
                 sampleLibraryData.primaryLibrary[0] -> {
@@ -130,6 +143,14 @@ fun YourLibraryScaffold(
                         YOUR -> {
                             listLikedSongs?.takeIf { it.isNotEmpty() }?.let { songs ->
                                 add(LibraryItem.LikedSongs(songs))
+                            }
+
+                            listYourSongs?.takeIf { it.isNotEmpty() }?.let { songs ->
+                                add(LibraryItem.YourSongs(songs))
+                            }
+
+                            listAlbumYour?.forEach { album ->
+                                add(LibraryItem.YourAlbums(album))
                             }
 
                             listPlaylistYour?.forEach { playlist ->
@@ -150,6 +171,14 @@ fun YourLibraryScaffold(
                         "" -> {
                             listLikedSongs?.takeIf { it.isNotEmpty() }?.let { songs ->
                                 add(LibraryItem.LikedSongs(songs))
+                            }
+
+                            listYourSongs?.takeIf { it.isNotEmpty() }?.let { songs ->
+                                add(LibraryItem.YourSongs(songs))
+                            }
+
+                            listAlbumYour?.forEach { album ->
+                                add(LibraryItem.YourAlbums(album))
                             }
 
                             listPlaylistYour?.forEach { playlist ->
@@ -176,6 +205,14 @@ fun YourLibraryScaffold(
                 null -> {
                     listLikedSongs?.takeIf { it.isNotEmpty() }?.let { songs ->
                         add(LibraryItem.LikedSongs(songs))
+                    }
+
+                    listYourSongs?.takeIf { it.isNotEmpty() }?.let { songs ->
+                        add(LibraryItem.YourSongs(songs))
+                    }
+
+                    listAlbumYour?.forEach { album ->
+                        add(LibraryItem.YourAlbums(album))
                     }
 
                     listPlaylistYour?.forEach { playlist ->
@@ -218,6 +255,8 @@ fun YourLibraryScaffold(
                           val item = mergedLibraryItems[index]
                           when (item) {
                               is LibraryItem.LikedSongs -> "song-${item.title}"
+                              is LibraryItem.YourSongs -> "song-your-${item.title}"
+                              is LibraryItem.YourAlbums -> "album-your-${item.title}"
                               is LibraryItem.YourPlaylist -> "playlist-${item.title}"
                               is LibraryItem.ForYouPlaylist -> "playlist-${item.title}"
                               is LibraryItem.FavoriteArtist -> "artist-${item.title}"
@@ -234,6 +273,26 @@ fun YourLibraryScaffold(
                                           type = STFItemType.Music,
                                           size = STFItemSize.Medium,
                                           onItemClick = onLikedSongsClick)
+                              }
+
+                              is LibraryItem.YourSongs -> {
+                                  STFItem(imageUrl = NOT_AVATAR,
+                                          title = stringResource(R.string.your_songs),
+                                          label = "${stringResource(R.string.playlist)} · ${item.songs.size}",
+                                          yourIconId = R.drawable.ic_24_artist,
+                                          isLiked = true,
+                                          type = STFItemType.Music,
+                                          size = STFItemSize.Medium,
+                                          onItemClick = onYourSongsClick)
+                              }
+
+                              is LibraryItem.YourAlbums -> {
+                                  STFItem(imageUrl = item.album.avatarUrl ?: NOT_AVATAR,
+                                          title = item.title,
+                                          label = "${stringResource(R.string.album)} · ${stringResource(R.string.for_you)} ${user.name}",
+                                          type = STFItemType.Music,
+                                          size = STFItemSize.Medium,
+                                          onItemClick = { onLikedAlbumClick(item.album) })
                               }
 
                               is LibraryItem.YourPlaylist -> {

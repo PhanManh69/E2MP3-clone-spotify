@@ -20,6 +20,7 @@ object MyConstant {
     const val PLAYLISTS_SEARCH = "playlists_search"
     const val VIEW_ALL_HISTORY = -91829L
     const val VIEW_ALL_LIKED = -19823L
+    const val VIEW_ALL_YOUR_SONG = -749122L
     const val PLAYLIST = "Danh sách phát"
     const val YOUR = "Của bạn"
     const val FOR_YOUR = "Dành cho bạn"
