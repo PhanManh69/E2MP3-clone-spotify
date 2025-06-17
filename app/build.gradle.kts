@@ -1,5 +1,15 @@
 @file:Suppress("DEPRECATION")
 
+import java.io.FileInputStream
+import java.util.Properties
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -17,18 +27,18 @@ kapt {
 }
 
 android {
-    namespace = "com.emanh.rootapp"
-    compileSdk = 35
-    compileSdkVersion(35)
+    namespace = keystoreProperties["namespace"]?.toString() ?: "com.example.default"
+    compileSdk = keystoreProperties["compileSdk"]?.toString()?.toIntOrNull() ?: 35
+    compileSdkVersion(keystoreProperties["compileSdk"]?.toString()?.toIntOrNull() ?: 35)
 
     defaultConfig {
-        applicationId = "com.emanh.rootapp"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = keystoreProperties["applicationId"]?.toString() ?: keystoreProperties["namespace"]?.toString()
+        minSdk = keystoreProperties["minSdk"]?.toString()?.toIntOrNull() ?: 24
+        targetSdk = keystoreProperties["targetSdk"]?.toString()?.toIntOrNull() ?: 35
+        versionCode = keystoreProperties["versionCode"]?.toString()?.toIntOrNull() ?: 1
+        versionName = keystoreProperties["versionName"]?.toString() ?: "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = keystoreProperties["testInstrumentationRunner"]?.toString() ?: "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -37,13 +47,20 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        val javaVersion = keystoreProperties["javaVersion"]?.toString()?.let {
+            JavaVersion.valueOf("VERSION_$it")
+        } ?: JavaVersion.VERSION_11
+
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = keystoreProperties["kotlinJvmTarget"]?.toString() ?: "11"
     }
+
     buildFeatures {
         compose = true
     }
@@ -123,11 +140,11 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.lottie.compose)
     implementation(libs.palette.ktx)
+    implementation(libs.coil.kt.coil.compose)
+    implementation(libs.androidx.datastore)
+    implementation(libs.com.cloudinary.android)
+    implementation(libs.com.cloudinary.core)
+    implementation(libs.bundles.exo.player)
     implementation(platform(libs.androidx.compose.bom))
     implementation(platform(libs.okhttp.bom))
-
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-
-    implementation("io.coil-kt:coil-compose:2.7.0")
 }
