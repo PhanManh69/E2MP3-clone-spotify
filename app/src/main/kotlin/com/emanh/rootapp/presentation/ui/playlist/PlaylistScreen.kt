@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,10 +59,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.emanh.rootapp.data.db.entity.UserInfo
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.model.UsersModel
+import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.composable.STFPlaylistAvatar
 import com.emanh.rootapp.presentation.composable.STFPlaylistHeader
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
 import com.emanh.rootapp.utils.faunchedEffectAvatar
 
@@ -78,17 +75,7 @@ fun PlaylistScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     }
 
     if (uiState.isLoading || uiState.owner == null || uiState.playlist == null) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(SurfacePrimary)) {
-            CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.Center),
-                    color = SurfaceProduct,
-                    trackColor = SurfaceSecondaryInvert,
-            )
-        }
+        STFLoading()
     } else {
         PlaylistScaffold(time = playlistViewModel.totalTime(uiState.songList),
                          isAddPlaylist = uiState.isAddPlaylist,

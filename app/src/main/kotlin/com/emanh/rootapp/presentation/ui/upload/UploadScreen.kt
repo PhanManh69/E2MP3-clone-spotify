@@ -191,10 +191,14 @@ private fun UpdloadScaffold(
             .debounceClickable(indication = null, onClick = {
                 focusManager.clearFocus()
             })) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
                 IconButton(onClick = goBack) {
                     Icon(painter = painterResource(R.drawable.ic_24_musical_chevron_lt), contentDescription = null, tint = IconPrimary)
                 }
+
+                Text(text = stringResource(R.string.add_song), color = TextPrimary, style = Body1Bold)
 
                 IconButton(onClick = onUploadClick) {
                     Icon(painter = painterResource(R.drawable.ic_32_upload),

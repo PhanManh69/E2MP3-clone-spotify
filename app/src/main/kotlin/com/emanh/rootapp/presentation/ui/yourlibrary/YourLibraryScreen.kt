@@ -1,18 +1,12 @@
 package com.emanh.rootapp.presentation.ui.yourlibrary
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,11 +22,9 @@ import com.emanh.rootapp.presentation.composable.STFHeaderType
 import com.emanh.rootapp.presentation.composable.STFItem
 import com.emanh.rootapp.presentation.composable.STFItemSize
 import com.emanh.rootapp.presentation.composable.STFItemType
+import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.composable.STFMenuLibraryType
 import com.emanh.rootapp.presentation.composable.SecondaryLibraryData
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
-import com.emanh.rootapp.presentation.theme.SurfaceProduct
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.utils.MyConstant.YOUR
 import com.emanh.rootapp.utils.MyConstant.PADDING_BOTTOM_BAR
 import com.emanh.rootapp.utils.MyConstant.FOR_YOUR
@@ -49,17 +41,7 @@ fun YourLibraryScreen(currentUser: UserInfo, onNavigationDrawerClick: () -> Unit
     }
 
     if (uiState.isLoading || uiState.user == null) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(SurfacePrimary)) {
-            CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.Center),
-                    color = SurfaceProduct,
-                    trackColor = SurfaceSecondaryInvert,
-            )
-        }
+        STFLoading()
     } else {
         YourLibraryScaffold(currentUser = currentUser,
                             user = uiState.user!!,

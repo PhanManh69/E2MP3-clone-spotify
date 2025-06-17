@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,15 +52,14 @@ import com.emanh.rootapp.presentation.composable.STFChipsType
 import com.emanh.rootapp.presentation.composable.STFItem
 import com.emanh.rootapp.presentation.composable.STFItemSize
 import com.emanh.rootapp.presentation.composable.STFItemType
+import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.composable.STFPlaylistHeader
 import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.theme.Body2Bold
 import com.emanh.rootapp.presentation.theme.Body7Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundDark
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.TextSecondary
 import com.emanh.rootapp.presentation.ui.playlistyour.composable.PlaylistYourInfoButton
@@ -72,25 +69,15 @@ import com.emanh.rootapp.utils.faunchedEffectAvatar
 
 @Composable
 fun PlaylistYourScreen(onItemClick: (Long, String) -> Unit) {
-    val viewMode = hiltViewModel<PlaylistYourViewModel>()
-    val uiState by viewMode.uiState.collectAsState()
+    val viewModel = hiltViewModel<PlaylistYourViewModel>()
+    val uiState by viewModel.uiState.collectAsState()
 
     if (uiState.isLoading || uiState.owner == null || uiState.playlist == null) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(SurfacePrimary)) {
-            CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.Center),
-                    color = SurfaceProduct,
-                    trackColor = SurfaceSecondaryInvert,
-            )
-        }
+        STFLoading()
     } else {
         PlaylistYourScaffold(owner = uiState.owner!!,
                              playlist = uiState.playlist!!,
-                             time = "2h24",
+                             time = viewModel.totalTime(uiState.songsList),
                              songsList = uiState.songsList,
                              songsRecommendList = uiState.songsRecommendList,
                              onOwnerClick = {},
@@ -100,9 +87,9 @@ fun PlaylistYourScreen(onItemClick: (Long, String) -> Unit) {
                              onPausePlayClick = {},
                              onEditClick = {},
                              onItemClick = { onItemClick(it, uiState.playlist!!.title.orEmpty()) },
-                             onAddSongClick = { viewMode.onIconClick(it) },
+                             onAddSongClick = { viewModel.onIconClick(it) },
                              onMoreSongClick = {},
-                             onRefreshClick = viewMode::onRefreshClick,
+                             onRefreshClick = viewModel::onRefreshClick,
                              onBackClick = {})
     }
 }

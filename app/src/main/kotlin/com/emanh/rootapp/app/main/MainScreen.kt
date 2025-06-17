@@ -4,12 +4,9 @@ import androidx.annotation.OptIn
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -40,12 +37,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.util.UnstableApi
 import com.emanh.rootapp.app.main.composable.MainBottomButton
 import com.emanh.rootapp.app.main.composable.MainDrawerSheet
+import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.navigation.createPlaylistScreenGraph
 import com.emanh.rootapp.presentation.navigation.playlistYourScreenGraph
+import com.emanh.rootapp.presentation.navigation.revenueDetailsScreenGraph
+import com.emanh.rootapp.presentation.navigation.revenueScreenGraph
 import com.emanh.rootapp.presentation.navigation.uploadScreenGraph
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
-import com.emanh.rootapp.presentation.theme.SurfaceProduct
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.theme.SurfaceTertiary
 import com.emanh.rootapp.presentation.ui.player.PlayerViewModel
 import kotlinx.coroutines.launch
@@ -73,17 +70,7 @@ fun MainScreen(
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     if (mainUiState.currentUser == null) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(SurfacePrimary)) {
-            CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.Center),
-                    color = SurfaceProduct,
-                    trackColor = SurfaceSecondaryInvert,
-            )
-        }
+        STFLoading()
     } else {
         ModalNavigationDrawer(
                 drawerState = drawerState,
@@ -91,14 +78,26 @@ fun MainScreen(
                     ModalDrawerSheet(modifier = Modifier
                         .fillMaxSize()
                         .padding(end = 48.dp), drawerContainerColor = SurfaceTertiary) {
-                        MainDrawerSheet(currentUser = mainUiState.currentUser!!, onUploadClick = {
-                            mainViewModel.onUploadClick()
-                            scope.launch {
-                                drawerState.apply {
-                                    if (isClosed) open() else close()
-                                }
-                            }
-                        }, onLogoutClick = onLogout)
+                        MainDrawerSheet(
+                                currentUser = mainUiState.currentUser!!,
+                                onUploadClick = {
+                                    mainViewModel.onUploadClick()
+                                    scope.launch {
+                                        drawerState.apply {
+                                            if (isClosed) open() else close()
+                                        }
+                                    }
+                                },
+                                onRevenueClick = {
+                                    mainViewModel.onRevenueClick()
+                                    scope.launch {
+                                        drawerState.apply {
+                                            if (isClosed) open() else close()
+                                        }
+                                    }
+                                },
+                                onLogoutClick = onLogout,
+                        )
                     }
                 },
         ) {
@@ -160,6 +159,8 @@ fun MainScreen(
                         mainViewModel.getTitleFromItem("Nghệ sĩ", title)
                     })
                     uploadScreenGraph(currentUser = mainUiState.currentUser!!)
+                    revenueScreenGraph(currentUser = mainUiState.currentUser!!)
+                    revenueDetailsScreenGraph()
                 }
 
                 MainBottomButton(modifier = Modifier.align(Alignment.BottomCenter),

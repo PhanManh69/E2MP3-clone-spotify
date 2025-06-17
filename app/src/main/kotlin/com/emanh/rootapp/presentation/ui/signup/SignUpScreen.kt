@@ -48,8 +48,8 @@ import com.emanh.rootapp.presentation.theme.IconPrimary
 import com.emanh.rootapp.presentation.theme.SurfaceInvert
 import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
+import com.emanh.rootapp.presentation.theme.SurfaceProductSuperDark
 import com.emanh.rootapp.presentation.theme.SurfaceSecondary
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.theme.TextBackgroundDark
 import com.emanh.rootapp.presentation.ui.signup.composable.SignUpTextField
 
@@ -194,7 +194,7 @@ private fun SignUpScaffold(
                 CircularProgressIndicator(
                         modifier = Modifier.size(54.dp),
                         color = SurfaceProduct,
-                        trackColor = SurfaceSecondaryInvert,
+                        trackColor = SurfaceProductSuperDark,
                 )
             } else {
                 Box(modifier = Modifier

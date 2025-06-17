@@ -115,6 +115,7 @@
     <string name="recently">Gần đây</string>
     <string name="settings_and_privacy">Cài đặt và quyền riêng tư</string>
     <string name="add_song">Thêm bài hát</string>
+    <string name="revenue">Doanh thu</string>
     <string name="logout">Đăng xuất</string>
     <string name="title_song">Tiêu đề bài hát của bạn</string>
     <string name="subtitle_song">Phụ đề bài hát của bạn</string>
@@ -149,4 +150,9 @@
     <string name="password_too_short">Mật khẩu của bạn quá ngắn</string>
     <string name="signup_failed">Đăng ký không thành công</string>
     <string name="passwords_do_not_match">Mật khẩu của bạn không khớp</string>
+    <string name="your_revenue">Doanh thu của bạn</string>
+    <string name="your_revenue_details">Chi tiết doanh thu của bạn</string>
+    <string name="your_current_amount">Số tiền hiện tại của bạn</string>
+    <string name="total_amount">Tổng tiền</string>
+    <string name="withdraw_money">Rút tiền</string>
 </resources>

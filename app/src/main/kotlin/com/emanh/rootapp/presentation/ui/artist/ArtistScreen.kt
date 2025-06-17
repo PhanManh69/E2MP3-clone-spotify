@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,11 +45,9 @@ import com.emanh.rootapp.domain.model.UsersModel
 import com.emanh.rootapp.presentation.composable.STFItem
 import com.emanh.rootapp.presentation.composable.STFItemSize
 import com.emanh.rootapp.presentation.composable.STFItemType
+import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.theme.Body2Bold
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
-import com.emanh.rootapp.presentation.theme.SurfaceProduct
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.theme.TextBackgroundDark
 import com.emanh.rootapp.presentation.theme.TextPrimary
 import com.emanh.rootapp.presentation.theme.Title1Bold
@@ -74,17 +70,7 @@ fun ArtistScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     }
 
     if (uiState.isLoading || uiState.artist == null) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(SurfacePrimary)) {
-            CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.Center),
-                    color = SurfaceProduct,
-                    trackColor = SurfaceSecondaryInvert,
-            )
-        }
+        STFLoading()
     } else {
         ArtistScaffold(
                 genre = artistViewModel.getGenreName(uiState.genreNameList),

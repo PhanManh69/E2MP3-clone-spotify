@@ -33,6 +33,12 @@ sealed class AppNavigationRoute {
     data object SignUp : AppNavigationRoute()
 
     @Serializable
+    data object Revenue : AppNavigationRoute()
+
+    @Serializable
+    data class RevenueDetail(val songId: Long = 0) : AppNavigationRoute()
+
+    @Serializable
     data object Upload : AppNavigationRoute()
 
     @Serializable

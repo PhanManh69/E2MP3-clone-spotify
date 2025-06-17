@@ -40,7 +40,13 @@ import com.emanh.rootapp.presentation.theme.TextTertiary
 import com.emanh.rootapp.presentation.theme.Title5Bold
 
 @Composable
-fun MainDrawerSheet(modifier: Modifier = Modifier, currentUser: UserInfo, onUploadClick: () -> Unit, onLogoutClick: () -> Unit) {
+fun MainDrawerSheet(
+    modifier: Modifier = Modifier,
+    currentUser: UserInfo,
+    onUploadClick: () -> Unit,
+    onRevenueClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
     var showExitDialog by remember { mutableStateOf(false) }
 
     Column(modifier = modifier.background(SurfaceTertiary)) {
@@ -65,6 +71,8 @@ fun MainDrawerSheet(modifier: Modifier = Modifier, currentUser: UserInfo, onUplo
 
         if (currentUser.isArtist) {
             MainButton(titleId = R.string.add_song, iconId = R.drawable.ic_32_upload, onClick = onUploadClick)
+
+            MainButton(titleId = R.string.revenue, iconId = R.drawable.ic_32_finance_mode, onClick = onRevenueClick)
         }
 
         MainButton(titleId = R.string.logout, iconId = R.drawable.ic_32_exit, onClick = { showExitDialog = true })

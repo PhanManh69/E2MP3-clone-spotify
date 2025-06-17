@@ -36,6 +36,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import androidx.core.net.toUri
 import com.emanh.rootapp.domain.usecase.UserSessionUseCase
+import com.emanh.rootapp.presentation.navigation.RevenueScreenNavigation
 import com.emanh.rootapp.presentation.navigation.UploadScreenNavigation
 import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
 import com.emanh.rootapp.presentation.navigation.router.AppRouter
@@ -77,6 +78,10 @@ class MainViewModel @Inject constructor(
 
     fun onUploadClick() {
         appRouter.getMainNavController()?.navigateTo(UploadScreenNavigation.getRoute())
+    }
+
+    fun onRevenueClick() {
+        appRouter.getMainNavController()?.navigateTo(RevenueScreenNavigation.getRoute())
     }
 
     private fun initializeMediaController() {

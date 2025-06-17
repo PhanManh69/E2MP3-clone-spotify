@@ -7,13 +7,14 @@ import com.emanh.rootapp.presentation.composable.STFCarouselHeroThumbData
 import com.emanh.rootapp.presentation.composable.STFCarouselThumbData
 import com.emanh.rootapp.presentation.composable.SecondaryLibraryData
 import com.emanh.rootapp.presentation.ui.home.HomePoscastData
+import org.intellij.lang.annotations.Language
 
 object MyConstant {
     const val ALBUM_TYPE = "album_type"
     const val PLAYLIST_TYPE = "palylist_type"
     const val SINGLE_TYPE = "single_type"
     const val ARTIST_TYPE = "artist_type"
-    const val PADDING_BOTTOM_BAR = 168
+    const val PADDING_BOTTOM_BAR = 160
     const val SONGS_SEARCH = "songs_search"
     const val ARTISTS_SEARCH = "artists_search"
     const val ALBUMS_SEARCH = "albums_search"
@@ -34,6 +35,18 @@ object MyConstant {
         "https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w544-h544-l90-rj"
     const val AVATAR_URL = "https://www.piclumen.com/wp-content/uploads/2024/10/piclumen-marquee-06.webp"
     const val NOT_AVATAR = "https://res.cloudinary.com/decqclrhl/image/upload/v1748745347/e2mp3-spotify/img/not_avatar.png"
+
+    @Language("AGSL")
+    val CUSTOM_SHADER = """
+        uniform float2 resolution;
+        layout(color) uniform half4 color1;
+        layout(color) uniform half4 color2;
+        half4 main(in float2 fragCoord) {
+            float2 uv = fragCoord/resolution.xy;
+            float mixValue = distance(uv, vec2(0, 1));
+            return mix(color1, color2, mixValue);
+        }
+    """.trimIndent()
 
     val equalizerIconList = listOf(R.drawable.ic_24_equalizer_1,
                                    R.drawable.ic_24_equalizer_2,

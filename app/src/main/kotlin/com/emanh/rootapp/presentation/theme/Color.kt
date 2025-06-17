@@ -24,7 +24,7 @@ val SurfaceFieldInvert = Color(0xFF313131)
 val SurfaceProduct = Color(0xFF1ED760)
 val SurfaceProductDark = Color(0xFF007C66)
 val SurfaceProductSuperDark = Color(0xFF015D4C)
-val SurfaceSeek = Color(0x33FFFFFF)
+val SurfaceSeek = Color(0x59FFFFFF)
 val SurfaceStroke = Color(0xFFFFFFFF)
 val SurfaceStrokeSecondary = Color(0xFF808080)
 val SurfaceAlphaInvert = Color(0x33FFFFFF)
@@ -88,6 +88,8 @@ val ProductG24 = Color(0xFF1ED760)
 val ProductG26 = Color(0xFF1BBB57)
 val ProductG32 = Color(0xFF007C66)
 val ProductG48 = Color(0xFF015D4C)
+val ProductG56 = Color(0xFF1E311E)
+val ProductG64 = Color(0xFF005200)
 
 val AlphaN100_10 = Color(0x1AFFFFFF)
 val AlphaN100_20 = Color(0x33FFFFFF)
@@ -109,7 +111,8 @@ val AlphaN09_0 = Color(0x00191414)
 val SpecialV59 = Color(0xFFA37EEA)
 val SpecialB48 = Color(0xFF0D72EA)
 val SpecialB64 = Color(0xFF509BF5)
-val SpecialR63 = Color(0xFFFE6843)
+val SpecialR63 = Color(0xFFC50000)
+val SpecialR72 = Color(0xFF5E0000)
 
 val GradientType = Brush.verticalGradient(0f to Color(0xFF191414).copy(alpha = 0.5f),
                                           0.29f to Color(0xE6191414).copy(alpha = 0.5f),
@@ -133,5 +136,5 @@ val LikedSongs = Brush.linearGradient(colors = listOf(Color(0xFF4331F4), Color(0
                                       start = Offset(0f, 0f),
                                       end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))
 val YourSongs = Brush.linearGradient(colors = listOf(Color(0xFFFE6843), Color(0xFFC5B1AA)),
-                                      start = Offset(0f, 0f),
-                                      end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))
+                                     start = Offset(0f, 0f),
+                                     end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY))

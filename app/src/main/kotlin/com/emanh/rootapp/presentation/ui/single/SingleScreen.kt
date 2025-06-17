@@ -13,10 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,14 +55,13 @@ import com.emanh.rootapp.presentation.composable.STFCarouselHeroType
 import com.emanh.rootapp.presentation.composable.STFItem
 import com.emanh.rootapp.presentation.composable.STFItemSize
 import com.emanh.rootapp.presentation.composable.STFItemType
+import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.composable.STFPlaylistAvatar
 import com.emanh.rootapp.presentation.composable.STFPlaylistHeader
 import com.emanh.rootapp.presentation.composable.utils.debounceClickable
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundDark
-import com.emanh.rootapp.presentation.theme.SurfacePrimary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
-import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
 import com.emanh.rootapp.presentation.ui.single.composable.SingleButton
 import com.emanh.rootapp.presentation.ui.single.composable.SingleInfomation
 import com.emanh.rootapp.utils.MyConstant.NOT_AVATAR
@@ -82,17 +79,7 @@ fun SingleScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
     }
 
     if (uiState.isLoading || uiState.single == null) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(SurfacePrimary)) {
-            CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(64.dp)
-                        .align(Alignment.Center),
-                    color = SurfaceProduct,
-                    trackColor = SurfaceSecondaryInvert,
-            )
-        }
+        STFLoading()
     } else {
         SingleScafflod(time = singleViewModel.totalTime(uiState.single!!),
                        single = uiState.single!!,

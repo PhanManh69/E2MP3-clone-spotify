@@ -45,6 +45,26 @@ class PlaylistYourViewModel @Inject constructor(
         }
     }
 
+    fun totalTime(songsList: List<SongsModel>): String {
+        var totalSeconds = 0
+
+        songsList.forEach { song ->
+            val parts = song.timeline?.split(":")
+            if (parts?.size == 3) {
+                val hours = parts[0].toIntOrNull() ?: 0
+                val minutes = parts[1].toIntOrNull() ?: 0
+                val seconds = parts[2].toIntOrNull() ?: 0
+
+                totalSeconds += hours * 3600 + minutes * 60 + seconds
+            }
+        }
+
+        val totalHours = totalSeconds / 3600
+        val totalMinutes = (totalSeconds % 3600) / 60
+
+        return "${totalHours}h${totalMinutes}min"
+    }
+
     fun onRefreshClick() {
         getSongsRecommend(playlistId)
     }
