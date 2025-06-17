@@ -218,6 +218,14 @@ object MyQuery {
         WHERE songId = :songId
     """
 
+    const val QUERY_RANDOM_SONGS = """
+        SELECT *
+        FROM songs
+        WHERE song_url != ""
+        ORDER BY RANDOM()
+        LIMIT 10
+    """
+
     const val QUERY_MORE_BY_ARTISTS = """
         SELECT DISTINCT s.*
         FROM songs s

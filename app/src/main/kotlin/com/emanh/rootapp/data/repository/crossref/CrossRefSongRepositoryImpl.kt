@@ -19,6 +19,10 @@ class CrossRefSongRepositoryImpl @Inject constructor(
         return crossRefSongDataSource.getSongDetailsById(songId)
     }
 
+    override fun getRandomSongDetails(): Flow<List<CrossRefSongsModel>> {
+        return crossRefSongDataSource.getRandomSongDetails()
+    }
+
     override fun getSongLike(songLikeEntity: SongLikeEntity): Flow<SongLikeEntity?> {
         return crossRefSongDataSource.getSongLike(songLikeEntity)
     }

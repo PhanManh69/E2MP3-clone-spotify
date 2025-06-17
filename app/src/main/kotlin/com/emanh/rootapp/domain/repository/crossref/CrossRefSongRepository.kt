@@ -10,6 +10,8 @@ interface CrossRefSongRepository {
 
     fun getSongDetailsById(songId: Long): Flow<CrossRefSongsModel>
 
+    fun getRandomSongDetails(): Flow<List<CrossRefSongsModel>>
+
     fun getSongLike(songLikeEntity: SongLikeEntity): Flow<SongLikeEntity?>
 
     suspend fun deleteSongLike(songLikeEntity: SongLikeEntity)

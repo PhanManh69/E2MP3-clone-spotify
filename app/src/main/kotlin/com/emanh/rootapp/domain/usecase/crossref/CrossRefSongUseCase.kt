@@ -13,6 +13,9 @@ class CrossRefSongUseCase @Inject constructor(
     fun getSongDetailsById(songId: Long): Flow<CrossRefSongsModel> {
         return crossRefSongRepository.getSongDetailsById(songId)
     }
+    fun getRandomSongDetails(): Flow<List<CrossRefSongsModel>> {
+        return crossRefSongRepository.getRandomSongDetails()
+    }
 
     fun getSongLike(songLikeEntity: SongLikeEntity): Flow<SongLikeEntity?> {
         return crossRefSongRepository.getSongLike(songLikeEntity)

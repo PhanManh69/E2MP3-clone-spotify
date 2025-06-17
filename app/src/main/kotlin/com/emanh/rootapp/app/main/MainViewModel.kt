@@ -53,6 +53,8 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
+    private var currentSongList: List<CrossRefSongsModel> = emptyList()
+    private var currentSongIndex: Int = 0
     private var mediaController: MediaController? = null
     private val controllerFuture: ListenableFuture<MediaController> by lazy {
         val intent = Intent(context, MusicService::class.java)
@@ -183,12 +185,39 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onBackClick(currentUserId: Long) {
+        if (currentSongList.isNotEmpty() && currentSongIndex > 0) {
+            currentSongIndex--
+            val previousSong = currentSongList[currentSongIndex]
+            processSongDetails(previousSong)
+            increaseViewsForSong(previousSong.songs.songId, currentUserId)
+        }
+    }
+
+    fun onForwardClick(currentUserId: Long) {
+        if (currentSongList.isNotEmpty() && currentSongIndex < currentSongList.size - 1) {
+            currentSongIndex++
+            val nextSong = currentSongList[currentSongIndex]
+            processSongDetails(nextSong)
+            increaseViewsForSong(nextSong.songs.songId, currentUserId)
+        }
+    }
+
     private fun getSongById(songId: Long) {
         viewModelScope.launch(coroutineExceptionHandler) {
             _uiState.update { it.copy(isLoading = true) }
 
             try {
                 val single = crossRefSongUseCase.getSongDetailsById(songId).first()
+                val listSong = crossRefSongUseCase.getRandomSongDetails().first()
+
+                currentSongList = listSong
+                currentSongIndex = listSong.indexOfFirst { it.songs.songId == songId }
+                if (currentSongIndex == -1) {
+                    currentSongList = listOf(single) + listSong
+                    currentSongIndex = 0
+                }
+
                 processSongDetails(single)
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading song: ${e.message}")

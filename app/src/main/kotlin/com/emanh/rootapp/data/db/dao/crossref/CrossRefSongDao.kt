@@ -11,6 +11,7 @@ import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefSongsModel
 import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_SONG_LIKE
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_SONG_LIKE
+import com.emanh.rootapp.utils.MyQuery.QUERY_RANDOM_SONGS
 import com.emanh.rootapp.utils.MyQuery.QUERY_SONG_BY_ID
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,10 @@ interface CrossRefSongDao {
     @Transaction
     @Query(QUERY_SONG_BY_ID)
     fun getSongDetailsById(songId: Long): Flow<CrossRefSongsModel>
+
+    @Transaction
+    @Query(QUERY_RANDOM_SONGS)
+    fun getRandomSongDetails(): Flow<List<CrossRefSongsModel>>
 
     @Transaction
     @Query(QUERY_GET_SONG_LIKE)

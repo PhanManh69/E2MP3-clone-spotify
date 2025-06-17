@@ -30,6 +30,8 @@ fun MainBottomButton(
     navController: NavHostController,
     artistsList: List<UsersModel>,
     onPlayerStickyClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onForwardClick: () -> Unit,
     onValueTimeLineChange: (Float) -> Unit,
     onSliderPositionChangeFinished: (Float) -> Unit,
     onPlayPauseClick: (isPlayed: Boolean) -> Unit
@@ -56,6 +58,8 @@ fun MainBottomButton(
                              currentUser = currentUser,
                              song = single,
                              artistsList = artistsList,
+                             onBackClick = onBackClick,
+                             onForwardClick = onForwardClick,
                              onPlayPauseClick = onPlayPauseClick,
                              onValueChange = onValueTimeLineChange,
                              onValueChangeFinished = onSliderPositionChangeFinished)

@@ -175,6 +175,12 @@ fun MainScreen(
                                  single = mainUiState.single,
                                  navController = navController,
                                  artistsList = mainUiState.artistsList,
+                                 onBackClick = {
+                                     mainViewModel.onBackClick(mainUiState.currentUser!!.id)
+                                 },
+                                 onForwardClick = {
+                                     mainViewModel.onForwardClick(mainUiState.currentUser!!.id)
+                                 },
                                  onPlayerStickyClick = playerViewModel::showPlayer,
                                  onValueTimeLineChange = { mainViewModel.onValueTimeLineChange(it) },
                                  onSliderPositionChangeFinished = { mainViewModel.onSliderPositionChangeFinished(it, scope) },
