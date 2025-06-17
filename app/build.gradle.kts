@@ -1,5 +1,15 @@
 @file:Suppress("DEPRECATION")
 
+import java.io.FileInputStream
+import java.util.Properties
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -17,18 +27,18 @@ kapt {
 }
 
 android {
-    namespace = "com.emanh.e2mp3.spotify"
-    compileSdk = 35
-    compileSdkVersion(35)
+    namespace = keystoreProperties["namespace"]?.toString() ?: "com.example.default"
+    compileSdk = keystoreProperties["compileSdk"]?.toString()?.toIntOrNull() ?: 35
+    compileSdkVersion(keystoreProperties["compileSdk"]?.toString()?.toIntOrNull() ?: 35)
 
     defaultConfig {
-        applicationId = "com.emanh.e2mp3.spotify"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = keystoreProperties["applicationId"]?.toString() ?: keystoreProperties["namespace"]?.toString()
+        minSdk = keystoreProperties["minSdk"]?.toString()?.toIntOrNull() ?: 24
+        targetSdk = keystoreProperties["targetSdk"]?.toString()?.toIntOrNull() ?: 35
+        versionCode = keystoreProperties["versionCode"]?.toString()?.toIntOrNull() ?: 1
+        versionName = keystoreProperties["versionName"]?.toString() ?: "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = keystoreProperties["testInstrumentationRunner"]?.toString() ?: "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -37,13 +47,20 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        val javaVersion = keystoreProperties["javaVersion"]?.toString()?.let {
+            JavaVersion.valueOf("VERSION_$it")
+        } ?: JavaVersion.VERSION_11
+
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = keystoreProperties["kotlinJvmTarget"]?.toString() ?: "11"
     }
+
     buildFeatures {
         compose = true
     }
