@@ -1,6 +1,5 @@
 package com.emanh.rootapp.domain.repository
 
-import com.emanh.rootapp.data.db.entity.SongsEntity
 import com.emanh.rootapp.domain.model.SongsModel
 import kotlinx.coroutines.flow.Flow
 
@@ -27,7 +26,7 @@ interface SongsRepository {
 
     fun getLikedSongsByUser(userId: Long): Flow<List<SongsModel>>
 
-    fun getSongsRecommend(albumId: Long): Flow<List<SongsModel>>
+    fun getSongsRecommend(): Flow<SongsModel>
 
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel>
 

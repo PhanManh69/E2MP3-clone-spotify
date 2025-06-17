@@ -55,7 +55,7 @@ interface SongsDao {
     fun getLikedSongsByUser(userId: Long): Flow<List<SongsEntity>>
 
     @Query(QUERY_GET_SONGS_RECOMMEND)
-    fun getSongsRecommend(albumId: Long): Flow<List<SongsEntity>>
+    fun getSongsRecommend(): Flow<SongsEntity>
 
     @Query(QUERY_GET_RANDOM_SONG_EXCLUDING)
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity>

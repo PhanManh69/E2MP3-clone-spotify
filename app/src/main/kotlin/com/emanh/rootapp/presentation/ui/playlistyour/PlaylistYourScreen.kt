@@ -73,14 +73,18 @@ fun PlaylistYourScreen(onItemClick: (Long, String) -> Unit) {
     val viewModel = hiltViewModel<PlaylistYourViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
-    if (uiState.isLoading || uiState.owner == null || uiState.playlist == null) {
+    if (uiState.isLoading || uiState.owner == null || uiState.playlist == null || uiState.songsRecommend1 == null || uiState.songsRecommend2 == null || uiState.songsRecommend3 == null || uiState.songsRecommend4 == null || uiState.songsRecommend5 == null) {
         STFLoading()
     } else {
         PlaylistYourScaffold(owner = uiState.owner!!,
                              playlist = uiState.playlist!!,
                              time = viewModel.totalTime(uiState.songsList),
                              songsList = uiState.songsList,
-                             songsRecommendList = uiState.songsRecommendList,
+                             songsRecommend1 = uiState.songsRecommend1!!,
+                             songsRecommend2 = uiState.songsRecommend2!!,
+                             songsRecommend3 = uiState.songsRecommend3!!,
+                             songsRecommend4 = uiState.songsRecommend4!!,
+                             songsRecommend5 = uiState.songsRecommend5!!,
                              onOwnerClick = {},
                              onDownloadClick = {},
                              onMoreClick = {},
@@ -88,7 +92,9 @@ fun PlaylistYourScreen(onItemClick: (Long, String) -> Unit) {
                              onPausePlayClick = {},
                              onEditClick = {},
                              onItemClick = { onItemClick(it, uiState.playlist!!.title.orEmpty()) },
-                             onAddSongClick = { viewModel.onIconClick(it) },
+                             onAddSongClick = { type, id ->
+                                 viewModel.onIconClick(type, id)
+                             },
                              onMoreSongClick = { viewModel.onMoreSongClick(it) },
                              onRefreshClick = viewModel::onRefreshClick,
                              onBackClick = {})
@@ -112,7 +118,11 @@ private fun PlaylistYourScaffold(
     owner: UsersModel,
     playlist: PlaylistsModel,
     songsList: List<SongsModel>,
-    songsRecommendList: List<SongsModel>,≠
+    songsRecommend1: SongsModel,
+    songsRecommend2: SongsModel,
+    songsRecommend3: SongsModel,
+    songsRecommend4: SongsModel,
+    songsRecommend5: SongsModel,
     onOwnerClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onMoreClick: () -> Unit,
@@ -120,7 +130,7 @@ private fun PlaylistYourScaffold(
     onShuffleClick: () -> Unit,
     onPausePlayClick: () -> Unit,
     onItemClick: (Long) -> Unit,
-    onAddSongClick: (Long) -> Unit,
+    onAddSongClick: (Int, Long) -> Unit,
     onMoreSongClick: (Long) -> Unit,
     onBackClick: () -> Unit,
     onRefreshClick: () -> Unit,
@@ -218,25 +228,73 @@ private fun PlaylistYourScaffold(
                 }
             }
 
-            items(count = songsRecommendList.size, key = { index ->
-                val item = songsRecommendList[index]
-                "recommend-songs-${item.id}-${index}"
-            }) { index ->
-                val item = songsRecommendList[index]
+            item {
+                Column(modifier = Modifier.offset(y = (-168).dp)) {
+                    STFItem(imageUrl = songsRecommend1.avatarUrl ?: NOT_AVATAR,
+                            title = songsRecommend1.title.orEmpty(),
+                            label = songsRecommend1.subtitle.orEmpty(),
+                            iconId = R.drawable.ic_24_plus_circle,
+                            type = STFItemType.Music,
+                            size = STFItemSize.Small,
+                            onItemClick = {
+                                onItemClick(songsRecommend1.id)
+                            },
+                            onIconClick = {
+                                onAddSongClick(1, songsRecommend1.id)
+                            })
 
-                STFItem(modifier = Modifier.offset(y = (-168).dp),
-                        imageUrl = item.avatarUrl ?: NOT_AVATAR,
-                        title = item.title.orEmpty(),
-                        label = item.subtitle.orEmpty(),
-                        iconId = R.drawable.ic_24_plus_circle,
-                        type = STFItemType.Music,
-                        size = STFItemSize.Small,
-                        onItemClick = {
-                            onItemClick(item.id)
-                        },
-                        onIconClick = {
-                            onAddSongClick(item.id)
-                        })
+                    STFItem(imageUrl = songsRecommend2.avatarUrl ?: NOT_AVATAR,
+                            title = songsRecommend2.title.orEmpty(),
+                            label = songsRecommend2.subtitle.orEmpty(),
+                            iconId = R.drawable.ic_24_plus_circle,
+                            type = STFItemType.Music,
+                            size = STFItemSize.Small,
+                            onItemClick = {
+                                onItemClick(songsRecommend2.id)
+                            },
+                            onIconClick = {
+                                onAddSongClick(2, songsRecommend2.id)
+                            })
+
+                    STFItem(imageUrl = songsRecommend3.avatarUrl ?: NOT_AVATAR,
+                            title = songsRecommend3.title.orEmpty(),
+                            label = songsRecommend3.subtitle.orEmpty(),
+                            iconId = R.drawable.ic_24_plus_circle,
+                            type = STFItemType.Music,
+                            size = STFItemSize.Small,
+                            onItemClick = {
+                                onItemClick(songsRecommend3.id)
+                            },
+                            onIconClick = {
+                                onAddSongClick(3, songsRecommend3.id)
+                            })
+
+                    STFItem(imageUrl = songsRecommend4.avatarUrl ?: NOT_AVATAR,
+                            title = songsRecommend4.title.orEmpty(),
+                            label = songsRecommend4.subtitle.orEmpty(),
+                            iconId = R.drawable.ic_24_plus_circle,
+                            type = STFItemType.Music,
+                            size = STFItemSize.Small,
+                            onItemClick = {
+                                onItemClick(songsRecommend4.id)
+                            },
+                            onIconClick = {
+                                onAddSongClick(4, songsRecommend4.id)
+                            })
+
+                    STFItem(imageUrl = songsRecommend5.avatarUrl ?: NOT_AVATAR,
+                            title = songsRecommend5.title.orEmpty(),
+                            label = songsRecommend5.subtitle.orEmpty(),
+                            iconId = R.drawable.ic_24_plus_circle,
+                            type = STFItemType.Music,
+                            size = STFItemSize.Small,
+                            onItemClick = {
+                                onItemClick(songsRecommend5.id)
+                            },
+                            onIconClick = {
+                                onAddSongClick(5, songsRecommend5.id)
+                            })
+                }
             }
 
             item {
@@ -301,14 +359,18 @@ private fun PlaylistYourScreenPreview() {
                              playlist = PlaylistsModel(title = "Tên playlist", subtitle = "Giới thiệu về playlist"),
                              time = "2h24",
                              songsList = fakeSongs,
-                             songsRecommendList = fakeSongs.take(5),
+                             songsRecommend1 = fakeSongs[0],
+                             songsRecommend2 = fakeSongs[1],
+                             songsRecommend3 = fakeSongs[2],
+                             songsRecommend4 = fakeSongs[3],
+                             songsRecommend5 = fakeSongs[4],
                              onOwnerClick = {},
                              onDownloadClick = {},
                              onMoreClick = {},
                              onShuffleClick = {},
                              onPausePlayClick = {},
                              onItemClick = {},
-                             onAddSongClick = {},
+                             onAddSongClick = { _, _ -> },
                              onMoreSongClick = {},
                              onBackClick = {},
                              onRefreshClick = {},

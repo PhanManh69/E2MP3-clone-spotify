@@ -26,7 +26,7 @@ interface SongsDataSource {
 
     fun getLikedSongsByUser(userId: Long): Flow<List<SongsEntity>>
 
-    fun getSongsRecommend(albumId: Long): Flow<List<SongsEntity>>
+    fun getSongsRecommend(): Flow<SongsEntity>
 
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity>
 

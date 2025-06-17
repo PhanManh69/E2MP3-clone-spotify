@@ -52,8 +52,8 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getLikedSongsByUser(userId)
     }
 
-    override fun getSongsRecommend(albumId: Long): Flow<List<SongsEntity>> {
-        return songsDao.getSongsRecommend(albumId)
+    override fun getSongsRecommend(): Flow<SongsEntity> {
+        return songsDao.getSongsRecommend()
     }
 
     override fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity> {

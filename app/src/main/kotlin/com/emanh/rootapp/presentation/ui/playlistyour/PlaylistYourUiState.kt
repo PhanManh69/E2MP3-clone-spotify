@@ -9,7 +9,11 @@ data class PlaylistYourUiState(
     val isShowButtonSheet: Boolean = false,
     val owner: UsersModel? = null,
     val song: SongsModel? = null,
+    val songsRecommend1: SongsModel? = null,
+    val songsRecommend2: SongsModel? = null,
+    val songsRecommend3: SongsModel? = null,
+    val songsRecommend4: SongsModel? = null,
+    val songsRecommend5: SongsModel? = null,
     val playlist: PlaylistsModel? = null,
-    val songsList: List<SongsModel> = emptyList(),
-    val songsRecommendList: List<SongsModel> = emptyList()
+    val songsList: List<SongsModel> = emptyList()
 )

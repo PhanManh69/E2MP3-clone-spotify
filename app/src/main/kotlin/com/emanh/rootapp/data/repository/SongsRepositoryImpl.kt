@@ -97,11 +97,9 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSongsRecommend(albumId: Long): Flow<List<SongsModel>> {
-        return songsDataSource.getSongsRecommend(albumId).map { entities ->
-            entities.map { entity ->
-                mapToModel(entity)
-            }
+    override fun getSongsRecommend(): Flow<SongsModel> {
+        return songsDataSource.getSongsRecommend().map { entity ->
+            mapToModel(entity)
         }
     }
 

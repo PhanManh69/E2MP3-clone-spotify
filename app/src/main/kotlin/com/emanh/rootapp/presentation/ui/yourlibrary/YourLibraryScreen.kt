@@ -236,13 +236,13 @@ fun YourLibraryScaffold(
                       items(count = mergedLibraryItems.size, key = { index ->
                           val item = mergedLibraryItems[index]
                           when (item) {
-                              is LibraryItem.LikedSongs -> "song-${item.title}"
-                              is LibraryItem.YourSongs -> "song-your-${item.title}"
-                              is LibraryItem.YourAlbums -> "album-your-${item.title}"
-                              is LibraryItem.YourPlaylist -> "playlist-${item.title}"
-                              is LibraryItem.ForYouPlaylist -> "playlist-${item.title}"
-                              is LibraryItem.FavoriteArtist -> "artist-${item.title}"
-                              is LibraryItem.LikedAlbum -> "album-${item.title}"
+                              is LibraryItem.LikedSongs -> "song-1-${item.title}"
+                              is LibraryItem.YourSongs -> "song-your-2-${item.title}"
+                              is LibraryItem.YourAlbums -> "album-your-3-${item.title}"
+                              is LibraryItem.YourPlaylist -> "playlist-4-${item.title}"
+                              is LibraryItem.ForYouPlaylist -> "playlist-5-${item.title}"
+                              is LibraryItem.FavoriteArtist -> "artist-6-${item.title}"
+                              is LibraryItem.LikedAlbum -> "album-7-${item.title}"
                           }
                       }) { index ->
                           val item = mergedLibraryItems[index]

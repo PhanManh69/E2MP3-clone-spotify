@@ -480,15 +480,8 @@ object MyQuery {
     const val QUERY_GET_SONGS_RECOMMEND = """
         SELECT *
         FROM songs s
-        JOIN cross_ref_song_genre sg ON s.songId = sg.songId
-        WHERE sg.genreId = 1 OR sg.genreId = 12
-            AND s.songId NOT IN (
-                SELECT songId
-                FROM cross_ref_playlist_song
-                WHERE playlistId = :albumId
-            )
         ORDER BY RANDOM()
-        LIMIT 5
+        LIMIT 1
     """
 
     const val QUERY_GET_RANDOM_SONG_EXCLUDING = """

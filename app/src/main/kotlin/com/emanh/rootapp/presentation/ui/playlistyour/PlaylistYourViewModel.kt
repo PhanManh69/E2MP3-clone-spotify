@@ -12,9 +12,12 @@ import com.emanh.rootapp.domain.usecase.SongsUseCase
 import com.emanh.rootapp.domain.usecase.UsersUseCase
 import com.emanh.rootapp.domain.usecase.crossref.CrossRefPlaylistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,10 +39,11 @@ class PlaylistYourViewModel @Inject constructor(
     private val playlistId: Long = savedStateHandle.get<Long>("playlistId") ?: -1
 
     init {
+        getSongsRecommend()
+
         if (playlistId != -1L) {
             Log.d(TAG, "Initializing with playlistId: $playlistId")
 
-            getSongsRecommend(playlistId)
             getOwnerAlbum(playlistId)
             loadPlaylistDetails(playlistId)
         }
@@ -66,10 +70,10 @@ class PlaylistYourViewModel @Inject constructor(
     }
 
     fun onRefreshClick() {
-        getSongsRecommend(playlistId)
+        getSongsRecommend()
     }
 
-    fun onIconClick(songId: Long) {
+    fun onIconClick(type: Int, songId: Long) {
         viewModelScope.launch {
             try {
                 crossRefPlaylistUseCase.insertSongToPlaylist(PlaylistSongEntity(playlistId, songId))
@@ -81,6 +85,38 @@ class PlaylistYourViewModel @Inject constructor(
 
                 updatedPlaylist?.let {
                     playlistsUseCase.updatePlaylist(it)
+                }
+
+                when (type) {
+                    1 -> {
+                        songsUseCase.getSongsRecommend().collect { songs ->
+                            _uiState.update { it.copy(songsRecommend1 = songs) }
+                        }
+                    }
+
+                    2 -> {
+                        songsUseCase.getSongsRecommend().collect { songs ->
+                            _uiState.update { it.copy(songsRecommend2 = songs) }
+                        }
+                    }
+
+                    3 -> {
+                        songsUseCase.getSongsRecommend().collect { songs ->
+                            _uiState.update { it.copy(songsRecommend3 = songs) }
+                        }
+                    }
+
+                    4 -> {
+                        songsUseCase.getSongsRecommend().collect { songs ->
+                            _uiState.update { it.copy(songsRecommend4 = songs) }
+                        }
+                    }
+
+                    5 -> {
+                        songsUseCase.getSongsRecommend().collect { songs ->
+                            _uiState.update { it.copy(songsRecommend5 = songs) }
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 Log.e("PlaylistViewModel", "Error in onIconClick", e)
@@ -169,10 +205,24 @@ class PlaylistYourViewModel @Inject constructor(
         }
     }
 
-    private fun getSongsRecommend(playlistId: Long) {
+    private fun getSongsRecommend() {
         viewModelScope.launch {
-            songsUseCase.getSongsRecommend(playlistId).collect { songs ->
-                _uiState.update { it.copy(songsRecommendList = songs) }
+            try {
+                val deferredResults = (1..5).map {
+                    async { songsUseCase.getSongsRecommend().first() }
+                }
+
+                val results = deferredResults.awaitAll()
+
+                _uiState.update { currentState ->
+                    currentState.copy(songsRecommend1 = results.getOrNull(0),
+                                      songsRecommend2 = results.getOrNull(1),
+                                      songsRecommend3 = results.getOrNull(2),
+                                      songsRecommend4 = results.getOrNull(3),
+                                      songsRecommend5 = results.getOrNull(4))
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading songs recommend: ${e.message}")
             }
         }
     }
