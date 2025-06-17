@@ -88,6 +88,36 @@ class PlaylistYourViewModel @Inject constructor(
         }
     }
 
+    fun onMoreSongClick(songId: Long) {
+        val song = uiState.value.songsList.find { it.id == songId }
+        _uiState.update { it.copy(song = song, isShowButtonSheet = true) }
+    }
+
+    fun onDismissRequest() {
+        _uiState.update { it.copy(isShowButtonSheet = false) }
+    }
+
+    fun onRemovePlaylistClick() {
+        viewModelScope.launch {
+            try {
+                crossRefPlaylistUseCase.deletePlaylistSong(PlaylistSongEntity(playlistId, uiState.value.song?.id ?: -1))
+
+                val updatedPlaylist = uiState.value.playlist?.let { currentPlaylist ->
+                    val newSongsIdList = currentPlaylist.songsIdList - (uiState.value.song?.id ?: -1)
+                    currentPlaylist.copy(songsIdList = newSongsIdList)
+                }
+
+                updatedPlaylist?.let {
+                    playlistsUseCase.updatePlaylist(it)
+                }
+
+                _uiState.update { it.copy(isShowButtonSheet = false) }
+            } catch (e: Exception) {
+                Log.e("PlaylistViewModel", "Error in onRemovePlaylistClick", e)
+            }
+        }
+    }
+
     private fun getOwnerAlbum(playlistId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }

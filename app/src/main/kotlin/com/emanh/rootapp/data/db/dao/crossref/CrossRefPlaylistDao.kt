@@ -11,6 +11,7 @@ import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
 import com.emanh.rootapp.domain.model.crossref.CrossRefPlaylistsModel
 import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_PLAYLIST_LIKE
+import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_PLAYLIST_SONG
 import com.emanh.rootapp.utils.MyQuery.QUERY_DELETE_USER_FOLLOWING
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_PLAYLIST_LIKE
 import com.emanh.rootapp.utils.MyQuery.QUERY_PLAYLIST_CARD
@@ -43,6 +44,9 @@ interface CrossRefPlaylistDao {
 
     @Query(QUERY_DELETE_PLAYLIST_LIKE)
     suspend fun deletePlaylistLike(playlistId: Long, userId: Long)
+
+    @Query(QUERY_DELETE_PLAYLIST_SONG)
+    suspend fun deletePlaylistSong(playlistId: Long, songId: Long)
 
     @Insert()
     suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity)

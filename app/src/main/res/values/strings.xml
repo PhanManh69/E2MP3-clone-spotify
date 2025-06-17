@@ -155,4 +155,9 @@
     <string name="your_current_amount">Số tiền hiện tại của bạn</string>
     <string name="total_amount">Tổng tiền</string>
     <string name="withdraw_money">Rút tiền</string>
+    <string name="add_to_other_playlist">Thêm vào danh sách phát khác</string>
+    <string name="remove_from_this_playlist">Xóa khỏi danh sách phát này</string>
+    <string name="add_to_queue">Thêm vào hàng chờ</string>
+    <string name="go_to_artist">Đi đến nghệ sĩ</string>
+    <string name="share">Chia sẻ</string>
 </resources>

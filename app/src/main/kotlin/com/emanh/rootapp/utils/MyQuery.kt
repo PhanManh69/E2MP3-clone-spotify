@@ -458,6 +458,10 @@ object MyQuery {
         DELETE FROM cross_ref_playlist_like WHERE playlistId = :playlistId AND userId = :userId
     """
 
+    const val QUERY_DELETE_PLAYLIST_SONG = """
+        DELETE FROM cross_ref_playlist_song WHERE playlistId = :playlistId AND songId = :songId
+    """
+
     const val QUERY_GET_ALBUM_LIKE = """
         SELECT * FROM cross_ref_album_like WHERE albumId = :albumId AND userId = :userId
     """

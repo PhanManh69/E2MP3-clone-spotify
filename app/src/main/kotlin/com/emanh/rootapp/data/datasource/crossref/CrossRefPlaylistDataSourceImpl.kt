@@ -34,6 +34,10 @@ class CrossRefPlaylistDataSourceImpl @Inject constructor(
         return crossRefPlaylistDao.deletePlaylistLike(playlistId = playlistLikeEntity.playlistId, userId = playlistLikeEntity.userId)
     }
 
+    override suspend fun deletePlaylistSong(playlistSongEntity: PlaylistSongEntity) {
+        return crossRefPlaylistDao.deletePlaylistSong(playlistId = playlistSongEntity.playlistId, songId = playlistSongEntity.songId)
+    }
+
     override suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity) {
         return crossRefPlaylistDao.insertPlaylistLike(playlistLikeEntity)
     }

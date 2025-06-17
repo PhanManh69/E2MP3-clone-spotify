@@ -46,6 +46,7 @@ import com.emanh.e2mp3.spotify.R
 import com.emanh.rootapp.domain.model.PlaylistsModel
 import com.emanh.rootapp.domain.model.SongsModel
 import com.emanh.rootapp.domain.model.UsersModel
+import com.emanh.rootapp.presentation.composable.STFButtonSheet
 import com.emanh.rootapp.presentation.composable.STFChips
 import com.emanh.rootapp.presentation.composable.STFChipsSize
 import com.emanh.rootapp.presentation.composable.STFChipsType
@@ -88,9 +89,19 @@ fun PlaylistYourScreen(onItemClick: (Long, String) -> Unit) {
                              onEditClick = {},
                              onItemClick = { onItemClick(it, uiState.playlist!!.title.orEmpty()) },
                              onAddSongClick = { viewModel.onIconClick(it) },
-                             onMoreSongClick = {},
+                             onMoreSongClick = { viewModel.onMoreSongClick(it) },
                              onRefreshClick = viewModel::onRefreshClick,
                              onBackClick = {})
+    }
+
+    if (uiState.isShowButtonSheet) {
+        STFButtonSheet(song = uiState.song!!,
+                       onDismissRequest = viewModel::onDismissRequest,
+                       onAddPlaylistClick = {},
+                       onRemovePlaylistClick = viewModel::onRemovePlaylistClick,
+                       onAddToQueueClick = {},
+                       onGoToArtistClick = {},
+                       onShareClick = {})
     }
 }
 
@@ -101,7 +112,7 @@ private fun PlaylistYourScaffold(
     owner: UsersModel,
     playlist: PlaylistsModel,
     songsList: List<SongsModel>,
-    songsRecommendList: List<SongsModel>,
+    songsRecommendList: List<SongsModel>,≠
     onOwnerClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onMoreClick: () -> Unit,

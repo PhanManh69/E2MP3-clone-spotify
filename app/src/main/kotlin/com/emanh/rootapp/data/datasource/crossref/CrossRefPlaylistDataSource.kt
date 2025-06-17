@@ -18,6 +18,8 @@ interface CrossRefPlaylistDataSource {
 
     suspend fun deletePlaylistLike(playlistLikeEntity: PlaylistLikeEntity)
 
+    suspend fun deletePlaylistSong(playlistSongEntity: PlaylistSongEntity)
+
     suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity)
 
     suspend fun insertSongToPlaylist(playlistSongEntity: PlaylistSongEntity)

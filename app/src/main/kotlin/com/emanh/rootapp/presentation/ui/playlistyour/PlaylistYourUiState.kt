@@ -6,7 +6,9 @@ import com.emanh.rootapp.domain.model.UsersModel
 
 data class PlaylistYourUiState(
     val isLoading: Boolean = false,
+    val isShowButtonSheet: Boolean = false,
     val owner: UsersModel? = null,
+    val song: SongsModel? = null,
     val playlist: PlaylistsModel? = null,
     val songsList: List<SongsModel> = emptyList(),
     val songsRecommendList: List<SongsModel> = emptyList()

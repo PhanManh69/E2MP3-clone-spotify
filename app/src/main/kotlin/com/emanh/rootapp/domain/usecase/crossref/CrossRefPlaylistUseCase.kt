@@ -30,6 +30,10 @@ class CrossRefPlaylistUseCase @Inject constructor(
         return crossRefPlaylistRepository.deletePlaylistLike(playlistLikeEntity)
     }
 
+    suspend fun deletePlaylistSong(playlistSongEntity: PlaylistSongEntity) {
+        return crossRefPlaylistRepository.deletePlaylistSong(playlistSongEntity)
+    }
+
     suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity) {
         return crossRefPlaylistRepository.insertPlaylistLike(playlistLikeEntity)
     }
