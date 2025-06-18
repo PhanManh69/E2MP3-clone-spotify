@@ -50,7 +50,6 @@ import com.emanh.rootapp.presentation.theme.Body7Regular
 import com.emanh.rootapp.presentation.theme.E2MP3Theme
 import com.emanh.rootapp.presentation.theme.IconBackgroundDark
 import com.emanh.rootapp.presentation.theme.IconInvert
-import com.emanh.rootapp.presentation.theme.IconProduct
 import com.emanh.rootapp.presentation.theme.IconSecondary
 import com.emanh.rootapp.presentation.theme.SurfaceProduct
 import com.emanh.rootapp.presentation.theme.SurfaceSecondaryInvert
@@ -107,7 +106,7 @@ fun PlaylistYourInfoButton(
                 }
             }
 
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(text = playlist.title.orEmpty(),
                          color = TextPrimary,
