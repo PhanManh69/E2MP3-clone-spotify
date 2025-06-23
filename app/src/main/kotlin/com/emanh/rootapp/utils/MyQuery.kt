@@ -249,7 +249,7 @@ object MyQuery {
         SELECT s.*
         FROM songs s
         JOIN cross_ref_song_artist sa ON s.songId = sa.songId
-        WHERE sa.userId = :userId
+        WHERE sa.userId = :userId AND s.status_upload = "SUCCESS"
         ORDER BY RANDOM()
     """
 
@@ -490,6 +490,13 @@ object MyQuery {
         WHERE songId NOT IN (:excludeIds)
         ORDER BY RANDOM()
         LIMIT 1
+    """
+
+    const val QUERY_GET_PROCESSING_SONGS = """
+        SELECT *
+        FROM songs s
+        JOIN cross_ref_song_artist sa ON s.songId = sa.songId 
+        WHERE status_upload = "PROCESSING" AND sa.userId = :userId
     """
 
     const val QUERY_GET_USER_LOGIN = """

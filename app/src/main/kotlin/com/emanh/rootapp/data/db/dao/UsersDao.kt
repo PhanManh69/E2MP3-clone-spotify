@@ -1,9 +1,11 @@
 package com.emanh.rootapp.data.db.dao
 
+import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.emanh.rootapp.data.db.entity.StatusUpload
 import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.utils.MyQuery.QERRY_SEARCH_ARTISTS
 import com.emanh.rootapp.utils.MyQuery.QUERY_ARTIST_BY_ID
@@ -23,6 +25,9 @@ import kotlinx.coroutines.flow.Flow
 interface UsersDao {
     @Query("SELECT * FROM users")
     fun getAllUsers(): Flow<List<UsersEntity>>
+
+    @Query("SELECT * FROM users")
+    fun getAllArtistCursor(): Cursor
 
     @Query(QUERY_YOUR_FAVORITE_ARTISTS)
     fun getYourFavoriteArtists(userId: Long): Flow<UsersEntity>

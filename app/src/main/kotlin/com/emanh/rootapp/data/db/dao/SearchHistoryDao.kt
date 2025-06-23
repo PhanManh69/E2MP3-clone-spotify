@@ -19,6 +19,9 @@ interface SearchHistoryDao {
     @Query(QUERY_DELETE_DUPLICATE)
     suspend fun deleteDuplicate(userId: Long, tableId: Long, type: String?)
 
+    @Query("DELETE FROM search_history WHERE table_id = :songId AND type = 'songs_search'")
+    fun deleteSongFromSearchHistory(songId: Long): Int
+
     @Insert()
     suspend fun insertSearchHistory(searchHistory: SearchHistoryEntity)
 }

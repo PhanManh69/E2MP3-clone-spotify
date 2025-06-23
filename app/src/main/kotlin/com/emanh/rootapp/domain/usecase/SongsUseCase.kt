@@ -56,8 +56,8 @@ class SongsUseCase @Inject constructor(
         return songsRepository.getSongsRecommend()
     }
 
-    fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel> {
-        return songsRepository.getRandomSongExcluding(excludeIds)
+    fun getProcessingSongs(userId: Long): Flow<List<SongsModel>> {
+        return songsRepository.getProcessingSongs(userId)
     }
 
     suspend fun insertSong(song: SongsModel): Long {

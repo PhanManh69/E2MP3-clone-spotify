@@ -18,6 +18,8 @@ import com.emanh.rootapp.data.datasource.SearchHistoryDataSource
 import com.emanh.rootapp.data.datasource.SearchHistoryDataSourceImpl
 import com.emanh.rootapp.data.datasource.SongsDataSource
 import com.emanh.rootapp.data.datasource.SongsDataSourceImpl
+import com.emanh.rootapp.data.datasource.UploadDataSource
+import com.emanh.rootapp.data.datasource.UploadDataSourceImpl
 import com.emanh.rootapp.data.datasource.UserDataStore
 import com.emanh.rootapp.data.datasource.UserDataStoreImpl
 import com.emanh.rootapp.data.datasource.UsersDataSource
@@ -38,6 +40,7 @@ import com.emanh.rootapp.data.db.dao.PodcastsDao
 import com.emanh.rootapp.data.db.dao.SearchDao
 import com.emanh.rootapp.data.db.dao.SearchHistoryDao
 import com.emanh.rootapp.data.db.dao.SongsDao
+import com.emanh.rootapp.data.db.dao.UploadDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
@@ -54,6 +57,7 @@ import com.emanh.rootapp.data.repository.PlaylistsRepositoryImpl
 import com.emanh.rootapp.data.repository.SearchHistoryRepositoryImpl
 import com.emanh.rootapp.data.repository.SearchRepositoryImpl
 import com.emanh.rootapp.data.repository.SongsRepositoryImpl
+import com.emanh.rootapp.data.repository.UploadRepositoryImpl
 import com.emanh.rootapp.data.repository.UserSessionRepositoryImpl
 import com.emanh.rootapp.data.repository.UsersRepositoryImpl
 import com.emanh.rootapp.data.repository.ViewsSongRepositoryImpl
@@ -68,6 +72,7 @@ import com.emanh.rootapp.domain.repository.PlaylistsRepository
 import com.emanh.rootapp.domain.repository.SearchHistoryRepository
 import com.emanh.rootapp.domain.repository.SearchRepository
 import com.emanh.rootapp.domain.repository.SongsRepository
+import com.emanh.rootapp.domain.repository.UploadRepository
 import com.emanh.rootapp.domain.repository.UserSessionRepository
 import com.emanh.rootapp.domain.repository.UsersRepository
 import com.emanh.rootapp.domain.repository.ViewsSongRepository
@@ -118,6 +123,12 @@ object DatabaseModule {
     @Singleton
     fun provideSongsDao(database: STFDatabase): SongsDao {
         return database.songsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUploadDao(database: STFDatabase): UploadDao {
+        return database.uploadDao()
     }
 
     @Provides
@@ -216,6 +227,18 @@ object DatabaseModule {
     @Singleton
     fun provideSongsRepository(songsDataSource: SongsDataSource): SongsRepository {
         return SongsRepositoryImpl(songsDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUploadDataSource(uploadDao: UploadDao): UploadDataSource {
+        return UploadDataSourceImpl(uploadDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUploadRepository(songsDataSource: UploadDataSource): UploadRepository {
+        return UploadRepositoryImpl(songsDataSource)
     }
 
     @Provides

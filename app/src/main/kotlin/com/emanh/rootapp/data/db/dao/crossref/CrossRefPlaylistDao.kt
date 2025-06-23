@@ -48,6 +48,9 @@ interface CrossRefPlaylistDao {
     @Query(QUERY_DELETE_PLAYLIST_SONG)
     suspend fun deletePlaylistSong(playlistId: Long, songId: Long)
 
+    @Query("DELETE FROM cross_ref_playlist_song WHERE songId = :songId")
+    fun deleteSongFromPlaylist(songId: Long): Int
+
     @Insert()
     suspend fun insertPlaylistLike(playlistLikeEntity: PlaylistLikeEntity)
 

@@ -1,17 +1,18 @@
-package com.emanh.rootapp.service
+package com.emanh.rootapp.network.service
 
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
 import com.emanh.e2mp3.spotify.R
 import com.emanh.rootapp.utils.MyConstant.NOTIFICATION_CHANNEL_ID
 import com.emanh.rootapp.utils.MyConstant.NOTIFICATION_ID
 
-@androidx.media3.common.util.UnstableApi
+@UnstableApi
 class MusicNotificationManager(
     private val context: Context, session: MediaSession, notificationListener: PlayerNotificationManager.NotificationListener
 ) {

@@ -24,6 +24,9 @@ interface ViewsSongDao {
 
     @Query(QUERY_VIEW_RECORD)
     suspend fun findViewRecord(userId: Long, songId: Long): ViewsSongEntity?
+
+    @Query("DELETE FROM views_song WHERE song_id = :songId")
+    fun deleteSongFromView(songId: Long): Int
     
     @Update
     suspend fun updateViewsSong(viewsSong: ViewsSongEntity)
