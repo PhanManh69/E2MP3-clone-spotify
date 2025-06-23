@@ -109,6 +109,14 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getProcessingSongs(userId: Long): Flow<List<SongsModel>> {
+        return songsDataSource.getProcessingSongs(userId).map { entities ->
+            entities.map { entity ->
+                mapToModel(entity)
+            }
+        }
+    }
+
     override suspend fun insertSong(song: SongsModel): Long {
         return songsDataSource.insertSong(mapToEntity(song))
     }
@@ -124,7 +132,8 @@ class SongsRepositoryImpl @Inject constructor(
                           releaseDate = entity.releaseDate,
                           genres = entity.genresIdList,
                           likes = entity.likesIdList,
-                          artists = entity.artistsIdList)
+                          artists = entity.artistsIdList,
+                          statusUpload = entity.statusUpload)
     }
 
     private fun mapToEntity(model: SongsModel): SongsEntity {
@@ -138,6 +147,7 @@ class SongsRepositoryImpl @Inject constructor(
                            releaseDate = model.releaseDate,
                            genresIdList = model.genres,
                            likesIdList = model.likes,
-                           artistsIdList = model.artists)
+                           artistsIdList = model.artists,
+                           statusUpload = model.statusUpload)
     }
 }

@@ -30,5 +30,7 @@ interface SongsRepository {
 
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsModel>
 
+    fun getProcessingSongs(userId: Long): Flow<List<SongsModel>>
+
     suspend fun insertSong(song: SongsModel): Long
 }

@@ -40,6 +40,7 @@ import com.emanh.rootapp.app.main.composable.MainDrawerSheet
 import com.emanh.rootapp.presentation.composable.STFLoading
 import com.emanh.rootapp.presentation.navigation.createPlaylistScreenGraph
 import com.emanh.rootapp.presentation.navigation.playlistYourScreenGraph
+import com.emanh.rootapp.presentation.navigation.processingScreenGraph
 import com.emanh.rootapp.presentation.navigation.revenueDetailsScreenGraph
 import com.emanh.rootapp.presentation.navigation.revenueScreenGraph
 import com.emanh.rootapp.presentation.navigation.uploadScreenGraph
@@ -160,6 +161,7 @@ fun MainScreen(
                     })
                     uploadScreenGraph(currentUser = mainUiState.currentUser!!)
                     revenueScreenGraph(currentUser = mainUiState.currentUser!!)
+                    processingScreenGraph(currentUser = mainUiState.currentUser!!)
                     revenueDetailsScreenGraph()
                 }
 

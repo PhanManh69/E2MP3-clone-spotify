@@ -34,6 +34,9 @@ interface CrossRefAlbumDao {
     @Query(QUERY_DELETE_ALBUM_LIKE)
     suspend fun deleteAlbumLike(albumId: Long, userId: Long)
 
+    @Query("DELETE FROM cross_ref_album_song WHERE songId = :songId")
+    fun deleteSongFromAlbum(songId: Long): Int
+
     @Insert()
     suspend fun insertAlbumLike(albumLikeEntity: AlbumLikeEntity)
 

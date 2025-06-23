@@ -1,5 +1,7 @@
 package com.emanh.rootapp.domain.model
 
+import com.emanh.rootapp.data.db.entity.StatusUpload
+
 data class SongsModel(
     val id: Long = 0,
     val avatarUrl: String? = null,
@@ -11,5 +13,6 @@ data class SongsModel(
     val releaseDate: String? = null,
     val genres: List<Long>? = null,
     val likes: List<Long>? = null,
-    val artists: List<Long>? = null
+    val artists: List<Long>? = null,
+    val statusUpload: String = StatusUpload.SUCCESS.name
 )

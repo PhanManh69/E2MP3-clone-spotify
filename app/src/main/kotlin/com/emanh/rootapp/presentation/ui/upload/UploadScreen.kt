@@ -116,6 +116,7 @@ fun UploadScreen(currentUser: UserInfo) {
                         viewModel.onSelectGenresClick()
                         viewModel.clearError()
                     },
+                    onNotiClick = viewModel::onNotiClick,
                     onInputTitleChange = {
                         viewModel.onInputTitleChange(it)
                         viewModel.clearError()
@@ -178,6 +179,7 @@ private fun UpdloadScaffold(
     onSelectAvatarClick: () -> Unit,
     onSelectSongClick: () -> Unit,
     onSelectGenresClick: () -> Unit,
+    onNotiClick: () -> Unit,
     onInputTitleChange: (String) -> Unit,
     onInputSubtitleChange: (String) -> Unit
 ) {
@@ -200,11 +202,20 @@ private fun UpdloadScaffold(
 
                 Text(text = stringResource(R.string.add_song), color = TextPrimary, style = Body1Bold)
 
-                IconButton(onClick = onUploadClick) {
-                    Icon(painter = painterResource(R.drawable.ic_32_upload),
-                         contentDescription = null,
-                         tint = IconPrimary,
-                         modifier = Modifier.size(24.dp))
+                Row {
+                    IconButton(onClick = onNotiClick) {
+                        Icon(painter = painterResource(R.drawable.ic_24_notifications),
+                             contentDescription = null,
+                             tint = IconPrimary,
+                             modifier = Modifier.size(24.dp))
+                    }
+
+                    IconButton(onClick = onUploadClick) {
+                        Icon(painter = painterResource(R.drawable.ic_32_upload),
+                             contentDescription = null,
+                             tint = IconPrimary,
+                             modifier = Modifier.size(24.dp))
+                    }
                 }
             }
 
@@ -333,6 +344,7 @@ private fun UploadScreenPreview() {
                         onSelectSongClick = {},
                         onSelectGenresClick = {},
                         onInputTitleChange = {},
+                        onNotiClick = {},
                         onInputSubtitleChange = {})
     }
 }

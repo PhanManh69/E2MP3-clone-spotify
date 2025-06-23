@@ -1,4 +1,4 @@
-package com.emanh.rootapp.service
+package com.emanh.rootapp.network.service
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -11,10 +11,11 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import com.emanh.rootapp.service.callbacks.MusicPlayerNotificationListener
+import com.emanh.rootapp.network.service.callbacks.MusicPlayerNotificationListener
 import com.emanh.rootapp.utils.MyConstant.MUSIC_PLAYBACK
 import com.emanh.rootapp.utils.MyConstant.NOTIFICATION_CHANNEL_ID
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import javax.inject.Inject
 
-@androidx.media3.common.util.UnstableApi
+@UnstableApi
 @AndroidEntryPoint
 class MusicService : MediaSessionService() {
 

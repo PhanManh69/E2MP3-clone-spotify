@@ -1,5 +1,6 @@
-package com.emanh.rootapp.service.callbacks
+package com.emanh.rootapp.network.service.callbacks
 
+import android.Manifest
 import android.app.Notification
 import android.app.Service.STOP_FOREGROUND_REMOVE
 import android.content.Intent
@@ -7,11 +8,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerNotificationManager
-import com.emanh.rootapp.service.MusicService
+import com.emanh.rootapp.network.service.MusicService
 import com.emanh.rootapp.utils.MyConstant.NOTIFICATION_ID
 
-@androidx.media3.common.util.UnstableApi
+@UnstableApi
 class MusicPlayerNotificationListener(
     private val musicService: MusicService
 ) : PlayerNotificationManager.NotificationListener {
@@ -32,7 +34,7 @@ class MusicPlayerNotificationListener(
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                         if (ContextCompat.checkSelfPermission(applicationContext,
-                                                              android.Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED
+                                                              Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED
                         ) {
                             return
                         }
