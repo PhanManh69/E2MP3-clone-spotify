@@ -24,11 +24,16 @@ import java.io.File
 import javax.inject.Inject
 import androidx.core.net.toUri
 import com.emanh.e2mp3.spotify.R
+import com.emanh.rootapp.data.db.entity.StatusUpload
 import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 import com.emanh.rootapp.domain.model.SearchModel
+import com.emanh.rootapp.domain.model.UploadModel
 import com.emanh.rootapp.domain.usecase.SearchUseCase
 import com.emanh.rootapp.domain.usecase.SongsUseCase
+import com.emanh.rootapp.domain.usecase.UploadUseCase
 import com.emanh.rootapp.domain.usecase.crossref.CrossRefSongUseCase
+import com.emanh.rootapp.presentation.navigation.ProcessingScreenNavigation
+import com.emanh.rootapp.presentation.navigation.extensions.NavActions.navigateTo
 import com.emanh.rootapp.utils.MyConstant.SONGS_SEARCH
 import com.emanh.rootapp.utils.MyConstant.genresList
 import com.emanh.rootapp.utils.removeAccents
@@ -43,6 +48,7 @@ class UploadViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val appRouter: AppRouter,
     private val songsUseCase: SongsUseCase,
+    private val uploadUseCase: UploadUseCase,
     private val searchUseCase: SearchUseCase,
     private val crossRefSongUseCase: CrossRefSongUseCase,
 ) : ViewModel() {
@@ -62,6 +68,10 @@ class UploadViewModel @Inject constructor(
 
     fun onSelectGenresClick() {
         _uiState.update { it.copy(showGenresDialog = true) }
+    }
+
+    fun onNotiClick() {
+        appRouter.getMainNavController()?.navigateTo(ProcessingScreenNavigation.getRoute())
     }
 
     fun onConfirmClick() {
@@ -149,15 +159,18 @@ class UploadViewModel @Inject constructor(
                                           timeline = uiState.value.songDuration,
                                           releaseDate = getCurrentDate(),
                                           genres = uiState.value.selectedGenresIndexes,
-                                          artists = artistsId)
+                                          artists = artistsId,
+                                          statusUpload = StatusUpload.PROCESSING.name)
+                val insertSong = songsUseCase.insertSong(songData)
+                val uploadData = UploadModel(userId = artistsId.first(), songId = insertSong, statusUpload = StatusUpload.PROCESSING.name)
 
-                val songId = songsUseCase.insertSong(songData)
-                val searchData = SearchModel(idTable = songId,
+                uploadUseCase.insertUpdoad(uploadData)
+                val searchData = SearchModel(idTable = insertSong,
                                              isTable = SONGS_SEARCH,
                                              normalizedSearchValue = "${uiState.value.inputTitle.removeAccents()} ${uiState.value.inputSubtitle.removeAccents()}")
 
                 searchUseCase.insertSearch(searchData)
-                crossRefSongUseCase.insertSongArtist(SongArtistEntity(songId, artistsId.first()))
+                crossRefSongUseCase.insertSongArtist(SongArtistEntity(insertSong, artistsId.first()))
 
                 _uiState.update {
                     it.copy(isUploading = false, uploadSuccess = true)

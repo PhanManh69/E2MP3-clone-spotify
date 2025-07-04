@@ -12,6 +12,7 @@ import com.emanh.rootapp.data.db.dao.PodcastsDao
 import com.emanh.rootapp.data.db.dao.SearchDao
 import com.emanh.rootapp.data.db.dao.SearchHistoryDao
 import com.emanh.rootapp.data.db.dao.SongsDao
+import com.emanh.rootapp.data.db.dao.UploadDao
 import com.emanh.rootapp.data.db.dao.UsersDao
 import com.emanh.rootapp.data.db.dao.ViewsSongDao
 import com.emanh.rootapp.data.db.dao.crossref.CrossRefAlbumDao
@@ -25,6 +26,7 @@ import com.emanh.rootapp.data.db.entity.PodcastsEntity
 import com.emanh.rootapp.data.db.entity.SearchEntity
 import com.emanh.rootapp.data.db.entity.SearchHistoryEntity
 import com.emanh.rootapp.data.db.entity.SongsEntity
+import com.emanh.rootapp.data.db.entity.UploadEntity
 import com.emanh.rootapp.data.db.entity.UsersEntity
 import com.emanh.rootapp.data.db.entity.ViewsSongEntity
 import com.emanh.rootapp.data.db.entity.crossref.AlbumArtistEntity
@@ -36,7 +38,7 @@ import com.emanh.rootapp.data.db.entity.crossref.SongArtistEntity
 import com.emanh.rootapp.data.db.entity.crossref.SongLikeEntity
 import com.emanh.rootapp.data.db.entity.crossref.UserFollowingEntity
 
-@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SearchEntity::class, SongGenreEntity::class, SongArtistEntity::class, SongLikeEntity::class, UserFollowingEntity::class, PlaylistSongEntity::class, AlbumSongEntity::class, AlbumArtistEntity::class, SearchHistoryEntity::class, PlaylistLikeEntity::class, AlbumLikeEntity::class],
+@Database(entities = [AlbumsEntity::class, GenresEntity::class, PlaylistsEntity::class, PodcastsEntity::class, SongsEntity::class, UsersEntity::class, ViewsSongEntity::class, SearchEntity::class, SongGenreEntity::class, SongArtistEntity::class, UploadEntity::class, SongLikeEntity::class, UserFollowingEntity::class, PlaylistSongEntity::class, AlbumSongEntity::class, AlbumArtistEntity::class, SearchHistoryEntity::class, PlaylistLikeEntity::class, AlbumLikeEntity::class],
           version = 1,
           exportSchema = false)
 @TypeConverters(Converters::class)
@@ -46,6 +48,7 @@ abstract class STFDatabase : RoomDatabase() {
     abstract fun playlistsDao(): PlaylistsDao
     abstract fun podcastsDao(): PodcastsDao
     abstract fun songsDao(): SongsDao
+    abstract fun uploadDao(): UploadDao
     abstract fun usersDao(): UsersDao
     abstract fun viewsSongDao(): ViewsSongDao
     abstract fun searchDao(): SearchDao

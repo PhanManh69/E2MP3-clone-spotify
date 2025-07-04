@@ -1,11 +1,16 @@
 package com.emanh.rootapp.data.db.dao
 
+import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.emanh.rootapp.data.db.entity.SongsEntity
+import com.emanh.rootapp.data.db.entity.StatusUpload
+import com.emanh.rootapp.data.db.entity.UploadEntity
 import com.emanh.rootapp.utils.MyQuery.QERRY_SEARCH_SONGS
+import com.emanh.rootapp.utils.MyQuery.QUERY_GET_PROCESSING_SONGS
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_RANDOM_SONG_EXCLUDING
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_SONGS_BY_SEARCH
 import com.emanh.rootapp.utils.MyQuery.QUERY_GET_SONGS_RECOMMEND
@@ -23,6 +28,12 @@ import kotlinx.coroutines.flow.Flow
 interface SongsDao {
     @Query("SELECT * FROM songs")
     fun getAllSongs(): Flow<List<SongsEntity>>
+
+    @Query("SELECT * FROM songs WHERE status_upload = :statusUpload")
+    fun getAllSongsCursor(statusUpload: String = StatusUpload.SUCCESS.name): Cursor
+
+    @Query("SELECT * FROM songs WHERE status_upload = :statusUpload")
+    fun getProcessingSongsCursor(statusUpload: String = StatusUpload.PROCESSING.name): Cursor
 
     @Query(QUERY_RECOMMENDED_YOUR)
     fun getRecommendedSongs(userId: Long): Flow<List<SongsEntity>>
@@ -59,6 +70,15 @@ interface SongsDao {
 
     @Query(QUERY_GET_RANDOM_SONG_EXCLUDING)
     fun getRandomSongExcluding(excludeIds: List<Long>): Flow<SongsEntity>
+
+    @Query(QUERY_GET_PROCESSING_SONGS)
+    fun getProcessingSongs(userId: Long): Flow<List<SongsEntity>>
+
+    @Query("DELETE FROM songs WHERE songId = :songId")
+    fun deleteSongById(songId: Long): Int
+
+    @Query("UPDATE songs SET status_upload = :status WHERE songId = :id")
+    suspend fun updateStatusUpload(id: Long, status: String): Int
 
     @Insert()
     suspend fun insertSong(song: SongsEntity): Long

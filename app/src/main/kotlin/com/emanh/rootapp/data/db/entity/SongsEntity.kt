@@ -16,5 +16,6 @@ data class SongsEntity(
     @ColumnInfo(name = "release_date") val releaseDate: String? = null,
     @ColumnInfo(name = "genres") val genresIdList: List<Long>? = null,
     @ColumnInfo(name = "likes") val likesIdList: List<Long>? = null,
-    @ColumnInfo(name = "artists") val artistsIdList: List<Long>? = null
+    @ColumnInfo(name = "artists") val artistsIdList: List<Long>? = null,
+    @ColumnInfo(name = "status_upload") val statusUpload: String = StatusUpload.SUCCESS.name
 )

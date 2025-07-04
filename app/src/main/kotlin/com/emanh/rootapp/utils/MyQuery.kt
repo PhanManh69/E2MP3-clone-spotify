@@ -249,7 +249,7 @@ object MyQuery {
         SELECT s.*
         FROM songs s
         JOIN cross_ref_song_artist sa ON s.songId = sa.songId
-        WHERE sa.userId = :userId
+        WHERE sa.userId = :userId AND s.status_upload = "SUCCESS"
         ORDER BY RANDOM()
     """
 
@@ -336,12 +336,13 @@ object MyQuery {
     """
 
     const val QERRY_SEARCH = """
-        SELECT *
-        FROM search
-        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%'
+        SELECT se.*
+        FROM search se
+        JOIN songs so ON se.idTable = so.songId AND se.isTable = "songs_search"
+        WHERE LOWER(se.normalized_search_value) LIKE '%' || LOWER(:value) || '%' AND so.status_upload = "SUCCESS"
         ORDER BY 
             CASE 
-                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                WHEN LOWER(se.normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
                 ELSE 1
             END,
             RANDOM()
@@ -490,6 +491,13 @@ object MyQuery {
         WHERE songId NOT IN (:excludeIds)
         ORDER BY RANDOM()
         LIMIT 1
+    """
+
+    const val QUERY_GET_PROCESSING_SONGS = """
+        SELECT *
+        FROM songs s
+        JOIN cross_ref_song_artist sa ON s.songId = sa.songId 
+        WHERE status_upload = "PROCESSING" AND sa.userId = :userId
     """
 
     const val QUERY_GET_USER_LOGIN = """

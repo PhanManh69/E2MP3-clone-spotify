@@ -89,7 +89,9 @@ fun PlaylistYourScreen(onItemClick: (Long, String) -> Unit) {
                              onDownloadClick = {},
                              onMoreClick = {},
                              onShuffleClick = {},
-                             onPausePlayClick = {},
+                             onPausePlayClick = {
+                                 onItemClick(uiState.songsList.first().id, uiState.playlist!!.title.orEmpty())
+                             },
                              onEditClick = {},
                              onItemClick = { onItemClick(it, uiState.playlist!!.title.orEmpty()) },
                              onAddSongClick = { type, id ->

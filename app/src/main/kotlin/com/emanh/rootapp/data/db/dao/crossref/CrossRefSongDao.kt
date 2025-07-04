@@ -36,6 +36,15 @@ interface CrossRefSongDao {
     @Query(QUERY_DELETE_SONG_LIKE)
     suspend fun deleteSongLike(songId: Long, userId: Long)
 
+    @Query("DELETE FROM cross_ref_song_artist WHERE songId = :songId")
+    fun deleteSongFromArtist(songId: Long): Int
+
+    @Query("DELETE FROM cross_ref_song_genre WHERE songId = :songId")
+    fun deleteSongFromGenre(songId: Long): Int
+
+    @Query("DELETE FROM cross_ref_song_like WHERE songId = :songId")
+    fun deleteSongFromLike(songId: Long): Int
+
     @Insert()
     suspend fun insertSongLike(songLikeEntity: SongLikeEntity)
 

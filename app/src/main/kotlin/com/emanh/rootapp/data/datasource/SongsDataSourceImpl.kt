@@ -60,6 +60,10 @@ class SongsDataSourceImpl @Inject constructor(
         return songsDao.getRandomSongExcluding(excludeIds)
     }
 
+    override fun getProcessingSongs(userId: Long): Flow<List<SongsEntity>> {
+        return songsDao.getProcessingSongs(userId)
+    }
+
     override suspend fun insertSong(song: SongsEntity): Long {
         return songsDao.insertSong(song)
     }

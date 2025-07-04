@@ -16,6 +16,9 @@ interface SearchDao {
     @Query(QERRY_SEARCH)
     fun getAllSearch(value: String): Flow<List<SearchEntity>>
 
+    @Query("DELETE FROM search WHERE isTable = :songId AND isTable = 'songs_search'")
+    fun deleteSongFromSearch(songId: Long): Int
+
     @Insert
     suspend fun insertSearch(search: SearchEntity): Long
 
