@@ -95,7 +95,9 @@ fun SingleScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
                        onDownloadClick = {},
                        onMoreClick = {},
                        onShuffleClick = {},
-                       onPausePlayClick = {},
+                       onPausePlayClick = {
+                           onItemClick(uiState.single!!.id, uiState.single!!.title.orEmpty())
+                       },
                        onItemClick = {
                            onItemClick(it, uiState.single!!.title.orEmpty())
                        },

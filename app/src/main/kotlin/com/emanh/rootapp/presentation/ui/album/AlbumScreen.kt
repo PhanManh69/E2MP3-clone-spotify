@@ -93,7 +93,9 @@ fun AlbumScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
                       onDownloadClick = {},
                       onMoreClick = {},
                       onShuffleClick = {},
-                      onPausePlayClick = {},
+                      onPausePlayClick = {
+                          onItemClick(uiState.songList.first().id, uiState.album!!.title.orEmpty())
+                      },
                       onItemClick = {
                           onItemClick(it, uiState.album!!.title.orEmpty())
                       },

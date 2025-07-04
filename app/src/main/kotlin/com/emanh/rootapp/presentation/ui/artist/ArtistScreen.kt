@@ -83,7 +83,9 @@ fun ArtistScreen(currentUser: UserInfo, onItemClick: (Long, String) -> Unit) {
                 },
                 onMoreClick = {},
                 onShuffleClick = {},
-                onPausePlayClick = {},
+                onPausePlayClick = {
+                    onItemClick(uiState.songsList.first().id, uiState.artist!!.name.orEmpty())
+                },
                 onItemClick = {
                     onItemClick(it, uiState.artist!!.name.orEmpty())
                 },

@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        handleFirstInstall()
 //        deleteDatabase("e2mp3_db")
-        databaseInitialized()
+//        databaseInitialized()
         setContent {
             E2MP3Theme {
                 DashboardScreen(appRouter = appRouter)

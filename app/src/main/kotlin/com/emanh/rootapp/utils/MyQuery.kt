@@ -336,12 +336,13 @@ object MyQuery {
     """
 
     const val QERRY_SEARCH = """
-        SELECT *
-        FROM search
-        WHERE LOWER(normalized_search_value) LIKE '%' || LOWER(:value) || '%'
+        SELECT se.*
+        FROM search se
+        JOIN songs so ON se.idTable = so.songId AND se.isTable = "songs_search"
+        WHERE LOWER(se.normalized_search_value) LIKE '%' || LOWER(:value) || '%' AND so.status_upload = "SUCCESS"
         ORDER BY 
             CASE 
-                WHEN LOWER(normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
+                WHEN LOWER(se.normalized_search_value) LIKE LOWER(:value) || '%' THEN 0
                 ELSE 1
             END,
             RANDOM()
